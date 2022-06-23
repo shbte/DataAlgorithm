@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "Object.h"
+#include "Exception.h"
 
 using namespace std;
 using namespace DemoData;
@@ -30,4 +31,19 @@ void func1()
 
     delete obj1;
     delete obj2;
+}
+
+// 异常类
+void func2()
+{
+    try
+    {
+        THROW_EXCEPTION(ArithmeticException, "testArithmeticException");
+    }
+    catch(const Exception& e)
+    {
+        cout << "catch(const Exception& e)" << endl;
+        cout << "message : " << e.message() << endl;    // message : testArithmeticException
+        cout << "location : " << e.location() << endl;  // location : ..\DemoData\MyFunc.cpp:41
+    }
 }

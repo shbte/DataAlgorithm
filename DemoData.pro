@@ -4,10 +4,12 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 HEADERS += \
+    Exception.h \
     MyFunc.h \
     Object.h
 
 SOURCES += \
+        Exception.cpp \
         main.cpp \
         MyFunc.cpp \
         Object.cpp
