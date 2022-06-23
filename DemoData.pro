@@ -3,7 +3,13 @@ CONFIG += console c++11
 CONFIG -= app_bundle
 CONFIG -= qt
 
-HEADERS +=
+HEADERS += \
+    Exception.h \
+    MyFunc.h \
+    Object.h
 
 SOURCES += \
-        main.cpp
+        Exception.cpp \
+        main.cpp \
+        MyFunc.cpp \
+        Object.cpp
