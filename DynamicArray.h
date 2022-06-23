@@ -2,7 +2,6 @@
 #define DYNAMICARRAY_H
 
 #include "Array.h"
-#include "Exception.h"
 
 namespace DemoData
 {
@@ -66,7 +65,7 @@ protected:
     }
 
 public:
-    DynamicArray(int length)
+    DynamicArray(int length = 0)
     {
         init(new T[length], length);
     }

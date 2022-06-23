@@ -239,6 +239,35 @@ void func5()
         cout << "da1[" << i << "] = " << da1[i] << "   ";   // da1[0] = 0   da1[1] = 1   da1[2] = 4
     }
     cout << endl;
+
+    DynamicArray<DynamicArray<int>> dd;
+
+    dd.resize(5);
+
+    for(int i = 0; i < dd.length(); i++)
+    {
+        dd[i].resize(i + 1);
+    }
+    for(int i = 0; i < dd.length(); i++)
+    {
+        for(int j = 0; j < dd[i].length(); j++)
+        {
+            dd[i][j] = i * j;
+        }
+    }
+    for(int i = 0; i < dd.length(); i++)
+    {
+        for(int j = 0; j < dd[i].length(); j++)
+        {
+            // dd[0][0] = 0
+            // dd[1][0] = 0  dd[1][1] = 1
+            // dd[2][0] = 0  dd[2][1] = 2  dd[2][2] = 4
+            // dd[3][0] = 0  dd[3][1] = 3  dd[3][2] = 6  dd[3][3] = 9
+            // dd[4][0] = 0  dd[4][1] = 4  dd[4][2] = 8  dd[4][3] = 12  dd[4][4] = 16
+            cout << "dd[" << i << "][" << j << "] = " << dd[i][j] << "  ";
+        }
+        cout << endl;
+    }
 }
 
 // 链表类
