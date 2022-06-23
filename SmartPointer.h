@@ -18,20 +18,11 @@ public:
     SmartPointer(const SmartPointer<T>& obj);
     SmartPointer<T>& operator =(const SmartPointer<T>& obj);
 
-    T* operator ->();
-    T& operator *();
-
-    bool isNULL();
-    T* get();
-
     ~SmartPointer();
 };
 
 template <typename T>
-SmartPointer<T>::SmartPointer(T* p)
-{
-    this->m_pointer = p;
-}
+SmartPointer<T>::SmartPointer(T* p) : Pointer<T>(p) {}
 
 template <typename T>
 SmartPointer<T>::SmartPointer(const SmartPointer<T>& obj)
