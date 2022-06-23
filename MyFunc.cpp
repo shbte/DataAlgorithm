@@ -5,8 +5,10 @@
 #include "Object.h"
 #include "Exception.h"
 #include "SmartPointer.h"
-#include "DynamicList.h"
 #include "StaticList.h"
+#include "DynamicList.h"
+#include "StaticArray.h"
+#include "DynamicArray.h"
 
 using namespace std;
 using namespace DemoData;
@@ -160,6 +162,79 @@ void func4()
     for(int i = 0; i < dl.length(); i++)
     {
         cout << "dl[" << i << "] = " << dl[i] << "    ";    // dl[0] = 5    dl[1] = 1    dl[2] = 2    dl[3] = 9    dl[4] = 3    dl[5] = 9
+    }
+    cout << endl;
+}
+
+// 数组类
+void func5()
+{
+    cout << "func6:: " << endl;
+
+    StaticArray<int, 5> sa;
+
+    for(int i = 0; i < sa.length(); i++)
+    {
+        sa[i] = i * i;
+    }
+    for(int i = 0; i < sa.length(); i++)
+    {
+        cout << "sa[" << i << "] = " << sa[i] << "   ";     // sa[0] = 0   sa[1] = 1   sa[2] = 4   sa[3] = 9   sa[4] = 16
+    }
+    cout << endl;
+    sa.set(1, 9);
+    for(int i = 0; i < sa.length(); i++)
+    {
+        cout << "sa[" << i << "] = " << sa[i] << "   ";     // sa[0] = 0   sa[1] = 9   sa[2] = 4   sa[3] = 9   sa[4] = 16
+    }
+    cout << endl;
+
+    int value;
+    sa.get(3, value);
+    cout << "sa[3] = " << value << endl;    // sa[3] = 9
+
+    cout << endl;
+    DynamicArray<int> da(5);
+
+    for(int i = 0; i < da.length(); i++)
+    {
+        da[i] = i * i;
+    }
+    for(int i = 0; i < da.length(); i++)
+    {
+        cout << "da[" << i << "] = " << da[i] << "   "; // da[0] = 0   da[1] = 1   da[2] = 4   da[3] = 9   da[4] = 16
+    }
+    cout << endl;
+
+    DynamicArray<int> da1(10);
+    da1 = da;
+    for(int i = 0; i < da1.length(); i++)
+    {
+        cout << "da1[" << i << "] = " << da1[i] << "   ";   // da1[0] = 0   da1[1] = 1   da1[2] = 4   da1[3] = 9   da1[4] = 16
+    }
+    cout << endl;
+
+    da1.resize(3);
+    for(int i = 0; i < da1.length(); i++)
+    {
+        cout << "da1[" << i << "] = " << da1[i] << "   ";   // da1[0] = 0   da1[1] = 1   da1[2] = 4
+    }
+    cout << endl;
+
+    try
+    {
+        da1[3] = 3;
+    }
+    catch(const Exception& e)
+    {
+        cout << "catch(const Exception& e)" << endl;
+        cout << e.message() << endl;    // Array index out of bounds...
+        cout << e.location() << endl;   // ..\DemoData\Array.h:57
+    }
+
+    for(int i = 0; i < da1.length(); i++)
+    {
+        cout << "da1[" << i << "] = " << da1[i] << "   ";   // da1[0] = 0   da1[1] = 1   da1[2] = 4
     }
     cout << endl;
 }

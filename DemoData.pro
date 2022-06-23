@@ -4,6 +4,8 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 HEADERS += \
+    Array.h \
+    DynamicArray.h \
     DynamicList.h \
     Exception.h \
     List.h \
@@ -11,6 +13,7 @@ HEADERS += \
     Object.h \
     SeqList.h \
     SmartPointer.h \
+    StaticArray.h \
     StaticList.h
 
 SOURCES += \
