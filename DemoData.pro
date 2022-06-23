@@ -8,6 +8,7 @@ HEADERS += \
     DynamicArray.h \
     DynamicList.h \
     Exception.h \
+    LinkList.h \
     List.h \
     MyFunc.h \
     Object.h \

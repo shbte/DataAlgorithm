@@ -9,6 +9,7 @@
 #include "DynamicList.h"
 #include "StaticArray.h"
 #include "DynamicArray.h"
+#include "LinkList.h"
 
 using namespace std;
 using namespace DemoData;
@@ -169,7 +170,7 @@ void func4()
 // 数组类
 void func5()
 {
-    cout << "func6:: " << endl;
+    cout << "func5:: Array " << endl;
 
     StaticArray<int, 5> sa;
 
@@ -237,4 +238,105 @@ void func5()
         cout << "da1[" << i << "] = " << da1[i] << "   ";   // da1[0] = 0   da1[1] = 1   da1[2] = 4
     }
     cout << endl;
+}
+
+// 链表类
+class LinkListBase : public Object
+{
+private:
+    int mi = 0;
+
+public:
+    LinkListBase(int i = 0)
+    {
+        mi = i;
+    }
+    // 重载比较操作符函数(==), 实现值相等, 父类只实现地址相等
+    bool operator==(const LinkListBase& obj)
+    {
+        return (mi == obj.mi);
+    }
+};
+void func6()
+{
+    cout << "func6:: List " << endl;
+
+    LinkList<int> ll;
+
+    for(int i = 0; i < 5; i++)
+    {
+        ll.insert(i, i);
+    }
+    for(int i = 0; i < ll.length(); i++)
+    {
+        cout << "ll[" << i << "] = " << ll.get(i) << "  ";  // ll[0] = 0  ll[1] = 1  ll[2] = 2  ll[3] = 3  ll[4] = 4
+    }
+    cout << endl;
+
+    for(int i = 0; i < 5; i++)
+    {
+        ll.insert(i + 6);
+    }
+    for(int i = 0; i < ll.length(); i++)
+    {
+        cout << "ll[" << i << "] = " << ll.get(i) << "  ";  // ll[0] = 0  ll[1] = 1  ll[2] = 2  ll[3] = 3  ll[4] = 4  ll[5] = 6  ll[6] = 7  ll[7] = 8  ll[8] = 9  ll[9] = 10
+    }
+    cout << endl;
+
+    ll.remove(1);
+    for(int i = 0; i < ll.length(); i++)
+    {
+        cout << "ll[" << i << "] = " << ll.get(i) << "  ";  // ll[0] = 0  ll[1] = 2  ll[2] = 3  ll[3] = 4  ll[4] = 6  ll[5] = 7  ll[6] = 8  ll[7] = 9  ll[8] = 10
+    }
+    cout << endl;
+
+    ll.set(1, 5);
+    for(int i = 0; i < ll.length(); i++)
+    {
+        cout << "ll[" << i << "] = " << ll.get(i) << "  ";  // ll[0] = 0  ll[1] = 5  ll[2] = 3  ll[3] = 4  ll[4] = 6  ll[5] = 7  ll[6] = 8  ll[7] = 9  ll[8] = 10
+    }
+    cout << endl;
+
+    ll.clear();
+    try
+    {
+        ll.get(0);
+    }
+    catch(const Exception& e)
+    {
+        cout << "catch (const Exception& e)" << endl;
+        cout << e.message() << endl;    // Paramter is invalid...
+        cout << e.location() << endl;   // ..\DemoData\LinkList.h:180
+    }
+
+    for(int i = 0; i < 5; i++)
+    {
+        ll.insert(i, i + 5);
+    }
+    for(int i = 0; i < ll.length(); i++)
+    {
+        cout << "ll[" << i << "] = " << ll.get(i) << "  ";  // ll[0] = 5  ll[1] = 6  ll[2] = 7  ll[3] = 8  ll[4] = 9
+    }
+    cout << endl;
+
+    // 意义在于把遍历输出函数的时间复杂度变小: O(n^2) ==> O(n)
+    for(ll.moveInit(1, 2); !ll.end(); ll.next())
+    {
+        cout << ll.currentValue() << "  ";  // 6  8
+    }
+    cout << endl;
+
+    cout << ll.find(7) << endl; // 2
+    cout << ll.find(4) << endl; // -1
+
+    LinkList<LinkListBase> llb;
+    LinkListBase b0(0);
+    LinkListBase b1(1);
+    LinkListBase b2(2);
+    llb.insert(b1);
+
+    cout << llb.find(b0) << endl;   // -1
+    cout << llb.find(b1) << endl;   // 0
+    cout << llb.find(b2) << endl;   // -1
+
 }
