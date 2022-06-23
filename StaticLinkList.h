@@ -71,8 +71,11 @@ protected:
         {
             if((space + i) == psn)
             {
-                space->~SNode();
+                (space + i)->~SNode();
                 m_use[i] = 0;
+
+                // 不会出现两个相同对象(对象的相同默认是以地址比较的), 因此, 此处结束循环
+                break;
             }
         }
     }
@@ -90,6 +93,14 @@ public:
     int capacity()
     {
         return N;
+    }
+
+    ~StaticLinkList()
+    {
+        // 子类调用父类clear函数, 再调用自身类destroy释放自身类指定空间
+        // 如果自身没调用父类clear函数, 则因为析构函数不会发生多态的特性而调用的是父类的destroy函数, 释放的是父类的堆空间
+        // 子类释放指定空间后, 链表长度为0, 然后父类会先进行长度判断再去释放堆空间 (长度为0, 则不释放, 保证了destroy函数能正确释放空间)
+        this->clear();
     }
 
 };

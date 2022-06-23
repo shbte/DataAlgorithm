@@ -124,6 +124,13 @@ public:
             Node* toDel = last->next;
             // 更新前置节点指针域, 值为删除节点的后继节点
             last->next = toDel->next;
+
+            // 如果当前游标位置被删除, 游标后移
+            if(m_current == toDel)
+            {
+                m_current = m_current->next;
+            }
+
             // 删除节点
             destroy(toDel);
 
@@ -144,10 +151,10 @@ public:
             m_header.next = toDel->next;
             // 删除节点
             destroy(toDel);
-        }
 
-        // 更新链表长度
-        m_length = 0;
+            // 更新链表长度, 减1
+            m_length--;
+        }
     }
 
     // 改
@@ -282,6 +289,14 @@ public:
 
         // 移动次数等于移动量级时, 移动成功
         return (i == m_step);
+    }
+
+    ~LinkList()
+    {
+        // 构造函数和析构函数中, 不会发生多态, 因此, 此处调用的是自身类函数
+        // 危险: clear中调用了destroy函数, 由于不会发生多态, 所以该自身类destroy函数释放的是自身堆空间
+        //      预期应该是调用子类destroy释放子类指定空间
+        clear();
     }
 
 };

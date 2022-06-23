@@ -373,4 +373,25 @@ void func7()
         cout << sll.currentValue() << "  "; // 0  1  2  3  4
     }
     cout << endl;
+
+    for(sll.moveInit(0); !sll.end(); sll.next())
+    {
+        if(sll.currentValue() == 2)
+        {
+            sll.remove(sll.find(sll.currentValue()));
+            cout << "sll[2] = " << sll.currentValue() << endl;  // sll[2] = 3
+        }
+    }
+    for(sll.moveInit(0); !sll.end(); sll.next())
+    {
+        cout << sll.currentValue() << "  "; // 0  1  3  4
+    }
+    cout << endl;
+
+    sll.remove(1);
+    for(sll.moveInit(0); !sll.end(); sll.next())
+    {
+        cout << sll.currentValue() << "  "; // 0  3  4
+    }
+    cout << endl;
 }
