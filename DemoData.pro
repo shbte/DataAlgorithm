@@ -12,6 +12,7 @@ HEADERS += \
     List.h \
     MyFunc.h \
     Object.h \
+    Pointer.h \
     SeqList.h \
     SmartPointer.h \
     StaticArray.h \

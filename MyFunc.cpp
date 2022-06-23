@@ -71,16 +71,20 @@ public:
 };
 void func3()
 {
+    cout << "func3:: SmartPointer " << endl;
+
     SmartPointer<Base> spb = new Base();
     SmartPointer<Base> nspb;
 
-    cout << "spb = " << spb.get()  << endl;     // spb = 0x19c490f6b50
-    cout << "nspb = " << nspb.get()  << endl;   // nspb = 0
+    cout <<  spb.func()  << endl;   // Pointer::func()
+
+    cout << "spb.isNull = " << spb.Pointer::isNull() << ", this = " << spb.Pointer::get() << endl;     // spb.isNull = 0, this = 0x25fe2886b50
+    cout << "nspb.isNull = " << nspb.Pointer::isNull() << ", this = " << nspb.Pointer::get() << endl;   // nspb.isNull = 1, this = 0
 
     nspb = spb;
 
-    cout << "spb.isNULL = " << spb.isNULL() << ", this = " << spb.get() << endl;    // spb.isNULL = 1, this = 0
-    cout << "nspb.isNULL = " << nspb.isNULL() << ", this = " << nspb.get() << endl; // nspb.isNULL = 0, this = 0x19c490f6b50
+    cout << "spb.isNull = " << spb.Pointer::isNull() << ", this = " << spb.Pointer::get() << endl;    // spb.isNULL = 1, this = 0
+    cout << "nspb.isNull = " << nspb.Pointer::isNull() << ", this = " << nspb.Pointer::get() << endl; // nspb.isNULL = 0, this = 0x19c490f6b50
 }
 
 // 线性表
