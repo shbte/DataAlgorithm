@@ -13,6 +13,9 @@ void func0000()
 
     cout << endl;
     func3();
+
+    cout << endl;
+    func4();
 }
 
 int main()

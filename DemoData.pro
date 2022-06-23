@@ -4,10 +4,14 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 HEADERS += \
+    DynamicList.h \
     Exception.h \
+    List.h \
     MyFunc.h \
     Object.h \
-    SmartPointer.h
+    SeqList.h \
+    SmartPointer.h \
+    StaticList.h
 
 SOURCES += \
         Exception.cpp \
