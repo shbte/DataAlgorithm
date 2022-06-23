@@ -15,6 +15,7 @@ HEADERS += \
     SeqList.h \
     SmartPointer.h \
     StaticArray.h \
+    StaticLinkList.h \
     StaticList.h
 
 SOURCES += \

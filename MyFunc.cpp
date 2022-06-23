@@ -10,6 +10,7 @@
 #include "StaticArray.h"
 #include "DynamicArray.h"
 #include "LinkList.h"
+#include "StaticLinkList.h"
 
 using namespace std;
 using namespace DemoData;
@@ -338,5 +339,38 @@ void func6()
     cout << llb.find(b0) << endl;   // -1
     cout << llb.find(b1) << endl;   // 0
     cout << llb.find(b2) << endl;   // -1
+}
 
+// 静态单链表
+void func7()
+{
+    cout << "func7:: StaticLinkList " << endl;
+
+    StaticLinkList<int, 5> sll;
+
+    for(int i = 0; i < sll.capacity(); i++)
+    {
+        sll.insert(i);
+    }
+    for(sll.moveInit(0); !sll.end(); sll.next())
+    {
+        cout << sll.currentValue() << "  "; // 0  1  2  3  4
+    }
+    cout << endl;
+
+    try
+    {
+        sll.insert(5);
+    }
+    catch(const Exception& e)
+    {
+        cout << "catch(const Exception& e)" << endl;    // catch(const Exception& e)
+        cout << e.message() << endl;    // No memory to insert new Node...
+        cout << e.location() << endl;   // ..\DemoData\LinkList.h:105
+    }
+    for(sll.moveInit(0); !sll.end(); sll.next())
+    {
+        cout << sll.currentValue() << "  "; // 0  1  2  3  4
+    }
+    cout << endl;
 }

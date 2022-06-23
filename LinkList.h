@@ -15,7 +15,7 @@ LinkList设计要点
     实现线性表的关键操作(增 删 改 查等)
  */
 template <typename T>
-class LinkList : List<T>
+class LinkList : public List<T>
 {
 protected:
     struct Node : public Object // struct当作class, 也可以继承其它类
@@ -32,6 +32,7 @@ protected:
         char reserved[sizeof(T)]; // 只开辟T类型所使用的空间(不构造对象), 使用时再进行内存解释构造
         Node* next;
     } m_header;
+
     int m_length;       // 链表长度
     Node* m_current;    // 当前节点
     int m_step;         // 移动量级
@@ -48,6 +49,7 @@ protected:
         return current;
     }
 
+    // 设置为虚函数, 实现多态特性(子类StaticLinkList需要动态调用自身的重载函数)
     virtual Node* create()
     {
         return new Node();
