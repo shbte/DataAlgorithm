@@ -10,6 +10,9 @@ void func0000()
 
     cout << endl;
     func2();
+
+    cout << endl;
+    func3();
 }
 
 int main()

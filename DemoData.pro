@@ -6,7 +6,8 @@ CONFIG -= qt
 HEADERS += \
     Exception.h \
     MyFunc.h \
-    Object.h
+    Object.h \
+    SmartPointer.h
 
 SOURCES += \
         Exception.cpp \
