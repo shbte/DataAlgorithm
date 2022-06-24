@@ -4,8 +4,6 @@
 #include "Object.h"
 #include "Exception.h"
 
-using namespace std;
-
 namespace DemoData
 {
 

@@ -51,7 +51,7 @@ SharedPointer<T>::SharedPointer(T* p) : m_ref(NULL)
 
 // 拷贝构造函数
 template <typename T>
-SharedPointer<T>::SharedPointer(const SharedPointer<T>& obj)
+SharedPointer<T>::SharedPointer(const SharedPointer<T>& obj) : Pointer<T>(NULL)
 {
     assign(obj);
 }
