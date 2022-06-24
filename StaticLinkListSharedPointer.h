@@ -1,7 +1,10 @@
+/* 备份 */
+/* 使用智能指针(SharedPointer<Node>)替换链表类(LinkList)中的原生指针(Node*) */
 #ifndef STATICLINKLIST_H
 #define STATICLINKLIST_H
 
-#include "LinkList.h"
+//#include "LinkList.h"
+#include "LinkListSharedPointer.h"
 
 namespace DemoData
 {
@@ -35,8 +38,8 @@ protected:
     // 标记数组, 标记节点空间是否可用, 可用(0), 不可用(1)
     int m_use[N];
 
-    // 在指定内存空间上创建对象
-    Node* create()
+    // 在指定内存空间上创建对象, 使用智能指针(SharedPointer<Node>)代替Node*
+    SharedPointer<Node> create()
     {
         SNode* ret = NULL;
 
@@ -60,25 +63,26 @@ protected:
         return ret;
     }
 
+    /* 使用智能指针(SharedPointer<Node>)代替Node*, 会自动释放内存空间, 不用手动释放 */
     // 归还指定内存空间上的对象
-    void destroy(Node* pn)
-    {
-        // 将内存解释为SNode类型
-        SNode* space = reinterpret_cast<SNode*>(m_space);
-        SNode* psn = reinterpret_cast<SNode*>(pn);
+    //    void destroy(Node* pn)
+    //    {
+    //        // 将内存解释为SNode类型
+    //        SNode* space = reinterpret_cast<SNode*>(m_space);
+    //        SNode* psn = reinterpret_cast<SNode*>(pn);
 
-        for(int i = 0; i < N; i++)
-        {
-            if((space + i) == psn)
-            {
-                (space + i)->~SNode();
-                m_use[i] = 0;
+    //        for(int i = 0; i < N; i++)
+    //        {
+    //            if((space + i) == psn)
+    //            {
+    //                (space + i)->~SNode();
+    //                m_use[i] = 0;
 
-                // 不会出现两个相同对象(对象的相同默认是以地址比较的), 因此, 此处结束循环
-                break;
-            }
-        }
-    }
+    //                // 不会出现两个相同对象(对象的相同默认是以地址比较的), 因此, 此处结束循环
+    //                break;
+    //            }
+    //        }
+    //    }
 
 public:
 

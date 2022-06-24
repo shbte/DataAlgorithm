@@ -9,6 +9,7 @@ HEADERS += \
     DynamicList.h \
     Exception.h \
     LinkList.h \
+    LinkListSharedPointer.h \
     List.h \
     MyFunc.h \
     Object.h \
@@ -18,6 +19,7 @@ HEADERS += \
     SmartPointer.h \
     StaticArray.h \
     StaticLinkList.h \
+    StaticLinkListSharedPointer.h \
     StaticList.h
 
 SOURCES += \
