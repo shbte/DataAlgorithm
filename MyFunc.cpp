@@ -428,11 +428,11 @@ void func7()
     cout << endl;
 }
 
+// 共享指针类
 class SPBase
 {
 protected:
     int mi;
-
 public:
     SPBase() : mi(1)
     {
@@ -453,7 +453,6 @@ public:
         cout << "SPBase::~SPBase()" << endl;
     }
 };
-
 void func8()
 {
     cout << "func8::SharedPointer " << endl;
@@ -462,23 +461,30 @@ void func8()
     SharedPointer<SPBase> sp1 = 0;
     SharedPointer<SPBase> sp2 = NULL;
     SharedPointer<SPBase> sp3 = sp0;
-    cout << "sp0.mi = " << sp0->getMi() << ", this = " << sp0.get() << endl;
-    cout << "sp1.mi = " << "0" << ", this = " << sp1.get() << endl;
-    cout << "sp2.mi = " << "NULL" << ", this = " << sp2.get() << endl;
-    cout << "sp3.mi = " << sp3->getMi() << ", this = " << sp3.get() << endl;
+    cout << "sp0.mi = " << sp0->getMi() << ", this = " << sp0.get() << ", ref = " << sp0.getRef() << endl;
+    cout << "sp1.mi = " << "0" << ", this = " << sp1.get() << ", ref = " << sp1.getRef() << endl;
+    cout << "sp2.mi = " << "NULL" << ", this = " << sp2.get() << ", ref = " << sp2.getRef() << endl;
+    cout << "sp3.mi = " << sp3->getMi() << ", this = " << sp3.get() << ", ref = " << sp3.getRef() << endl;
     cout << endl;
 
     sp1 = sp0;
     sp2 = sp1;
-    cout << "sp0.mi = " << sp0->getMi() << ", this = " << sp0.get() << endl;
-    cout << "sp1.mi = " << sp1->getMi() << ", this = " << sp1.get() << endl;
-    cout << "sp2.mi = " << sp2->getMi() << ", this = " << sp2.get() << endl;
-    cout << "sp3.mi = " << sp3->getMi() << ", this = " << sp3.get() << endl;
+    cout << "sp0.mi = " << sp0->getMi() << ", this = " << sp0.get() << ", ref = " << sp0.getRef() << endl;
+    cout << "sp1.mi = " << sp1->getMi() << ", this = " << sp1.get() << ", ref = " << sp1.getRef() << endl;
+    cout << "sp2.mi = " << sp2->getMi() << ", this = " << sp2.get() << ", ref = " << sp2.getRef() << endl;
+    cout << "sp3.mi = " << sp3->getMi() << ", this = " << sp3.get() << ", ref = " << sp3.getRef() << endl;
     cout << endl;
 
     sp3->setMi(10);
-    cout << "sp0.mi = " << sp0->getMi() << ", this = " << sp0.get() << endl;
-    cout << "sp1.mi = " << sp1->getMi() << ", this = " << sp1.get() << endl;
-    cout << "sp2.mi = " << sp2->getMi() << ", this = " << sp2.get() << endl;
-    cout << "sp3.mi = " << sp3->getMi() << ", this = " << sp3.get() << endl;
+    cout << "sp0.mi = " << sp0->getMi() << ", this = " << sp0.get() << ", ref = " << sp0.getRef() << endl;
+    cout << "sp1.mi = " << sp1->getMi() << ", this = " << sp1.get() << ", ref = " << sp1.getRef() << endl;
+    cout << "sp2.mi = " << sp2->getMi() << ", this = " << sp2.get() << ", ref = " << sp2.getRef() << endl;
+    cout << "sp3.mi = " << sp3->getMi() << ", this = " << sp3.get() << ", ref = " << sp3.getRef() << endl;
+    cout << endl;
+
+    sp2 = 0;
+    cout << "sp0.mi = " << sp0->getMi() << ", this = " << sp0.get() << ", ref = " << sp0.getRef() << endl;
+    cout << "sp1.mi = " << sp1->getMi() << ", this = " << sp1.get() << ", ref = " << sp1.getRef() << endl;
+    cout << "sp2.mi = " << "sp2->getMi()" << ", this = " << sp2.get() << ", ref = " << sp2.getRef() << endl;
+    cout << "sp3.mi = " << sp3->getMi() << ", this = " << sp3.get() << ", ref = " << sp3.getRef() << endl;
 }

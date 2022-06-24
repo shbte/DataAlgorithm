@@ -22,6 +22,7 @@ public:
 
     void clear();
     void assign(const SharedPointer<T>&);
+    int getRef();
 
     ~SharedPointer();
 };
@@ -65,6 +66,8 @@ SharedPointer<T>& SharedPointer<T>::operator=(const SharedPointer<T>& obj)
 
         assign(obj);
     }
+
+    return *this;
 }
 
 // 比较函数
@@ -109,8 +112,16 @@ void SharedPointer<T>::assign(const SharedPointer<T>& obj)
     // 更新计数, 加1
     if(this->m_ref)
     {
-        *(this->m_ref)++;
+        (*this->m_ref)++;
     }
+}
+
+// 获取计数
+template <typename T>
+int SharedPointer<T>::getRef()
+{
+    int ret = (m_ref == NULL ? 0 : *m_ref);
+    return ret;
 }
 
 // 析构函数
