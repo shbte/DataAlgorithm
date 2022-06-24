@@ -292,7 +292,7 @@ public:
 };
 void func6()
 {
-    cout << "func6:: List " << endl;
+    cout << "func6:: LinkList " << endl;
 
     LinkList<int> ll;
 

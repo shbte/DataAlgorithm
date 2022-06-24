@@ -36,7 +36,7 @@ protected:
     int m_use[N];
 
     // 在指定内存空间创建对象
-    Node* create()
+    SharedPointer<Node> create()
     {
         SNode* ret = NULL;
 

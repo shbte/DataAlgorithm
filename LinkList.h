@@ -3,6 +3,7 @@
 
 #include "List.h"
 #include "Exception.h"
+#include "SharedPointer.h"
 
 namespace DemoData
 {
@@ -20,7 +21,7 @@ protected:
     struct Node : public Object // struct当作class, 也可以继承其它类
     {
         T value;    // 数据区
-        Node* next; // 指针区(指向下一节点: 后继节点)
+        SharedPointer<Node> next; // 指针区(指向下一节点: 后继节点)
     };
 
     // 定义的同时创建了Node对象, 而导致T类型具体构造了(如果T类型构造函数错误, LinkList将出错)
@@ -29,18 +30,21 @@ protected:
     mutable struct : public Object
     {
         char reserved[sizeof(T)]; // 只开辟T类型所使用的空间(不构造对象), 使用时再进行内存解释构造
-        Node* next;
+        SharedPointer<Node> next;
     } m_header;
 
     int m_length;       // 链表长度
-    Node* m_current;    // 当前节点
+    SharedPointer<Node> m_current;    // 当前节点
     int m_step;         // 移动量级
 
+    // 定义前置节点为类成员变量, 防止临时变量使用头信息节点后释放头信息节点
+    SharedPointer<Node> last;
+
     // 获取特定(index)位置节点
-    Node* position(int index) const
+    SharedPointer<Node> position(int index) const
     {
         // 从头信息节点开始往后遍历获取特定节点位置, 头信息节点不计入节点长度
-        Node* current = reinterpret_cast<Node*>(&m_header);  // 类型转换, 内存解释为Node*
+        SharedPointer<Node> current = reinterpret_cast<Node*>(&m_header);  // 类型转换, 内存解释为Node*
         for(int i = 0; i <= index; i++)
         {
             current = current->next;
@@ -49,14 +53,15 @@ protected:
     }
 
     // 设置为虚函数, 实现多态特性(子类StaticLinkList需要动态调用自身的重载函数)
-    virtual Node* create()
+    virtual SharedPointer<Node> create()
     {
         return new Node();
     }
-    virtual void destroy(Node* pn)
-    {
-        delete pn;
-    }
+    // 使用智能指针(SharedPointer)代替Node*, 会自动释放内存空间, 不用手动
+    // virtual void destroy(SharedPointer<Node> pn)
+    // {
+    // delete pn;
+    // }
 
 public:
     LinkList();
@@ -115,11 +120,11 @@ bool LinkList<T>::insert(int index, const T& e)
     if(ret)
     {
         // 创建新节点的堆空间
-        Node* newNode = create();
+        SharedPointer<Node> newNode = create();
         if(newNode != NULL)
         {
             // 获取新节点的前置节点位置(-1)
-            Node* last = position(index - 1);
+            last = position(index - 1);
 
             // 赋值新节点数据域
             newNode->value = e;
@@ -150,10 +155,10 @@ bool LinkList<T>::remove(int index)
     if(ret)
     {
         // 获取删除节点的前置节点位置(-1)
-        Node* last = position(index - 1);
+        last = position(index - 1);
 
         // 获取删除节点位置
-        Node* toDel = last->next;
+        SharedPointer<Node> toDel = last->next;
         // 更新前置节点指针域, 值为删除节点的后继节点
         last->next = toDel->next;
 
@@ -164,7 +169,7 @@ bool LinkList<T>::remove(int index)
         }
 
         // 删除节点
-        destroy(toDel);
+        // destroy(toDel); // SharedPointer析构时释放对象空间(自动)
 
         // 更新链表长度, 减1
         m_length--;
@@ -176,14 +181,14 @@ bool LinkList<T>::remove(int index)
 template <typename T>
 void LinkList<T>::clear()
 {
-    while(m_header.next)
+    while(m_header.next.get())
     {
         // 获取删除节点位置
-        Node* toDel = m_header.next;
+        SharedPointer<Node> toDel = m_header.next;
         // 头节点后移
         m_header.next = toDel->next;
         // 删除节点
-        destroy(toDel);
+        // destroy(toDel); // SharedPointer析构时释放对象空间(自动)
 
         // 更新链表长度, 减1
         m_length--;
@@ -200,7 +205,7 @@ bool LinkList<T>::set(int index, const T& e)
     if(ret)
     {
         // 获取当前节点位置
-        Node* current = position(index);
+        SharedPointer<Node> current = position(index);
         current->value = e;
     }
 
@@ -217,7 +222,7 @@ bool LinkList<T>::get(int index, T& e) const
     if(ret)
     {
         // 获取当前节点位置
-        Node* current = position(index);
+        SharedPointer<Node> current = position(index);
         e = current->value;
     }
 
@@ -253,9 +258,9 @@ int LinkList<T>::find(const T& e) const
     int ret = -1;
 
     int i = 0;
-    Node* node = m_header.next;
+    SharedPointer<Node> node = m_header.next;
 
-    while(node)
+    while(node.get())
     {
         if(node->value == e)
         {

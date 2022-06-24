@@ -19,6 +19,7 @@ public:
     SharedPointer<T>& operator =(const SharedPointer<T>&);
 
     bool operator ==(const SharedPointer<T>&);
+    bool operator !=(const SharedPointer<T>&);
 
     void clear();
     void assign(const SharedPointer<T>&);
@@ -76,6 +77,11 @@ bool SharedPointer<T>::operator==(const SharedPointer<T>& obj)
 {
     return (this->m_pointer == obj.m_pointer);
 }
+template <typename T>
+bool SharedPointer<T>::operator!=(const SharedPointer<T>& obj)
+{
+    return !(this->m_pointer == obj.m_pointer);
+}
 
 // 清理函数
 template <typename T>
@@ -87,16 +93,20 @@ void SharedPointer<T>::clear()
     this->m_pointer = NULL;
     this->m_ref = NULL;
 
-    // 判断是否还有其它指针对象
-    if(ref)
+    // 判断是否为头信息节点(头信息节点ref = 0)
+    if(this->m_pointer)
     {
-        (*ref)--;
-
-        // 不存在其它指针对象指向相同
-        if(!*ref)
+        // 判断是否还有其它指针对象
+        if(ref)
         {
-            delete toDel;
-            free(ref);
+            (*ref)--;
+
+            // 不存在其它指针对象指向相同
+            if(!*ref)
+            {
+                delete toDel;
+                free(ref);
+            }
         }
     }
 }
