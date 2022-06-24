@@ -35,7 +35,7 @@ protected:
     // 标记数组, 标记节点空间是否可用, 可用(0), 不可用(1)
     int m_use[N];
 
-    // 在指定内存空间创建对象, 使用智能指针(SharedPointer)代替Node*
+    // 在指定内存空间创建对象, 使用智能指针(SharedPointer<Node>)代替Node*
     SharedPointer<Node> create()
     {
         SNode* ret = NULL;
@@ -60,7 +60,7 @@ protected:
         return ret;
     }
 
-    /* 使用智能指针(SharedPointer)代替Node*, 会自动释放内存空间, 不用手动 */
+    /* 使用智能指针(SharedPointer<Node>)代替Node*, 会自动释放内存空间, 不用手动释放 */
     // 归还指定内存空间上的对象
     //    void destroy(Node* pn)
     //    {

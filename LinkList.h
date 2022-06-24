@@ -38,7 +38,7 @@ protected:
     int m_step;         // 移动量级
 
     // 定义前置节点为类成员变量, 防止临时变量使用头信息节点后释放头信息节点
-    SharedPointer<Node> last;
+    SharedPointer<Node> lastNode;
 
     // 获取特定(index)位置节点
     SharedPointer<Node> position(int index) const
@@ -57,7 +57,7 @@ protected:
     {
         return new Node();
     }
-    /* 使用智能指针(SharedPointer)代替Node*, 会自动释放内存空间, 不用手动 */
+    /* 使用智能指针(SharedPointer<Node>)代替Node*, 会自动释放内存空间, 不用手动释放 */
     //     virtual void destroy(SharedPointer<Node> pn)
     //     {
     //     delete pn;
@@ -124,14 +124,14 @@ bool LinkList<T>::insert(int index, const T& e)
         if(newNode != NULL)
         {
             // 获取新节点的前置节点位置(-1)
-            last = position(index - 1);
+            lastNode = position(index - 1);
 
             // 赋值新节点数据域
             newNode->value = e;
             // 赋值新节点指针域, 值为前置节点的后继节点
-            newNode->next = last->next;
+            newNode->next = lastNode->next;
             // 更新前置节点的后继节点为新节点
-            last->next = newNode;
+            lastNode->next = newNode;
 
             // 更新链表长度, 加1
             m_length++;
@@ -155,12 +155,12 @@ bool LinkList<T>::remove(int index)
     if(ret)
     {
         // 获取删除节点的前置节点位置(-1)
-        last = position(index - 1);
+        lastNode = position(index - 1);
 
         // 获取删除节点位置
-        SharedPointer<Node> toDel = last->next;
+        SharedPointer<Node> toDel = lastNode->next;
         // 更新前置节点指针域, 值为删除节点的后继节点
-        last->next = toDel->next;
+        lastNode->next = toDel->next;
 
         // 如果当前游标位置被删除, 游标后移
         if(m_current == toDel)
@@ -169,7 +169,7 @@ bool LinkList<T>::remove(int index)
         }
 
         // 删除节点
-        // destroy(toDel); // SharedPointer析构时释放对象空间(自动)
+        // destroy(toDel); // SharedPointer<Node>析构时自动释放内存空间
 
         // 更新链表长度, 减1
         m_length--;
@@ -188,7 +188,7 @@ void LinkList<T>::clear()
         // 头节点后移
         m_header.next = toDel->next;
         // 删除节点
-        // destroy(toDel); // SharedPointer析构时释放对象空间(自动)
+        // destroy(toDel); // SharedPointer<Node>析构时自动释放内存空间
 
         // 更新链表长度, 减1
         m_length--;
