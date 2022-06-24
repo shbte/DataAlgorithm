@@ -57,11 +57,11 @@ protected:
     {
         return new Node();
     }
-    // 使用智能指针(SharedPointer)代替Node*, 会自动释放内存空间, 不用手动
-    // virtual void destroy(SharedPointer<Node> pn)
-    // {
-    // delete pn;
-    // }
+    /* 使用智能指针(SharedPointer)代替Node*, 会自动释放内存空间, 不用手动 */
+    //     virtual void destroy(SharedPointer<Node> pn)
+    //     {
+    //     delete pn;
+    //     }
 
 public:
     LinkList();
