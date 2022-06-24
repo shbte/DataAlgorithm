@@ -8,5 +8,6 @@ void func4();
 void func5();
 void func6();
 void func7();
+void func8();
 
 #endif // MYFUNC_H

@@ -11,6 +11,7 @@
 #include "DynamicArray.h"
 #include "LinkList.h"
 #include "StaticLinkList.h"
+#include "SharedPointer.h"
 
 using namespace std;
 using namespace DemoData;
@@ -425,4 +426,59 @@ void func7()
         cout << sll.currentValue() << "  "; // 0  3  4
     }
     cout << endl;
+}
+
+class SPBase
+{
+protected:
+    int mi;
+
+public:
+    SPBase() : mi(1)
+    {
+        cout << "SPBase::SPBase()::mi = " << mi << endl;
+    }
+
+    void setMi(int i)
+    {
+        mi = i;
+    }
+    int getMi()
+    {
+        return mi;
+    }
+
+    ~SPBase()
+    {
+        cout << "SPBase::~SPBase()" << endl;
+    }
+};
+
+void func8()
+{
+    cout << "func8::SharedPointer " << endl;
+
+    SharedPointer<SPBase> sp0 = new SPBase();
+    SharedPointer<SPBase> sp1 = 0;
+    SharedPointer<SPBase> sp2 = NULL;
+    SharedPointer<SPBase> sp3 = sp0;
+    cout << "sp0.mi = " << sp0->getMi() << ", this = " << sp0.get() << endl;
+    cout << "sp1.mi = " << "0" << ", this = " << sp1.get() << endl;
+    cout << "sp2.mi = " << "NULL" << ", this = " << sp2.get() << endl;
+    cout << "sp3.mi = " << sp3->getMi() << ", this = " << sp3.get() << endl;
+    cout << endl;
+
+    sp1 = sp0;
+    sp2 = sp1;
+    cout << "sp0.mi = " << sp0->getMi() << ", this = " << sp0.get() << endl;
+    cout << "sp1.mi = " << sp1->getMi() << ", this = " << sp1.get() << endl;
+    cout << "sp2.mi = " << sp2->getMi() << ", this = " << sp2.get() << endl;
+    cout << "sp3.mi = " << sp3->getMi() << ", this = " << sp3.get() << endl;
+    cout << endl;
+
+    sp3->setMi(10);
+    cout << "sp0.mi = " << sp0->getMi() << ", this = " << sp0.get() << endl;
+    cout << "sp1.mi = " << sp1->getMi() << ", this = " << sp1.get() << endl;
+    cout << "sp2.mi = " << sp2->getMi() << ", this = " << sp2.get() << endl;
+    cout << "sp3.mi = " << sp3->getMi() << ", this = " << sp3.get() << endl;
 }

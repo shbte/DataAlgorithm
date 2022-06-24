@@ -25,6 +25,9 @@ void func0000()
 
     cout << endl;
     func7();
+
+    cout << endl;
+    func8();
 }
 
 int main()

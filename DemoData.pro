@@ -14,6 +14,7 @@ HEADERS += \
     Object.h \
     Pointer.h \
     SeqList.h \
+    SharedPointer.h \
     SmartPointer.h \
     StaticArray.h \
     StaticLinkList.h \

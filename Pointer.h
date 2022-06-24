@@ -2,7 +2,7 @@
 #define POINTER_H
 
 #include "Object.h"
-#include <string>
+#include "Exception.h"
 
 using namespace std;
 
@@ -23,11 +23,6 @@ public:
 
     bool isNull();
     T* get();
-
-    string func()
-    {
-        return "Pointer::func()";
-    }
 };
 
 template <typename T>
