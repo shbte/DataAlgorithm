@@ -28,6 +28,9 @@ void func0000()
 
     cout << endl;
     func8();
+
+    cout << endl;
+    func9();
 }
 
 int main()

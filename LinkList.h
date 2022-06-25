@@ -25,7 +25,6 @@ protected:
 
     // 定义的同时创建了Node对象, 而导致T类型具体构造了(如果T类型构造函数错误, LinkList将出错)
     // mutable Node m_header;  // 头信息节点
-
     mutable struct : public Object
     {
         char reserved[sizeof(T)]; // 只开辟T类型所使用的空间(不构造对象), 使用时再进行内存解释构造
@@ -35,9 +34,6 @@ protected:
     int m_length;       // 链表长度
     Node* m_current;    // 当前节点
     int m_step;         // 移动量级
-
-    // 定义前置节点为类成员变量, 防止临时变量使用头信息节点后释放头信息节点
-    Node* lastNode;
 
     // 获取特定(index)位置节点
     Node* position(int index) const
@@ -64,31 +60,31 @@ protected:
 public:
     LinkList();
 
-    bool insert(const T& e);
-    bool insert(int index, const T& e);
-    bool remove(int index);
-    void clear();
-    bool set(int index, const T& e);
-    bool get(int index, T& e) const;
-    T get(int index) const;
+    virtual bool insert(const T& e);
+    virtual bool insert(int index, const T& e);
+    virtual bool remove(int index);
+    virtual void clear();
+    virtual bool set(int index, const T& e);
+    virtual bool get(int index, T& e) const;
+    virtual T get(int index) const;
 
     // 获取链表长度
-    int length() const;
+    virtual int length() const;
     // 查找函数, >=0说明存在, =-1说明不存在
-    int find(const T& e) const;
+    virtual int find(const T& e) const;
 
     /* 遍历函数重设计: 意义在于把遍历输出函数的时间复杂度变小( O(n^2) ==> O(n) ) */
 
     // 设置当前节点, 并设置移动量级
-    bool moveInit(int index, int step = 1);
+    virtual bool moveInit(int index, int step = 1);
     // 判断当前节点是否为空, 为空说明链表结束
-    bool end();
+    virtual bool end();
     // 获取当前节点的数据
-    T currentValue();
+    virtual T currentValue();
     // 移动一个量级当前节点
-    bool next();
+    virtual bool next();
 
-    ~LinkList();
+    virtual ~LinkList();
 };
 
 // 构造函数
@@ -123,7 +119,7 @@ bool LinkList<T>::insert(int index, const T& e)
         if(newNode != NULL)
         {
             // 获取新节点的前置节点位置(-1)
-            lastNode = position(index - 1);
+            Node* lastNode = position(index - 1);
 
             // 赋值新节点数据域
             newNode->value = e;
@@ -154,7 +150,7 @@ bool LinkList<T>::remove(int index)
     if(ret)
     {
         // 获取删除节点的前置节点位置(-1)
-        lastNode = position(index - 1);
+        Node* lastNode = position(index - 1);
 
         // 获取删除节点位置
         Node* toDel = lastNode->next;

@@ -12,6 +12,7 @@
 #include "LinkList.h"
 #include "StaticLinkList.h"
 #include "SharedPointer.h"
+#include "CircleLinkList.h"
 
 using namespace std;
 using namespace DemoData;
@@ -487,4 +488,91 @@ void func8()
     cout << "sp1.mi = " << sp1->getMi() << ", this = " << sp1.get() << ", ref = " << sp1.getRef() << endl;
     cout << "sp2.mi = " << "sp2->getMi()" << ", this = " << sp2.get() << ", ref = " << sp2.getRef() << endl;
     cout << "sp3.mi = " << sp3->getMi() << ", this = " << sp3.get() << ", ref = " << sp3.getRef() << endl;
+}
+
+// 循环链表类
+void func9()
+{
+    cout << "func9:: CircleLinkList " << endl;
+
+    CircleLinkList<int> cll;
+
+    for(int i = 0; i < 5; i++)
+    {
+        cll.insert(0, i);
+    }
+    for(int i = 0; i < 5; i++)
+    {
+        cll.insert(i + 1);
+    }
+
+    for(int i = 0; i < cll.length(); i++)
+    {
+        cout << cll.get(i) << " ";  // 4 3 2 1 0 1 2 3 4 5
+    }
+    cout << endl;
+
+    for(int i = 0; i < cll.length(); i++)
+    {
+        int mi;
+        cll.get(i, mi);
+        cout << mi << " ";  // 4 3 2 1 0 1 2 3 4 5
+    }
+    cout << endl;
+
+    cll.remove(10);
+    for(int i = 0; i < cll.length(); i++)
+    {
+        cout << cll.get(i) << " ";  // 3 2 1 0 1 2 3 4 5
+    }
+    cout << endl;
+    cll.remove(0);
+    for(int i = 0; i < cll.length(); i++)
+    {
+        cout << cll.get(i) << " ";  // 2 1 0 1 2 3 4 5
+    }
+    cout << endl;
+
+    cll.clear();
+    for(int i = 0; i < cll.length(); i++)
+    {
+        cout << cll.get(i) << " ";  //
+    }
+    cout << cll.find(5) << endl;    // -1
+
+    for(int i = 0; i < 5; i++)
+    {
+        cll.insert(i, i);
+    }
+    for(int i = 0; i < 5; i++)
+    {
+        cll.insert(i + 1);
+    }
+    for(int i = 0; i < cll.length(); i++)
+    {
+        cout << cll.get(i) << " ";  // 0 1 2 3 4 1 2 3 4 5
+    }
+    cout << endl;
+    cout << cll.find(-1) << endl;   // -1
+    cout << cll.find(2) << endl;    // 2
+    cout << cll.find(5) << endl;    // 9
+
+    cll.clear();
+
+    for(int i = 0; i < 41; i++)
+    {
+        cll.insert(i, i + 1);
+    }
+    for(int i = 0; i < cll.length(); i++)
+    {
+        cout << cll.get(i) << " ";  // 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41
+    }
+    cout << endl;
+    for(cll.moveInit(0, 2); !cll.end();)
+    {
+        cll.next();
+        cout << cll.currentValue() << " ";
+        cll.remove(cll.find(cll.currentValue()));
+    }
+    cout << endl;
 }

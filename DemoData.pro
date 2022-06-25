@@ -5,6 +5,7 @@ CONFIG -= qt
 
 HEADERS += \
     Array.h \
+    CircleLinkList.h \
     DynamicArray.h \
     DynamicList.h \
     Exception.h \
