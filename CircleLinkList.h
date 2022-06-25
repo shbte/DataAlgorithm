@@ -94,6 +94,7 @@ bool CircleLinkList<T>::insert(int index, const T& e)
     // 获取合法的元素下标位置
     index = mod(index, this->m_length + 1);
 
+    /*
     // 判断插入的新节点是否为首节点
     if(index == 0)
     {
@@ -132,6 +133,11 @@ bool CircleLinkList<T>::insert(int index, const T& e)
 
     this->m_length++;
     ret = true;
+    */
+
+    /* LinkList类方法实现 */
+    ret = LinkList<T>::insert(index, e);
+    last_to_first();
 
     return ret;
 }
@@ -146,6 +152,7 @@ bool CircleLinkList<T>::remove(int index)
         // 获取合法的元素下标位置
         index = mod(index, this->m_length);
 
+        /*
         Node* toDelNode;
 
         // 判断删除的节点是否为首节点
@@ -177,6 +184,11 @@ bool CircleLinkList<T>::remove(int index)
 
         LinkList<T>::destroy(toDelNode);
         this->m_length--;
+        */
+
+        /* LinkList类方法实现 */
+        ret = LinkList<T>::remove(index);
+        last_to_first();
 
         // 循环链表元素为0时, 重置类成员值
         if(this->m_length == 0)
