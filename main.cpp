@@ -31,6 +31,9 @@ void func0000()
 
     cout << endl;
     func9();
+
+    cout << endl;
+    func10();
 }
 
 int main()

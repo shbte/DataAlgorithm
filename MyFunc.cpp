@@ -13,6 +13,7 @@
 #include "StaticLinkList.h"
 #include "SharedPointer.h"
 #include "CircleLinkList.h"
+#include "DualLinkList.h"
 
 using namespace std;
 using namespace DemoData;
@@ -568,11 +569,84 @@ void func9()
         cout << cll.get(i) << " ";  // 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41
     }
     cout << endl;
+
     for(cll.moveInit(0, 2); !cll.end();)
     {
         cll.next();
-        cout << cll.currentValue() << " ";
+        cout << cll.currentValue() << " ";  // 3 6 9 12 15 18 21 24 27 30 33 36 39 1 5 10 14 19 23 28 32 37 41 7 13 20 26 34 40 8 17 29 38 11 25 2 22 4 35 16 31
         cll.remove(cll.find(cll.currentValue()));
     }
     cout << endl;
+
+    for(int i = 0; i < 3; i++)
+    {
+        cll.insert(i, i + 1);
+    }
+    cll.moveInit(0, 2);
+    cll.next();
+    while(!cll.end())
+    {
+        cout << cll.currentValue() << " ";  // 3 1 2
+        cll.remove(cll.find(cll.currentValue()));
+        cll.next();
+    }
+    cout << endl;
+}
+
+// 双向链表
+void func10()
+{
+    cout << "func10:: DualLinkList " << endl;
+
+    DualLinkList<int> dll;
+
+    for(int i = 0; i < 5; i++)
+    {
+        dll.insert(0, i);
+        dll.insert(i);
+    }
+    for(int i = 0; i < dll.length(); i++)
+    {
+        int e;
+        dll.get(i, e);
+        cout << e << " ";   // 4 3 2 1 0 0 1 2 3 4
+    }
+    cout << endl;
+
+    dll.remove(1);
+    for(dll.moveInit(0); !dll.end(); dll.next())
+    {
+        cout << dll.currentValue() << " ";  // 4 2 1 0 0 1 2 3 4
+    }
+    cout << endl;
+
+    dll.clear();
+    for(dll.moveInit(0); !dll.end(); dll.next())
+    {
+        cout << dll.currentValue() << " ";
+    }
+
+    for(int i = 0; i < 5; i++)
+    {
+        dll.insert(i);
+        dll.insert(0, i);
+        dll.insert(i, i);
+    }
+    for(dll.moveInit(0); !dll.end(); dll.next())
+    {
+        cout << dll.currentValue() << " ";  // 4 3 2 1 4 3 2 1 0 0 0 1 2 3 4
+    }
+    cout << endl;
+    for(dll.moveInit(0, 2); !dll.end(); dll.next())
+    {
+        cout << dll.currentValue() << " ";  // 4 2 4 2 0 0 2 4
+    }
+    cout << endl;
+
+    for(dll.moveInit(dll.length() - 1, 2); !dll.end(); dll.last())
+    {
+        cout << dll.currentValue() << " ";  // 4 2 4 2 0 0 2 4
+    }
+    cout << endl;
+
 }
