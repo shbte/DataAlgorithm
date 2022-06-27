@@ -6,12 +6,14 @@ CONFIG -= qt
 HEADERS += \
     Array.h \
     CircleLinkList.h \
+    DualCircleLinkList.h \
     DualLinkList.h \
     DynamicArray.h \
     DynamicList.h \
     Exception.h \
     LinkList.h \
     LinkListSharedPointer.h \
+    LinuxList.h \
     List.h \
     MyFunc.h \
     Object.h \

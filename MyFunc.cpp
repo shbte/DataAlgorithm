@@ -14,6 +14,7 @@
 #include "SharedPointer.h"
 #include "CircleLinkList.h"
 #include "DualLinkList.h"
+#include "DualCircleLinkList.h"
 
 using namespace std;
 using namespace DemoData;
@@ -648,5 +649,62 @@ void func10()
         cout << dll.currentValue() << " ";  // 4 2 4 2 0 0 2 4
     }
     cout << endl;
+}
 
+// 双向循环链表
+void func11()
+{
+    cout << "func11:: DualCircleLinkList " << endl;
+
+    DualCircleLinkList<int> dcll;
+
+    for(int i = 0; i < 5; i++)
+    {
+        dcll.insert(i);
+    }
+    for(int i = 0; i < dcll.length(); i++)
+    {
+        int e;
+        dcll.get(i, e);
+        cout << e << "  ";
+    }
+    cout << endl;
+
+    dcll.remove(0);
+    for(int i = 0; i < dcll.length(); i++)
+    {
+        int e;
+        dcll.get(i, e);
+        cout << e << "  ";
+    }
+    cout << endl;
+    dcll.set(0, 3);
+    for(int i = 0; i < dcll.length(); i++)
+    {
+        int e;
+        dcll.get(i, e);
+        cout << e << "  ";
+    }
+    cout << endl;
+
+    dcll.clear();
+    cout << "length = " << dcll.length() << endl;
+
+    for(int i = 0; i < 41; i++)
+    {
+        dcll.insert(i + 1);
+    }
+    for(int i = 0; i < dcll.length(); i++)
+    {
+        cout << dcll.get(i) << " ";
+    }
+    cout << endl;
+    int i = 0;
+    for(dcll.moveInit(0, 2); !dcll.end() && i < dcll.length();)
+    {
+        dcll.next();
+        cout << dcll.currentValue() << " ";
+        dcll.remove(dcll.find(dcll.currentValue()));
+    }
+    cout << endl;
 }
