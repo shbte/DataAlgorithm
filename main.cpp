@@ -4,6 +4,7 @@
 
 using namespace std;
 
+// 数组 链表
 void func0000()
 {
     func1();
@@ -39,11 +40,20 @@ void func0000()
     func11();
 }
 
+// 栈 队列
+void func0001()
+{
+    cout << endl;
+    func12();
+}
+
 int main()
 {
     cout << "Hello World!" << endl;
 
     func0000();
+
+    func0001();
 
     return 0;
 }

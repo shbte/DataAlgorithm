@@ -15,6 +15,7 @@
 #include "CircleLinkList.h"
 #include "DualLinkList.h"
 #include "DualCircleLinkList.h"
+#include "StaticStack.h"
 
 using namespace std;
 using namespace DemoData;
@@ -705,6 +706,25 @@ void func11()
         dcll.next();
         cout << dcll.currentValue() << " ";
         dcll.remove(dcll.find(dcll.currentValue()));
+    }
+    cout << endl;
+}
+
+void func12()
+{
+    cout << "func12: StaticStack " << endl;
+
+    StaticStack<int, 5> ss;
+
+    for(int i = 0; i < ss.capacity(); i++)
+    {
+        ss.push(i);
+    }
+    int size = ss.size();
+    for(int i = 0; i < size; i++)
+    {
+        cout << ss.top() << " ";
+        ss.pop();
     }
     cout << endl;
 }

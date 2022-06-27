@@ -21,10 +21,12 @@ HEADERS += \
     SeqList.h \
     SharedPointer.h \
     SmartPointer.h \
+    Stack.h \
     StaticArray.h \
     StaticLinkList.h \
     StaticLinkListSharedPointer.h \
-    StaticList.h
+    StaticList.h \
+    StaticStack.h
 
 SOURCES += \
         Exception.cpp \
