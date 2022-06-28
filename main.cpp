@@ -51,6 +51,9 @@ void func0001()
 
     cout << endl;
     func14();
+
+    cout << endl;
+    func15();
 }
 
 int main()

@@ -18,6 +18,7 @@
 #include "StaticStack.h"
 #include "LinkStack.h"
 #include "StaticQueue.h"
+#include "LinkQueue.h"
 
 using namespace std;
 using namespace DemoData;
@@ -766,7 +767,7 @@ void func13()
     size = ls.size();
     for(int i = 0 ; i < size; i++)
     {
-        cout << ls.top() << " ";
+        cout << ls.top() << " ";    // 5
         ls.pop();
     }
     cout << endl;
@@ -781,7 +782,7 @@ void func13()
     cout << endl;
 
     bool Symbol_Math(const char*);
-    const char* code = "a'{}s<d[(s\"<>\")] > 'f";
+    const char* code = "a'{}s<d[(s\"<>\")] > 'f";   // 1
     cout << Symbol_Math(code) << endl;
 }
 
@@ -795,13 +796,53 @@ void func14()
     {
         sq.add(i);
     }
-    cout << "size = " << sq.size() << ", capacity = " << sq.capacity() << endl;
+    cout << "size = " << sq.size() << ", capacity = " << sq.capacity() << endl; // size = 10, capacity = 10
     for(int i = 0; i < sq.capacity(); i++)
     {
-        cout << sq.front() << " ";
+        cout << sq.front() << " ";  // 0 1 2 3 4 5 6 7 8 9
         sq.remove();
     }
     cout << endl;
 
-    cout << "size = " << sq.size() << ", capacity = " << sq.capacity() << endl;
+    cout << "size = " << sq.size() << ", capacity = " << sq.capacity() << endl; // size = 0, capacity = 10
+}
+
+// 链式队列
+void func15()
+{
+    cout << "func14: LinkQueue " << endl;
+
+    LinkQueue<int> lq;
+
+    for(int i = 0; i < 10; i++)
+    {
+        lq.add(i);
+    }
+    int size = lq.size();
+    cout << "size = " << size << endl;  // size = 9
+    for(int i = 0; i < size; i++)
+    {
+        cout << lq.front() << " ";  // 0 1 2 3 4 5 6 7 8
+        lq.remove();
+    }
+    cout << endl;
+    size = lq.size();
+    cout << "size = " << size << endl;  // size = 0
+
+    for(int i = 0; i < 5; i++)
+    {
+        lq.add(i);
+    }
+    size = lq.size();
+    cout << "size = " << size << endl;  // size = 5
+    for(int i = 0; i < size; i++)
+    {
+        cout << lq.front() << " ";  // 0 1 2 3 4
+        lq.remove();
+    }
+    cout << endl;
+
+    lq.clear();
+    size = lq.size();
+    cout << "size = " << size << endl;  // size = 0
 }

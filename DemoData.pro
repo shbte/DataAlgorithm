@@ -13,6 +13,7 @@ HEADERS += \
     Exception.h \
     LinkList.h \
     LinkListSharedPointer.h \
+    LinkQueue.h \
     LinkStack.h \
     LinuxList.h \
     List.h \

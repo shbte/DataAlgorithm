@@ -81,7 +81,6 @@ bool DualCircleLinkList<T>::insert(int index, const T& e)
         Node* newNode = new Node();
         if(newNode != NULL)
         {
-            // 首节点
             list_head* pos = position(index);
 
             newNode->value = e;
@@ -135,6 +134,7 @@ bool DualCircleLinkList<T>::remove(int index)
             }
         }
         list_del(toDelNode);
+        delete list_entry(toDelNode, Node, head);
         this->m_length--;
     }
 

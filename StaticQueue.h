@@ -40,7 +40,7 @@ bool StaticQueue<T, N>::add(const T& e)
 
     if(ret)
     {
-        int index = this->m_rear + 1;
+        int index = (this->m_rear + 1) % N;
         m_space[index] = e;
         this->m_rear = index;
         this->m_length++;
