@@ -13,6 +13,7 @@ HEADERS += \
     Exception.h \
     LinkList.h \
     LinkListSharedPointer.h \
+    LinkStack.h \
     LinuxList.h \
     List.h \
     MyFunc.h \
@@ -30,6 +31,7 @@ HEADERS += \
 
 SOURCES += \
         Exception.cpp \
+        SymbolMath.cpp \
         main.cpp \
         MyFunc.cpp \
         Object.cpp

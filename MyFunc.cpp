@@ -16,6 +16,7 @@
 #include "DualLinkList.h"
 #include "DualCircleLinkList.h"
 #include "StaticStack.h"
+#include "LinkStack.h"
 
 using namespace std;
 using namespace DemoData;
@@ -667,7 +668,7 @@ void func11()
     {
         int e;
         dcll.get(i, e);
-        cout << e << "  ";
+        cout << e << "  ";  // 0  1  2  3  4
     }
     cout << endl;
 
@@ -676,7 +677,7 @@ void func11()
     {
         int e;
         dcll.get(i, e);
-        cout << e << "  ";
+        cout << e << "  ";  // 1  2  3  4
     }
     cout << endl;
     dcll.set(0, 3);
@@ -684,12 +685,12 @@ void func11()
     {
         int e;
         dcll.get(i, e);
-        cout << e << "  ";
+        cout << e << "  ";  // 3  2  3  4
     }
     cout << endl;
 
     dcll.clear();
-    cout << "length = " << dcll.length() << endl;
+    cout << "length = " << dcll.length() << endl;   // length = 0
 
     for(int i = 0; i < 41; i++)
     {
@@ -697,14 +698,14 @@ void func11()
     }
     for(int i = 0; i < dcll.length(); i++)
     {
-        cout << dcll.get(i) << " ";
+        cout << dcll.get(i) << " "; // 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41
     }
     cout << endl;
     int i = 0;
     for(dcll.moveInit(0, 2); !dcll.end() && i < dcll.length();)
     {
         dcll.next();
-        cout << dcll.currentValue() << " ";
+        cout << dcll.currentValue() << " "; // 3 6 9 12 15 18 21 24 27 30 33 36 39 1 5 10 14 19 23 28 32 37 41 7 13 20 26 34 40 8 17 29 38 11 25 2 22 4 35 16 31
         dcll.remove(dcll.find(dcll.currentValue()));
     }
     cout << endl;
@@ -714,7 +715,7 @@ void func12()
 {
     cout << "func12: StaticStack " << endl;
 
-    StaticStack<int, 5> ss;
+    StaticStack<int, 9> ss;
 
     for(int i = 0; i < ss.capacity(); i++)
     {
@@ -723,8 +724,62 @@ void func12()
     int size = ss.size();
     for(int i = 0; i < size; i++)
     {
-        cout << ss.top() << " ";
+        cout << ss.top() << " ";    // 8 7 6 5 4 3 2 1 0
         ss.pop();
     }
     cout << endl;
+
+    ss.clear();
+    for(int i = 0; i < ss.capacity(); i++)
+    {
+        ss.push(i + 1);
+    }
+    size = ss.size();
+    for(int i = 0; i < size; i++)
+    {
+        cout << ss.top() << " ";    // 9 8 7 6 5 4 3 2 1
+        ss.pop();
+    }
+    cout << endl;
+}
+
+void func13()
+{
+    cout << "func13: LinkStack " << endl;
+
+    LinkStack<int> ls;
+
+    for(int i = 0; i < 5; i++)
+    {
+        ls.push(i);
+    }
+    int size = ls.size();
+    for(int i = 0 ; i < size; i++)
+    {
+        cout << ls.top() << " ";    // 4 3 2 1 0
+        ls.pop();
+    }
+    cout << endl;
+
+    ls.push(5);
+    size = ls.size();
+    for(int i = 0 ; i < size; i++)
+    {
+        cout << ls.top() << " ";
+        ls.pop();
+    }
+    cout << endl;
+
+    ls.push(10);
+    ls.clear();
+    size = ls.size();
+    for(int i = 0 ; i < size; i++)
+    {
+        cout << ls.top() << " ";
+    }
+    cout << endl;
+
+    bool Symbol_Math(const char*);
+    const char* code = "a'{}s<d[(s\"<>\")] > 'f";
+    cout << Symbol_Math(code) << endl;
 }
