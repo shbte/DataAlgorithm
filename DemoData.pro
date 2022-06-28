@@ -19,6 +19,7 @@ HEADERS += \
     MyFunc.h \
     Object.h \
     Pointer.h \
+    Queue.h \
     SeqList.h \
     SharedPointer.h \
     SmartPointer.h \
@@ -27,6 +28,7 @@ HEADERS += \
     StaticLinkList.h \
     StaticLinkListSharedPointer.h \
     StaticList.h \
+    StaticQueue.h \
     StaticStack.h
 
 SOURCES += \

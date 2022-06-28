@@ -14,5 +14,6 @@ void func10();
 void func11();
 void func12();
 void func13();
+void func14();
 
 #endif // MYFUNC_H

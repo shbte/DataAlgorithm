@@ -17,6 +17,7 @@
 #include "DualCircleLinkList.h"
 #include "StaticStack.h"
 #include "LinkStack.h"
+#include "StaticQueue.h"
 
 using namespace std;
 using namespace DemoData;
@@ -782,4 +783,25 @@ void func13()
     bool Symbol_Math(const char*);
     const char* code = "a'{}s<d[(s\"<>\")] > 'f";
     cout << Symbol_Math(code) << endl;
+}
+
+void func14()
+{
+    cout << "func14: StaticQueue " << endl;
+
+    StaticQueue<int, 10> sq;
+
+    for(int i = 0; i < sq.capacity(); i++)
+    {
+        sq.add(i);
+    }
+    cout << "size = " << sq.size() << ", capacity = " << sq.capacity() << endl;
+    for(int i = 0; i < sq.capacity(); i++)
+    {
+        cout << sq.front() << " ";
+        sq.remove();
+    }
+    cout << endl;
+
+    cout << "size = " << sq.size() << ", capacity = " << sq.capacity() << endl;
 }
