@@ -19,6 +19,8 @@
 #include "LinkStack.h"
 #include "StaticQueue.h"
 #include "LinkQueue.h"
+#include "StackToQueue.h"
+#include "QueueToStack.h"
 
 using namespace std;
 using namespace DemoData;
@@ -844,5 +846,67 @@ void func15()
 
     lq.clear();
     size = lq.size();
+    cout << "size = " << size << endl;  // size = 0
+}
+
+// 双栈实现队列, 双队列实现栈
+void func16()
+{
+    cout << "func16: StackToQueue " << endl;
+
+    StackToQueue<int> sq;
+
+    for(int i = 0; i < 10; i++)
+    {
+        sq.add(i);
+    }
+    int size = sq.size();
+    for(int i = 0; i < size; i++)
+    {
+        cout << sq.front() << " ";  // 0 1 2 3 4 5 6 7 8 9
+        sq.remove();
+    }
+    cout << endl;
+    cout << "size = " << sq.size() << endl; // size = 0
+
+    for(int i = 0; i < 10; i++)
+    {
+        sq.add(i);
+    }
+    cout << "size = " << size << endl;  // size = 10
+    sq.remove();
+    size = sq.size();
+    cout << "size = " << size << endl;  // size = 9
+    sq.clear();
+    size = sq.size();
+    cout << "size = " << size << endl;  // size = 0
+
+    cout << "func16: QueueToStack " << endl;
+
+    QueueToStack<int> qs;
+
+    for(int i = 0; i < 10; i++)
+    {
+        qs.push(i);
+    }
+    size = qs.size();
+    cout << "size = " << size << endl;  // size = 10
+    for(int i = 0; i < 10; i++)
+    {
+        cout << qs.top() << " ";    // 9 8 7 6 5 4 3 2 1 0
+        qs.pop();
+    }
+    cout << endl;
+    size = qs.size();
+    cout << "size = " << size << endl;  // size = 0
+    for(int i = 0; i < 10; i++)
+    {
+        qs.push(i);
+    }
+    size = qs.size();
+    cout << "size = " << size << endl;  // size = 10
+    cout << "top = " << qs.top() << endl;   // top = 9
+    qs.clear();
+    size = qs.size();
     cout << "size = " << size << endl;  // size = 0
 }

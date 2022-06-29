@@ -21,10 +21,12 @@ HEADERS += \
     Object.h \
     Pointer.h \
     Queue.h \
+    QueueToStack.h \
     SeqList.h \
     SharedPointer.h \
     SmartPointer.h \
     Stack.h \
+    StackToQueue.h \
     StaticArray.h \
     StaticLinkList.h \
     StaticLinkListSharedPointer.h \
