@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "MyFunc.h"
+#include "DDStringFunc.h"
 
 using namespace std;
 
@@ -59,6 +60,13 @@ void func0001()
     func16();
 }
 
+// String
+void func0002()
+{
+    cout << endl;
+    func001();
+}
+
 int main()
 {
     cout << "Hello World!" << endl;
@@ -66,6 +74,8 @@ int main()
     func0000();
 
     func0001();
+
+    func0002();
 
     return 0;
 }

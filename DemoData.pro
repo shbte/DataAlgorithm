@@ -6,6 +6,8 @@ CONFIG -= qt
 HEADERS += \
     Array.h \
     CircleLinkList.h \
+    DDString.h \
+    DDStringFunc.h \
     DualCircleLinkList.h \
     DualLinkList.h \
     DynamicArray.h \
@@ -35,6 +37,8 @@ HEADERS += \
     StaticStack.h
 
 SOURCES += \
+        DDString.cpp \
+        DDStringFunc.cpp \
         Exception.cpp \
         SymbolMath.cpp \
         main.cpp \
