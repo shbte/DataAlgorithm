@@ -68,6 +68,12 @@ void func0002()
 
     cout << endl;
     func002();
+
+    cout << endl;
+    func003();
+
+    cout << endl;
+    func004();
 }
 
 int main()

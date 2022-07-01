@@ -1,3 +1,4 @@
+#include <cstring>
 #include <iostream>
 
 #include "DDStringFunc.h"
@@ -103,4 +104,136 @@ void func002()
         cout << e.message() << endl;    // parameter s is Invalid...
         cout << e.location() << endl;   // ..\DemoData\DDString.cpp:188
     }
+}
+
+// 字符串匹配表
+int* make_pmt(const char* s)
+{
+    int len = strlen(s);
+    int* ret = reinterpret_cast<int*>(malloc(sizeof(int) * len));
+
+    if(ret)
+    {
+        ret[0] = 0;
+        // 最大匹配长度(longest length) ==> index + 1
+        int ll = ret[0];
+
+        for(int i = 1; i < len; i++)
+        {
+            // 匹配不成功 ==> 匹配长度>0, 且扩展字符不匹配时, 匹配回退, 重新寻找前字符(ll-1)最大匹配长度和扩展字符进行匹配
+            while((ll > 0) && (s[ll] != s[i]))
+            {
+                ll = ret[ll - 1];
+            }
+
+            // 匹配成功 ==> 最优情况, 扩展字符刚好匹配; 当ll==0时, 为首尾单个元素匹配(只匹配第一个和最后一个元素)
+            if(s[ll] == s[i])
+            {
+                ll++;
+            }
+
+            ret[i] = ll;
+        }
+    }
+
+    return ret;
+}
+// KMP字符串匹配查找算法(获取匹配字符串的头下标)
+int kmp(const char* s, const char* p)
+{
+    int ret = -1;
+    int slen = strlen(s);
+    int plen = strlen(p);
+    int* pmt = make_pmt(p);
+
+    if((pmt != NULL) && (0 < plen) && (plen <= slen))
+    {
+        for(int si = 0, pi = 0; si < slen; si++)
+        {
+            // 当pi=0时, 前匹配成功数为0, 不需要减少位移数(左移)
+            while((pi > 0) && (s[si] != p[pi]))
+            {
+                // -1是只获取匹配不成功前字符的最大匹配长度(pi位置已经匹配失败)
+                pi = pmt[pi - 1];
+            }
+
+            // 元素匹配成功时, 进行下一元素比较
+            if(s[si] == p[pi])
+            {
+                pi++;
+            }
+
+            // 匹配结束, 获取下表并结束循环
+            if(pi == plen)
+            {
+                ret = si + 1 - plen;
+                break;
+            }
+        }
+    }
+
+    free(pmt);
+
+    return ret;
+}
+void func003()
+{
+    cout << "func003: " << endl;
+
+    String s = "ABCDABD";
+    int* pmt = make_pmt(s.str());
+
+    for(int i = 0; i < s.length(); i++)
+    {
+        /*
+        0 : 0
+        1 : 0
+        2 : 0
+        3 : 0
+        4 : 1
+        5 : 2
+        6 : 0
+        */
+        cout << i << " : " << pmt[i] << endl;
+    }
+
+    cout << kmp(s.str(), "CD") << endl;         // 2
+    cout << kmp(s.str(), "CD") << endl;         // 2
+    cout << kmp(s.str(), "CDE") << endl;        // -1
+    cout << kmp(s.str(), "ABCDABD") << endl;    // 0
+
+    free(pmt);
+}
+
+void func004()
+{
+    cout << "func004: " << endl;
+
+    String s = "D.T.Software";
+
+    cout << s.indexOf(String("D.")) << endl;            // 0
+    cout << s.indexOf(String(".T.")) << endl;           // 1
+    cout << s.indexOf(String("re")) << endl;            // 10
+    cout << s.indexOf(String("D.T.Software")) << endl;  // 0
+
+    cout << s.remove(String("D.")).str() << endl;       // T.Software
+    cout << s.remove(String(".S")).str() << endl;       // Toftware
+    cout << s.remove(String("re")).str() << endl;       // Toftwa
+    cout << s.remove(String("Toftwa")).str() << endl;   //
+
+    s = "D.T.Software";
+    cout << (s - String("D.")).str() << endl;           // T.Software
+    cout << (s - String(".S")).str() << endl;           // D.Toftware
+    cout << (s - String("re")).str() << endl;           // D.T.Softwa
+    cout << (s - String("D.T.Software")).str() << endl; //
+
+    cout << s.replace("D.", "D..").str() << endl;                       // D..T.Software
+    cout << s.replace(".S", ".S.").str() << endl;                       // D..T.S.oftware
+    cout << s.replace("re", "re.").str() << endl;                       // D..T.S.oftware.
+    cout << s.replace("D..T.S.oftware.", "D.T.Software").str() << endl; // D.T.Software
+
+    cout << (s.sub(0, 1)).str() << endl;    // D
+    cout << (s.sub(11, 1)).str() << endl;   // e
+    cout << (s.sub(4, 14)).str() << endl;   // Software
+    cout << (s.sub(0, 20)).str() << endl;   // D.T.Software
 }
