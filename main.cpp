@@ -65,6 +65,9 @@ void func0002()
 {
     cout << endl;
     func001();
+
+    cout << endl;
+    func002();
 }
 
 int main()
