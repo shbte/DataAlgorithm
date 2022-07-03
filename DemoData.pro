@@ -28,6 +28,8 @@ HEADERS += \
     SeqList.h \
     SharedPointer.h \
     SmartPointer.h \
+    Sort.h \
+    SortFunc.h \
     Stack.h \
     StackToQueue.h \
     StaticArray.h \
@@ -42,6 +44,7 @@ SOURCES += \
         DDStringFunc.cpp \
         Exception.cpp \
         Recursion.cpp \
+        SortFunc.cpp \
         SymbolMath.cpp \
         main.cpp \
         MyFunc.cpp \

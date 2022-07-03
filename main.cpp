@@ -2,6 +2,7 @@
 
 #include "MyFunc.h"
 #include "DDStringFunc.h"
+#include "SortFunc.h"
 
 using namespace std;
 
@@ -79,6 +80,13 @@ void func0002()
     func005();
 }
 
+// Sort
+void func0003()
+{
+    cout << endl;
+    funcSort001();
+}
+
 int main()
 {
     cout << "Hello World!" << endl;
@@ -88,6 +96,8 @@ int main()
     func0001();
 
     func0002();
+
+    func0003();
 
     return 0;
 }
