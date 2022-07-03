@@ -4,6 +4,7 @@
 #include "DDStringFunc.h"
 #include "DDString.h"
 #include "Exception.h"
+#include "Recursion.h"
 
 using namespace std;
 using namespace DemoData;
@@ -236,4 +237,50 @@ void func004()
     cout << (s.sub(11, 1)).str() << endl;   // e
     cout << (s.sub(4, 14)).str() << endl;   // Software
     cout << (s.sub(0, 20)).str() << endl;   // D.T.Software
+}
+
+void func005()
+{
+    cout << "func005: " << endl;
+
+    String s = "D.T.Software.";
+
+    cout << _strlen_(s.str()) << endl;  // 13
+
+    Node* list1 = create_list(1, 5);
+    Node* list2 = create_list(3, 12);
+
+    // 打印链表
+    print_list(list1);  // 1->2->3->4->5->NULL
+    print_list(list2);  // 3->4->5->6->7->8->9->10->11->12->13->14->NULL
+
+    // 反转链表, 后打印
+    list1 = reverse(list1);
+    print_list(list1);  // 5->4->3->2->1->NULL
+
+    // 链表合并
+    Node* merge_list = merge(list1, list2);
+    print_list(merge_list); // 5->4->3->4->5->6->7->8->9->10->11->12->13->14->3->2->1->NULL
+
+    // 逆序打印单链表中值为偶数的节点
+    r_print_even(merge_list);   // ->2->14->12->10->8->6->4->4
+    cout << endl;
+
+    // destroy_list(list1);
+    // destroy_list(list2);
+    // 释放list1和list2的内存空间 (因为list1和list2已经合并, 有可能释放其中一个时, 另一个也被释放, 造成重复释放错误, 从而使用merge_list来释放list1和list2的内存空间)
+    destroy_list(merge_list);
+
+    // 汉诺塔移动问题
+    HanoiTower(1, 'a', 'b', 'c');   // a ==> c
+    cout << endl;
+    HanoiTower(2, 'a', 'b', 'c');   // a ==> b a ==> c b ==> c
+    cout << endl;
+    HanoiTower(3, 'a', 'b', 'c');   // a ==> c a ==> b c ==> b a ==> c b ==> a b ==> c a ==> c
+    cout << endl;
+
+    char cs[] = "acc";
+    // 全排列的递归解法
+    permutation(cs, cs);    // acc cac cca cca cac
+    cout << endl;
 }

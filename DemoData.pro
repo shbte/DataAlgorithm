@@ -24,6 +24,7 @@ HEADERS += \
     Pointer.h \
     Queue.h \
     QueueToStack.h \
+    Recursion.h \
     SeqList.h \
     SharedPointer.h \
     SmartPointer.h \
@@ -40,6 +41,7 @@ SOURCES += \
         DDString.cpp \
         DDStringFunc.cpp \
         Exception.cpp \
+        Recursion.cpp \
         SymbolMath.cpp \
         main.cpp \
         MyFunc.cpp \

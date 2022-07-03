@@ -74,6 +74,9 @@ void func0002()
 
     cout << endl;
     func004();
+
+    cout << endl;
+    func005();
 }
 
 int main()
