@@ -78,4 +78,41 @@ void funcSort001()
     // 希尔排序, true(升序)
     Sort::Shell(ash, size, true);
     Sort::print_array(ash, size);   // 0 1 2 3 4 5 6 7 8 9 10 11 12
+
+    cout << "Sort::Merge" << endl;
+
+    int am[] = {4, 6, 1, 2, 12, 11, 8, 3, 10, 5, 9, 0, 7};
+    //int am[] = {52, 23, 80, 36, 68, 14};
+    size = sizeof(am) / sizeof(am[0]);
+
+    // 打印数组元素
+    Sort::print_array(am, size);    // 4 6 1 2 12 11 8 3 10 5 9 0 7
+
+    // 归并排序, 默认(升序)
+    Sort::Merge(am, size);
+    Sort::print_array(am, size);    // 0 1 2 3 4 5 6 7 8 9 10 11 12
+    // 归并排序, false(降序)
+    Sort::Merge(am, size, false);
+    Sort::print_array(am, size);    // 12 11 10 9 8 7 6 5 4 3 2 1 0
+    // 归并排序, true(升序)
+    Sort::Merge(am, size, true);
+    Sort::print_array(am, size);    // 0 1 2 3 4 5 6 7 8 9 10 11 12
+
+    cout << "Sort::Quick" << endl;
+
+    int aq[] = {4, 6, 1, 2, 12, 11, 8, 3, 10, 5, 9, 0, 7};
+    size = sizeof(aq) / sizeof(aq[0]);
+
+    // 打印数组元素
+    Sort::print_array(aq, size);    // 4 6 1 2 12 11 8 3 10 5 9 0 7
+
+    // 快速排序, 默认(升序)
+    Sort::Quick(aq, size);
+    Sort::print_array(aq, size);    // 0 1 2 3 4 5 6 7 8 9 10 11 12
+    // 快速排序, false(降序)
+    Sort::Quick(aq, size, false);
+    Sort::print_array(aq, size);    // 12 11 10 9 8 7 6 5 4 3 2 1 0
+    // 快速排序, true(升序)
+    Sort::Quick(aq, size, true);
+    Sort::print_array(aq, size);    // 0 1 2 3 4 5 6 7 8 9 10 11 12
 }
