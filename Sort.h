@@ -110,6 +110,86 @@ public:
         }
     }
 
+    // 希尔排序(不稳定) =>
+    template <typename T>
+    static void Shell(T array[], int len, bool min2max = true)
+    {
+        int d = len;
+
+        do
+        {
+            d = d / 3 + 1;
+
+            // 打印d值
+            //cout << "d = " << d << endl;
+
+            for(int i = 0; i < d; i++)
+            {
+                for(int j = i + d; j < len; j += d)
+                {
+                    // 获取标记数组元素下标(插入位置下标)
+                    int m = j;
+                    // 获取本次排序的数组元素值
+                    T v = array[m];
+
+                    // 本次排序的数组元素值与排序好的数组元素进行比较 => 将比较操作加入for循环: 因已排好序而不用遍历比较到底, 所以条件不符合时, 后续也不会有符合的情况, 可直接中断循环
+                    for(int k = j - d; (k >= 0) && (min2max ? (array[k] > v) : (array[k] < v)); k -= d)
+                    {
+                        // 较大/较小数组元素后移
+                        array[k + d] = array[k];
+                        // 更新插入位置下标
+                        m = k;
+
+                        // 打印交换位置(下标)
+                        //cout << "  <" << k + d << ", " << k << ">" << endl;
+                    }
+
+                    // 本次排序的数组元素下标与标记元素下标不一致时, 将本次排序的数组元素值放入插入位置下标
+                    if(m != j)
+                    {
+                        array[m] = v;
+                    }
+                }
+            }
+
+            /* 这个排序只需要前几次让数组基本有序即可, 没必要完全按照思想做, 因此, 可使用以下代码
+            // 打印d值
+            //cout << "d = " << d << endl;
+
+            for(int i = d; i < len; i += d)
+            {
+                // 获取标记数组元素下标(插入位置下标)
+                int k = i;
+                // 获取本次排序的数组元素值
+                T e = array[i];
+
+                // 本次排序的数组元素值与排序好的数组元素进行比较 => 将比较操作加入for循环: 因已排好序而不用遍历比较到底, 所以条件不符合时, 后续也不会有符合的情况, 可直接中断循环
+                for(int j = i - d; (j >= 0) && (min2max ? (array[j] > e) : (array[j] < e)); j -= d)
+                {
+                    // 较大/较小数组元素后移
+                    array[j + d] = array[j];
+                    // 更新插入位置下标
+                    k = j;
+
+                    // 打印交换位置(下标)
+                    //cout << "  <" << j + d << ", " << j << ">";
+                }
+
+                // 本次排序的数组元素下标与标记元素下标不一致时, 将本次排序的数组元素值放入插入位置下标
+                if(k != i)
+                {
+                    array[k] = e;
+                }
+            }
+            //cout << endl;
+            */
+            // 打印单轮排序后的数组
+            //cout << " => ";
+            //print_array(array, len);
+
+        } while(d > 1);
+    }
+
     // 打印数组元素
     template <typename T>
     static void print_array(T array[], int size)

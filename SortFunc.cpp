@@ -60,4 +60,22 @@ void funcSort001()
     // 冒泡排序, true: 升序
     Sort::Bubble(ab, size, true);
     Sort::print_array(ab, size);    // 0 1 2 3 4 5 6 7 8 9 10 11 12
+
+    cout << "Sort::Shell" << endl;
+
+    int ash[] = {4, 6, 1, 2, 12, 11, 8, 3, 10, 5, 9, 0, 7};
+    //int ash[] = {21, 25, 49, 25, 16, 8};
+    size = sizeof(ash) / sizeof(ash[0]);
+
+    Sort::print_array(ash, size);   // 4 6 1 2 12 11 8 3 10 5 9 0 7
+
+    // 希尔排序, 默认(升序)
+    Sort::Shell(ash, size);
+    Sort::print_array(ash, size);   // 0 1 2 3 4 5 6 7 8 9 10 11 12
+    // 希尔排序, false(降序)
+    Sort::Shell(ash, size, false);
+    Sort::print_array(ash, size);   // 12 11 10 9 8 7 6 5 4 3 2 1 0
+    // 希尔排序, true(升序)
+    Sort::Shell(ash, size, true);
+    Sort::print_array(ash, size);   // 0 1 2 3 4 5 6 7 8 9 10 11 12
 }
