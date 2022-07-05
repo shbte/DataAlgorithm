@@ -37,7 +37,9 @@ HEADERS += \
     StaticLinkListSharedPointer.h \
     StaticList.h \
     StaticQueue.h \
-    StaticStack.h
+    StaticStack.h \
+    Tree.h \
+    TreeNode.h
 
 SOURCES += \
         DDString.cpp \
