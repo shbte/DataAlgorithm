@@ -228,6 +228,7 @@ void funcSort001()
     Sort::Quick(sa.array(), size);
     Sort::print_array(sa.array(), size);    // 0 1.2 2.4 3.6 4.8 6 7.2 8.4 9.6 10.8
 
+    /*
     cout << "Sort::SortBase" << endl;
 
     for(int i = 0; i < 1000; i++)
@@ -245,7 +246,7 @@ void funcSort001()
     clock_t end = clock();
     cout << "time : " << (end - begin) << endl;
 
-    /*
+
     for(int i = 0; i < 1000; i++)
     {
         cout << sb[i].id << " ";

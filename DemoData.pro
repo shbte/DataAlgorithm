@@ -13,6 +13,9 @@ HEADERS += \
     DynamicArray.h \
     DynamicList.h \
     Exception.h \
+    FuncTree.h \
+    GTree.h \
+    GTreeNode.h \
     LinkList.h \
     LinkListSharedPointer.h \
     LinkQueue.h \
@@ -45,6 +48,7 @@ SOURCES += \
         DDString.cpp \
         DDStringFunc.cpp \
         Exception.cpp \
+        FuncTree.cpp \
         Recursion.cpp \
         SortFunc.cpp \
         SymbolMath.cpp \

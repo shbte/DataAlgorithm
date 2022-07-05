@@ -3,6 +3,7 @@
 #include "MyFunc.h"
 #include "DDStringFunc.h"
 #include "SortFunc.h"
+#include "FuncTree.h"
 
 using namespace std;
 
@@ -87,6 +88,13 @@ void func0003()
     funcSort001();
 }
 
+// Tree
+void func0004()
+{
+    cout << endl;
+    funcTree001();
+}
+
 int main()
 {
     cout << "Hello World!" << endl;
@@ -98,6 +106,8 @@ int main()
     func0002();
 
     func0003();
+
+    func0004();
 
     return 0;
 }
