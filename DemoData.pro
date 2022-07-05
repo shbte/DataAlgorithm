@@ -7,12 +7,14 @@ HEADERS += \
     Array.h \
     CircleLinkList.h \
     DDString.h \
-    DDStringFunc.h \
     DualCircleLinkList.h \
     DualLinkList.h \
     DynamicArray.h \
     DynamicList.h \
     Exception.h \
+    FuncDDString.h \
+    FuncMy.h \
+    FuncSort.h \
     FuncTree.h \
     GTree.h \
     GTreeNode.h \
@@ -22,7 +24,6 @@ HEADERS += \
     LinkStack.h \
     LinuxList.h \
     List.h \
-    MyFunc.h \
     Object.h \
     Pointer.h \
     Queue.h \
@@ -32,7 +33,6 @@ HEADERS += \
     SharedPointer.h \
     SmartPointer.h \
     Sort.h \
-    SortFunc.h \
     Stack.h \
     StackToQueue.h \
     StaticArray.h \
@@ -46,12 +46,12 @@ HEADERS += \
 
 SOURCES += \
         DDString.cpp \
-        DDStringFunc.cpp \
         Exception.cpp \
+        FuncDDString.cpp \
+        FuncMy.cpp \
+        FuncSort.cpp \
         FuncTree.cpp \
         Recursion.cpp \
-        SortFunc.cpp \
         SymbolMath.cpp \
         main.cpp \
-        MyFunc.cpp \
         Object.cpp

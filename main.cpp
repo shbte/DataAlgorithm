@@ -1,8 +1,8 @@
 #include <iostream>
 
-#include "MyFunc.h"
-#include "DDStringFunc.h"
-#include "SortFunc.h"
+#include "FuncMy.h"
+#include "FuncDDString.h"
+#include "FuncSort.h"
 #include "FuncTree.h"
 
 using namespace std;
