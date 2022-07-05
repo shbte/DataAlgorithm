@@ -3,7 +3,6 @@
 
 #include <iostream>
 
-#include "Object.h"
 #include "Exception.h"
 
 using namespace std;

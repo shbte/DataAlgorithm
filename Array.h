@@ -7,7 +7,6 @@ namespace DemoData
 {
 
 /*
-
 Array设计要点
     抽象类模板, 存储空间的位置和大小由子类完成
     重载数组操作符, 判断访问下标是否合法
@@ -60,6 +59,12 @@ public:
     T operator [](int i) const
     {
         return (const_cast<Array<T> &>(*this))[i];
+    }
+
+    // 返回数组指针
+    T* array() const
+    {
+        return m_array;
     }
 };
 
