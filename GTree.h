@@ -14,6 +14,9 @@ class GTree : public Tree<T>
     // 递归查找函数
     GTreeNode<T>* find(GTreeNode<T>* node, const T& value) const;
     GTreeNode<T>* find(GTreeNode<T>* node, TreeNode<T>* nodee) const;
+
+    // 释放堆空间节点空间
+    void free(GTreeNode<T>* node);
 public:
     bool insert(TreeNode<T>* node);
     bool insert(const T& value, TreeNode<T>* parent);
@@ -29,12 +32,14 @@ public:
     }
     GTreeNode<T>* root() const
     {
-        return dynamic_cast<GTreeNode<T>*>(this->m_root);
+        return this->m_root ? dynamic_cast<GTreeNode<T>*>(this->m_root) : NULL;
     }
     int degree() const {}
     int count() const {}
     int height() const {}
-    void clear() {}
+    void clear();
+
+    ~GTree<T>();
 };
 
 // 递归查找函数, 从node节点按值查找
@@ -53,7 +58,7 @@ GTreeNode<T>* GTree<T>::find(GTreeNode<T>* node, const T& value) const
         }
         else
         {
-            if(node->child.length())
+            if(node->child.length() > 0)
             {
                 // 该节点拥有N个子节点, 所以使用for循环遍历, 并判断是否查找到, 查找到直接结束循环
                 for(node->child.moveInit(0); !node->child.end() && (ret == NULL); node->child.next())
@@ -83,7 +88,7 @@ GTreeNode<T>* GTree<T>::find(GTreeNode<T>* node, TreeNode<T>* obj) const
         }
         else
         {
-            if(node->child.length())
+            if(node->child.length() > 0)
             {
                 // 该节点拥有N个子节点, 所以使用for循环遍历, 并判断是否查找到, 查找到直接结束循环
                 for(node->child.moveInit(0); !node->child.end() && (ret == NULL); node->child.next())
@@ -150,7 +155,7 @@ bool GTree<T>::insert(const T& value, TreeNode<T>* parent)
     bool ret = false;
 
     // 创建新节点对象
-    GTreeNode<T>* node = new GTreeNode<T>();
+    GTreeNode<T>* node = GTreeNode<T>::NewNode();
 
     if(node != NULL)
     {
@@ -167,6 +172,54 @@ bool GTree<T>::insert(const T& value, TreeNode<T>* parent)
     }
 
     return ret;
+}
+
+// 释放堆空间节点空间
+template <typename T>
+void GTree<T>::free(GTreeNode<T>* node)
+{
+    if(node != NULL)
+    {
+        // 判断是否有子类链表
+        if(node->child.length() > 0)
+        {
+            // 设置链表的当前节点为首节点
+            node->child.moveInit(0);
+
+            // 判断链表的当前节点是否为空
+            while(!node->child.end())
+            {
+                GTreeNode<T>* del = node->child.currentValue();
+
+                // 递归释放内存堆空间
+                free(del);
+
+                // 删除链表节点(当前节点后移), 链表节点的值为子类树节点地址, 子类树节点被释放后, 其父类的子类链表节点也应被移除
+                node->child.remove(node->child.find(del));
+            }
+        }
+
+        // 内存在堆空间时才释放空间
+        if(node->flag())
+        {
+            delete node;
+        }
+    }
+}
+template <typename T>
+void GTree<T>::clear()
+{
+    free(root());
+
+    // 树根节点赋空, 防止由于其为栈空间而没释放问题
+    this->m_root = NULL;
+}
+
+// 析构函数
+template <typename T>
+GTree<T>::~GTree<T>()
+{
+    clear();
 }
 
 }

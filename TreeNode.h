@@ -20,7 +20,7 @@ public:
 
     virtual ~TreeNode()
     {
-        delete parent;
+        parent = NULL;
     };
 };
 

@@ -15,8 +15,13 @@ void funcTree001()
     GTree<char> gtc;
     GTreeNode<char>* parent;
 
+    GTreeNode<char> root;
+    root.value = 'A';
+    root.parent = NULL;
+
     // 插入节点
-    gtc.insert('A', NULL);
+    //gtc.insert('A', NULL);
+    gtc.insert(&root);
 
     parent = gtc.find('A');
     gtc.insert('B', parent);
@@ -41,6 +46,8 @@ void funcTree001()
 
     parent = gtc.find('H');
     gtc.insert('M', parent);
+
+    gtc.clear();
 
     // 叶子节点
     const char* degree = "KLFGMIJ";
