@@ -4,6 +4,7 @@
 
 #include "GTree.h"
 #include "Recursion.h"
+#include "SharedPointer.h"
 
 using namespace std;
 using namespace DemoData;
@@ -47,7 +48,8 @@ void funcTree001()
     parent = gtc.find('H');
     gtc.insert('M', parent);
 
-    gtc.clear();
+    // 清除树节点
+    //gtc.clear();
 
     // 叶子节点
     const char* degree = "KLFGMIJ";
@@ -56,6 +58,24 @@ void funcTree001()
     for(int i = 0; i < _strlen_(degree); i++)
     {
         TreeNode<char>* node = gtc.find(degree[i]);
+
+        while(node)
+        {
+            cout << node->value << "->";
+
+            node = node->parent;
+        }
+        cout << "NULL" << endl;
+    }
+
+    // 清除单个树节点
+    GTreeNode<char>* renode = gtc.find('D');
+    SharedPointer<Tree<char>> spt = gtc.remove(renode);
+
+    // 从尾到头输出树
+    for(int i = 0; i < _strlen_(degree); i++)
+    {
+        TreeNode<char>* node = spt->find(degree[i]);
 
         while(node)
         {

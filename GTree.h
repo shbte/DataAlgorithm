@@ -15,13 +15,15 @@ class GTree : public Tree<T>
     GTreeNode<T>* find(GTreeNode<T>* node, const T& value) const;
     GTreeNode<T>* find(GTreeNode<T>* node, TreeNode<T>* nodee) const;
 
-    // 释放堆空间节点空间
+    // 递归释放树堆空间节点
     void free(GTreeNode<T>* node);
+    // 删除树节点
+    void remove(GTreeNode<T>* node, GTree<T>*& ret);
 public:
     bool insert(TreeNode<T>* node);
     bool insert(const T& value, TreeNode<T>* parent);
-    SharedPointer<Tree<T>> remove(const T& value) {};
-    SharedPointer<Tree<T>> remove(TreeNode<T>* node) {};
+    SharedPointer<Tree<T>> remove(const T& value);
+    SharedPointer<Tree<T>> remove(TreeNode<T>* node);
     GTreeNode<T>* find(const T& value) const       // 由于GTreeNode为TreeNode的子类, 所以返回类型可以使用子类代替, 但参数类型不可使用子类代替父类
     {
         return find(root(), value);
@@ -174,7 +176,82 @@ bool GTree<T>::insert(const T& value, TreeNode<T>* parent)
     return ret;
 }
 
-// 释放堆空间节点空间
+// 删除树节点(在父类的子类链表中, 删除该节点)
+template <typename T>
+void GTree<T>::remove(GTreeNode<T>* node, GTree<T>*& ret)
+{
+    // 创建删除树空间并赋值
+    ret = new GTree<T>();
+
+    if(ret != NULL)
+    {
+        // 获取删除节点的父类, 不直接获取是因为父节点可能为空(根节点的父节点为空)
+        GTreeNode<T>* parent = dynamic_cast<GTreeNode<T>*>(node->parent);
+
+        // (根节点的父节点为空)
+        if(parent != NULL)
+        {
+            // 获取子类链表
+            LinkList<GTreeNode<T> *>& child = parent->child;
+
+            // 从子类链表中删除记录子类节点信息的链表节点(将删除节点从树信息中删除)
+            child.remove(child.find(node));
+
+            // 删除节点的父节点清空(将树信息从删除节点中清除)
+            node->parent = NULL;
+        }
+        else
+        {
+            // 删除节点为根节点时, 原对象树删除(根节点赋空)
+            this->m_root = NULL;
+        }
+
+        // 将删除树节点树作为新树根节点返回(没创建树空间时, 树指针为空)
+        ret->m_root = node;
+    }
+    else
+    {
+        THROW_EXCEPTION(NoEnoughMemoryException, "No memory to create new tree...");
+    }
+}
+template <typename T>
+SharedPointer<Tree<T>> GTree<T>::remove(const T& value)
+{
+    // 将删除节点所在的分支作为树返回
+    GTree<T>* ret = NULL;
+
+    // 在树中查找删除节点
+    GTreeNode<T>* n = find(value);
+
+    // 判断删除节点是否存在树中
+    if(n != NULL)
+    {
+        remove(n, ret);
+    }
+
+    // 会调用SharedPointer的构造函数
+    return ret;
+}
+template <typename T>
+SharedPointer<Tree<T>> GTree<T>::remove(TreeNode<T>* node)
+{
+    // 将删除节点所在的分支作为树返回
+    GTree<T>* ret = NULL;
+
+    // 在树中查找删除节点
+    GTreeNode<T>* n = find(node);
+
+    // 判断删除节点是否存在树中
+    if(n != NULL)
+    {
+        remove(n, ret);
+    }
+
+    // 会调用SharedPointer的构造函数
+    return ret;
+}
+
+// 递归释放树堆空间节点
 template <typename T>
 void GTree<T>::free(GTreeNode<T>* node)
 {
@@ -194,7 +271,7 @@ void GTree<T>::free(GTreeNode<T>* node)
                 // 递归释放内存堆空间
                 free(del);
 
-                // 删除链表节点(当前节点后移), 链表节点的值为子类树节点地址, 子类树节点被释放后, 其父类的子类链表节点也应被移除
+                // 删除链表节点(且当前链表节点会从删除节点后移), 链表节点的值为子类树节点地址, 子类树节点被释放后, 其父类的子类链表节点也应被移除
                 node->child.remove(node->child.find(del));
             }
         }
