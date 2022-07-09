@@ -40,6 +40,8 @@ public:
         {
             ret->m_flag = true;
         }
+
+        return ret;
     }
 };
 

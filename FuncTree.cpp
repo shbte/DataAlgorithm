@@ -61,12 +61,28 @@ void funcTree001()
 
         while(node)
         {
+            /*
+             K->E->B->A->NULL
+             L->E->B->A->NULL
+             F->B->A->NULL
+             G->C->A->NULL
+             M->H->D->A->NULL
+             I->D->A->NULL
+             J->D->A->NULL
+            */
             cout << node->value << "->";
 
             node = node->parent;
         }
         cout << "NULL" << endl;
     }
+
+    // 获取树的度数
+    cout << gtc.degree() << endl;   // 3
+    // 获取树的节点数
+    cout << gtc.count() << endl;    // 13
+    // 获取树的最大高度
+    cout << gtc.height() << endl;   // 4
 
     // 清除单个树节点
     GTreeNode<char>* renode = gtc.find('D');
@@ -79,10 +95,33 @@ void funcTree001()
 
         while(node)
         {
+            /*
+             NULL
+             NULL
+             NULL
+             NULL
+             M->H->D->NULL
+             I->D->NULL
+             J->D->NULL
+            */
             cout << node->value << "->";
 
             node = node->parent;
         }
         cout << "NULL" << endl;
     }
+
+    // 获取树的度数
+    cout << gtc.degree() << endl;   // 2
+    // 获取树的节点数
+    cout << gtc.count() << endl;    // 8
+    // 获取树的最大高度
+    cout << gtc.height() << endl;   // 4
+
+    // 获取树的度数
+    cout << spt->degree() << endl;  // 3
+    // 获取树的节点数
+    cout << spt->count() << endl;   // 5
+    // 获取树的最大高度
+    cout << spt->height() << endl;  // 3
 }

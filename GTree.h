@@ -19,6 +19,13 @@ class GTree : public Tree<T>
     void free(GTreeNode<T>* node);
     // 删除树节点
     void remove(GTreeNode<T>* node, GTree<T>*& ret);
+
+    // 获取以该节点为根的最大度数
+    int degree(GTreeNode<T>* node) const;
+    // 获取以该节点为根的节点数
+    int count(GTreeNode<T>* node) const;
+    // 获取以该节点为根的高度
+    int height(GTreeNode<T>* node) const;
 public:
     bool insert(TreeNode<T>* node);
     bool insert(const T& value, TreeNode<T>* parent);
@@ -36,9 +43,9 @@ public:
     {
         return this->m_root ? dynamic_cast<GTreeNode<T>*>(this->m_root) : NULL;
     }
-    int degree() const {}
-    int count() const {}
-    int height() const {}
+    int degree() const;
+    int count() const;
+    int height() const;
     void clear();
 
     ~GTree<T>();
@@ -249,6 +256,115 @@ SharedPointer<Tree<T>> GTree<T>::remove(TreeNode<T>* node)
 
     // 会调用SharedPointer的构造函数
     return ret;
+}
+
+// 获取以该节点为根的最大度数
+template <typename T>
+int GTree<T>::degree(GTreeNode<T>* node) const
+{
+    int ret = 0;
+
+    // 判断该节点是否为空
+    if(node != NULL)
+    {
+        // 使用引用&, 而不会创建对象
+        LinkList<GTreeNode<T>*>& child = node->child;
+
+        // 判断该节点是否存在子类
+        if(child.length() > 0)
+        {
+            // 该节点的子类树等于该节点的度数
+            ret = child.length();
+
+            // 循环遍历子类链表, 计算各个子类的度数
+            for(child.moveInit(0); !child.end(); child.next())
+            {
+                // 递归调用, 获取该节点的子类的度数
+                int d = degree(child.currentValue());
+
+                // 获取最大度数
+                if(d > ret)
+                {
+                    ret = d;
+                }
+            }
+        }
+    }
+
+    return ret;
+}
+// 树的最大度数
+template <typename T>
+int GTree<T>::degree() const
+{
+    return degree(root());
+}
+// 获取以该节点为根的节点数
+template <typename T>
+int GTree<T>::count(GTreeNode<T>* node) const
+{
+    int ret = 0;
+
+    if(node != NULL)
+    {
+        ret += 1;
+
+        LinkList<GTreeNode<T>*>& child = node->child;
+
+        if(child.length() > 0)
+        {
+            for(child.moveInit(0); !child.end(); child.next())
+            {
+                ret += count(child.currentValue());
+            }
+        }
+    }
+
+    return ret;
+}
+// 树中节点的数目
+template <typename T>
+int GTree<T>::count() const
+{
+    return count(root());
+}
+// 获取以该节点为根的高度
+template <typename T>
+int GTree<T>::height(GTreeNode<T>* node) const
+{
+    int ret = 0;
+
+    if(node != NULL)
+    {
+        ret += 1;
+
+        LinkList<GTreeNode<T>*>& child = node->child;
+
+        if(child.length() > 0)
+        {
+            int h = 0;
+
+            for(child.moveInit(0); !child.end(); child.next())
+            {
+                int temph = height(child.currentValue());
+
+                if(temph > h)
+                {
+                    h = temph;
+                }
+            }
+
+            ret += h;
+        }
+    }
+
+    return ret;
+}
+// 树的最大高度
+template <typename T>
+int GTree<T>::height() const
+{
+    return height(root());
 }
 
 // 递归释放树堆空间节点
