@@ -4,6 +4,7 @@
 #include "Tree.h"
 #include "GTreeNode.h"
 #include "Exception.h"
+#include "LinkQueue.h"
 
 namespace DemoData
 {
@@ -11,6 +12,10 @@ namespace DemoData
 template <typename T>
 class GTree : public Tree<T>
 {
+protected:
+    // 按层次入队存储的树节点队列
+    LinkQueue<GTreeNode<T>*> m_queue;
+
     // 递归查找函数
     GTreeNode<T>* find(GTreeNode<T>* node, const T& value) const;
     GTreeNode<T>* find(GTreeNode<T>* node, TreeNode<T>* nodee) const;
@@ -26,7 +31,14 @@ class GTree : public Tree<T>
     int count(GTreeNode<T>* node) const;
     // 获取以该节点为根的高度
     int height(GTreeNode<T>* node) const;
+
+    // 拷贝构造函数私有化
+    GTree<T>(const GTree<T>&);
+    // 赋值操作符函数私有化
+    GTree<T>& operator =(const GTree<T>&);
 public:
+    GTree<T>() {}
+
     bool insert(TreeNode<T>* node);
     bool insert(const T& value, TreeNode<T>* parent);
     SharedPointer<Tree<T>> remove(const T& value);
@@ -47,6 +59,12 @@ public:
     int count() const;
     int height() const;
     void clear();
+
+    // 遍历功能函数
+    bool begin();
+    bool next();
+    GTreeNode<T>* current();
+    bool end();
 
     ~GTree<T>();
 };
@@ -305,14 +323,18 @@ int GTree<T>::count(GTreeNode<T>* node) const
 {
     int ret = 0;
 
+    // 判断该节点是否为空
     if(node != NULL)
     {
+        // 不为空时, 节点数+1
         ret += 1;
 
         LinkList<GTreeNode<T>*>& child = node->child;
 
+        // 判断该节点子是否存在子类
         if(child.length() > 0)
         {
+            // 遍历追加该节点的子类树的节点数
             for(child.moveInit(0); !child.end(); child.next())
             {
                 ret += count(child.currentValue());
@@ -334,26 +356,32 @@ int GTree<T>::height(GTreeNode<T>* node) const
 {
     int ret = 0;
 
+    // 判断该节点是否为空
     if(node != NULL)
     {
+        // 该节点不为空时, 树高度+1
         ret += 1;
 
         LinkList<GTreeNode<T>*>& child = node->child;
 
+        // 判断该节点是否存在子类
         if(child.length() > 0)
         {
             int h = 0;
 
+            // 遍历获取该节点的的子树的最大高度
             for(child.moveInit(0); !child.end(); child.next())
             {
                 int temph = height(child.currentValue());
 
+                // 更新该节点的子树的最大高度
                 if(temph > h)
                 {
                     h = temph;
                 }
             }
 
+            // 将子类树的最大高度加入
             ret += h;
         }
     }
@@ -365,6 +393,76 @@ template <typename T>
 int GTree<T>::height() const
 {
     return height(root());
+}
+
+/* 遍历功能函数 */
+// 将根节点压入队列中给你
+template <typename T>
+bool GTree<T>::begin()
+{
+    bool ret = (root() != NULL);
+
+    // 判断树节点是否合法
+    if(ret)
+    {
+        // 将树节点队列清空
+        m_queue.clear();
+
+        // 将树的根节点加入队列
+        m_queue.add(root());
+    }
+
+    return ret;
+}
+// 队头元素弹出, 将队头元素的孩子压入队列中
+template <typename T>
+bool GTree<T>::next()
+{
+    bool ret = !end();
+
+    // 判断队列是否为空
+    if(ret)
+    {
+        // 获取队列头元素
+        GTreeNode<T>* node = m_queue.front();
+
+        // 删除队列头元素 => value(GTreeNode<T>*)为指针, 所以此处并不会把树节点空间释放
+        m_queue.remove();
+
+        // 判断该节点是否存在子节点
+        if(node->child.length() > 0)
+        {
+            // 循环遍历, 将该节点的子节点元素加入队列
+            for(node->child.moveInit(0); !node->child.end(); node->child.next())
+            {
+                m_queue.add(node->child.currentValue());
+            }
+        }
+    }
+
+    return ret;
+}
+// 访问队头元素指向的数据元素
+template <typename T>
+GTreeNode<T>* GTree<T>::current()
+{
+    GTreeNode<T>* ret = NULL;
+
+    // 判断队列元素是否为空
+    if(!end())
+    {
+        // 返回队列头元素
+        ret = m_queue.front();
+    }
+
+    return ret;
+}
+// 判断队列是否为空
+template <typename T>
+bool GTree<T>::end()
+{
+    // 队列大小为空时, 当前游标为空(队列游标永远指向队列头元素)
+    return (m_queue.size() == 0);
 }
 
 // 递归释放树堆空间节点

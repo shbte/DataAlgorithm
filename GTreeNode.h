@@ -18,6 +18,10 @@ protected:
         return Object::operator new(size);
     }
 
+    // 拷贝构造函数私有化
+    GTreeNode<T>(const GTreeNode<T>&);
+    // 赋值操作符函数私有化
+    GTreeNode<T>& operator =(const GTreeNode<T>&);
 public:
     // 将指向子类的指针保存进链表, 可以实现一个节点多个子类(不用数组是因为数组大小更改麻烦)
     LinkList<GTreeNode<T>*> child;

@@ -29,6 +29,10 @@ public:
     virtual int degree() const = 0;
     virtual int count() const = 0;
     virtual int height() const = 0;
+    virtual bool begin() = 0;
+    virtual bool next() = 0;
+    virtual TreeNode<T>* current() = 0;
+    virtual bool end() = 0;
     virtual void clear() = 0;
 };
 

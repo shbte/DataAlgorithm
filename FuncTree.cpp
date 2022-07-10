@@ -77,6 +77,17 @@ void funcTree001()
         cout << "NULL" << endl;
     }
 
+    for(gtc.begin(); !gtc.end(); gtc.next())
+    {
+        cout << gtc.current()->value << " ";    // A B C D E F G H I J K L M
+    }
+    cout << endl;
+    for(gtc.begin(); !gtc.end(); gtc.next())
+    {
+        cout << gtc.current()->value << " ";    // A B C D E F G H I J K L M
+    }
+    cout << endl;
+
     // 获取树的度数
     cout << gtc.degree() << endl;   // 3
     // 获取树的节点数
@@ -124,4 +135,10 @@ void funcTree001()
     cout << spt->count() << endl;   // 5
     // 获取树的最大高度
     cout << spt->height() << endl;  // 3
+
+    for(spt->begin(); !spt->end(); spt->next())
+    {
+        cout << spt->current()->value << " ";    // D H I J M
+    }
+    cout << endl;
 }
