@@ -5,6 +5,8 @@ CONFIG -= qt
 
 HEADERS += \
     Array.h \
+    BTree.h \
+    BTreeNode.h \
     CircleLinkList.h \
     DDString.h \
     DualCircleLinkList.h \

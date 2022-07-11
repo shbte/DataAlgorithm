@@ -32,6 +32,7 @@ protected:
     // 获取以该节点为根的高度
     int height(GTreeNode<T>* node) const;
 
+    /* 禁止树之间相互复制 */
     // 拷贝构造函数私有化
     GTree<T>(const GTree<T>&);
     // 赋值操作符函数私有化
@@ -43,6 +44,7 @@ public:
     bool insert(const T& value, TreeNode<T>* parent);
     SharedPointer<Tree<T>> remove(const T& value);
     SharedPointer<Tree<T>> remove(TreeNode<T>* node);
+
     GTreeNode<T>* find(const T& value) const       // 由于GTreeNode为TreeNode的子类, 所以返回类型可以使用子类代替, 但参数类型不可使用子类代替父类
     {
         return find(root(), value);
@@ -51,10 +53,12 @@ public:
     {
         return find(root(), node);
     }
+
     GTreeNode<T>* root() const
     {
         return this->m_root ? dynamic_cast<GTreeNode<T>*>(this->m_root) : NULL;
     }
+
     int degree() const;
     int count() const;
     int height() const;
@@ -252,6 +256,9 @@ SharedPointer<Tree<T>> GTree<T>::remove(const T& value)
     if(n != NULL)
     {
         remove(n, ret);
+
+        // 树节点被删除时, 清空该树所使用的队列
+        m_queue.clear();
     }
 
     // 会调用SharedPointer的构造函数
@@ -270,6 +277,9 @@ SharedPointer<Tree<T>> GTree<T>::remove(TreeNode<T>* node)
     if(n != NULL)
     {
         remove(n, ret);
+
+        // 树节点被删除时, 清空该树所使用的队列
+        m_queue.clear();
     }
 
     // 会调用SharedPointer的构造函数
@@ -504,6 +514,9 @@ void GTree<T>::clear()
 
     // 树根节点赋空, 防止由于其为栈空间而没释放问题
     this->m_root = NULL;
+
+    // 清除队列元素
+    m_queue.clear();
 }
 
 // 析构函数

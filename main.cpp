@@ -93,6 +93,9 @@ void func0004()
 {
     cout << endl;
     funcTree001();
+
+    cout << endl;
+    funcTree002();
 }
 
 int main()

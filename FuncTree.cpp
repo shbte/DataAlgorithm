@@ -5,6 +5,7 @@
 #include "GTree.h"
 #include "Recursion.h"
 #include "SharedPointer.h"
+#include "BTree.h"
 
 using namespace std;
 using namespace DemoData;
@@ -141,4 +142,14 @@ void funcTree001()
         cout << spt->current()->value << " ";    // D H I J M
     }
     cout << endl;
+}
+
+void funcTree002()
+{
+    cout << "funcTree002: BTree" << endl;
+
+    BTree<char> btc;
+    BTreeNode<char> btnc;
+
+
 }
