@@ -25,21 +25,29 @@ public:
     // 插入函数
     bool insert(TreeNode<T>* node)
     {
+        bool ret = false;
 
+        return ret;
     }
     bool insert(const T& value, TreeNode<T>* parent)
     {
+        bool ret = false;
 
+        return ret;
     }
 
     // 删除函数
     SharedPointer<Tree<T>> remove(const T& value)
     {
+        BTree<T>* ret = NULL;
 
+        return ret;
     }
     SharedPointer<Tree<T>> remove(TreeNode<T>* node)
     {
+        BTree<T>* ret = NULL;
 
+        return ret;
     }
 
     // 查找函数
