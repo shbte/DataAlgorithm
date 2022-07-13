@@ -148,8 +148,50 @@ void funcTree002()
 {
     cout << "funcTree002: BTree" << endl;
 
-    BTree<char> btc;
-    BTreeNode<char> btnc;
+    BTree<int> bti;
 
+    BTreeNode<int> root;
+    root.value = 1;
 
+    bti.insert(&root);
+
+    bti.insert(2, &root);
+    bti.insert(3, &root);
+
+    BTreeNode<int>* parent;
+    parent = bti.find(2);
+    bti.insert(4, parent);
+    bti.insert(5, parent);
+
+    parent = bti.find(3);
+    bti.insert(6, parent);
+    bti.insert(7, parent);
+
+    parent = bti.find(4);
+    bti.insert(8, parent);
+    bti.insert(9, parent, RIGHT);
+
+    parent = bti.find(5);
+    bti.insert(10, parent);
+
+    parent = bti.find(6);
+    bti.insert(11, parent, LEFT);
+
+    // 手动指定尾节点元素值集合
+    int a[] = {8, 9, 10, 11, 7};
+
+    // 输出二叉树(按叶子节点到根节点的顺序输出)
+    for(int i = 0; i < 5; i++)
+    {
+        TreeNode<int>* node = bti.find(a[i]);
+
+        while(node)
+        {
+            cout << node->value << " ";
+
+            // 输出完毕后, 移动节点
+            node = node->parent;
+        }
+        cout << endl;
+    }
 }
