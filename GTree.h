@@ -196,6 +196,12 @@ bool GTree<T>::insert(const T& value, TreeNode<T>* parent)
 
         // 将新节点插入树中
         ret = insert(node);
+
+        // 新节点对象插入失败时, 释放节点对象的堆内存空间
+        if(!ret && node->flag())
+        {
+            delete node;
+        }
     }
     else
     {
