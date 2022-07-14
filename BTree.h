@@ -22,6 +22,9 @@ protected:
     // 删除函数 => 清理节点关联信息
     void remove(BTreeNode<T>* node, BTree<T>*& ret);
 
+    // 递归清除节点函数
+    void free(BTreeNode<T>* node);
+
 public:
     BTree<T>() {}
 
@@ -85,10 +88,9 @@ public:
         return ret;
     }
 
-    void clear()
-    {
+    void clear();
 
-    }
+    ~BTree<T>();
 };
 // 指定位置的节点插入函数
 template <typename T>
@@ -292,8 +294,10 @@ void BTree<T>::remove(BTreeNode<T>* node, BTree<T>*& ret)
     }
     else
     {
-        // 删除节点为根节点时, 树清空
+        // 删除节点为根节点时, 赋空
         this->m_root = NULL;
+
+        // 不要使用清空函数, 该函数会释放树对象指向的树节点, 树节点对象在这里不需要释放
         //clear();
     }
 
@@ -416,6 +420,65 @@ template <typename T>
 BTreeNode<T>* BTree<T>::find(TreeNode<T>* node) const
 {
     return find(root(), dynamic_cast<BTreeNode<T>*>(node));
+}
+
+// 递归清除节点函数
+template <typename T>
+void BTree<T>::free(BTreeNode<T>* node)
+{
+    if(node != NULL)
+    {
+        // 清除左节点
+        free(node->m_left);
+        // 清除右节点
+        free(node->m_right);
+
+        // 获取清楚节点的父节点
+        BTreeNode<T>* parent = dynamic_cast<BTreeNode<T>*>(node->parent);
+
+        // 判断父节点是否为空, 不为空时, 清理父节点中关于清除节点的信息
+        if(parent != NULL)
+        {
+            // 删除节点为父节点的左节点时, 左节点信息赋空
+            if(parent->m_left == node)
+            {
+                parent->m_left = NULL;
+            }
+            // 删除节点为父节点的右节点时, 右节点信息赋空
+            else if(parent->m_right == node)
+            {
+                parent->m_right = NULL;
+            }
+            // 正常情况不会出现父节点没有子节点信息, 应报异常
+            else
+            {
+                THROW_EXCEPTION(InvalidParameterException, "Paramter node is invalid...");
+            }
+        }
+
+        // 释放清除节点的内存堆空间
+        if(node->flag())
+        {
+            delete node;
+        }
+    }
+}
+// 清除所有树节点
+template <typename T>
+void BTree<T>::clear()
+{
+    // 释放树节点所使用的内存堆空间
+    free(root());
+
+    // 树根节点赋空, 防止由于其为栈空间而没释放问题
+    this->m_root = NULL;
+}
+
+template <typename T>
+BTree<T>::~BTree<T>()
+{
+    // 析构时清空树
+    clear();
 }
 
 }

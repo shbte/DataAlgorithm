@@ -243,4 +243,20 @@ void funcTree002()
         }
         cout << endl;
     }
+
+    bti.clear();
+    // 输出二叉树(按叶子节点到根节点的顺序输出)
+    for(int i = 0; i < 5; i++)
+    {
+        TreeNode<int>* node = bti.find(a[i]);
+
+        while(node)
+        {
+            cout << node->value << " ";
+
+            // 输出完毕后, 移动节点
+            node = node->parent;
+        }
+        cout << endl;
+    }
 }
