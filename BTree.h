@@ -25,6 +25,11 @@ protected:
     // 递归清除节点函数
     void free(BTreeNode<T>* node);
 
+    // 树属性递归函数
+    int degree(BTreeNode<T>* node) const;
+    int count(BTreeNode<T>* node) const;
+    int height(BTreeNode<T>* node) const;
+
 public:
     BTree<T>() {}
 
@@ -44,23 +49,14 @@ public:
     BTreeNode<T>* find(const T& value) const;
     BTreeNode<T>* find(TreeNode<T>* node) const;
 
-    // 节点属性函数
+    // 树属性函数
     BTreeNode<T>* root() const
     {
         return dynamic_cast<BTreeNode<T>*>(this->m_root);
     }
-    int degree() const
-    {
-
-    }
-    int count() const
-    {
-
-    }
-    int height() const
-    {
-
-    }
+    int degree() const;
+    int count() const;
+    int height() const;
 
     /* 遍历功能函数 */
     bool begin()
@@ -420,6 +416,84 @@ template <typename T>
 BTreeNode<T>* BTree<T>::find(TreeNode<T>* node) const
 {
     return find(root(), dynamic_cast<BTreeNode<T>*>(node));
+}
+
+/* 树属性函数 */
+// 树的最大度数
+template <typename T>
+int BTree<T>::degree(BTreeNode<T>* node) const
+{
+    int ret = 0;
+
+    // 判断节点是否为空
+    if(node != NULL)
+    {
+        // !值只能是0或1, 使用俩个!!来判断是否有值, 从而计算该节点度数
+        ret = !!node->m_left + !!node->m_right;
+
+        // 获取子节点集合, 为遍历循环做准备
+        BTreeNode<T>* child[] = { node->m_left, node->m_right };
+
+        // 获取子节点的最大度数, 因为是二叉树(度数<=2), 所以当获取度数为2时, 循环结束
+        for(int i = 0; (i < 2) && (ret < 2); i++)
+        {
+            // 子节点的度数
+            int h = degree(child[i]);
+
+            // 更新最大度数
+            if(h > ret)
+            {
+                ret = h;
+            }
+        }
+    }
+
+    return ret;
+}
+template <typename T>
+int BTree<T>::degree() const
+{
+    return degree(root());
+}
+// 树的节点数
+template <typename T>
+int BTree<T>::count(BTreeNode<T>* node) const
+{
+    // 左子节点数 + 右子节点数 + 1(自节点数)
+    return (node != NULL) ? (count(node->m_left) + count(node->m_right) + 1) : 0;
+}
+template <typename T>
+int BTree<T>::count() const
+{
+    return count(root());
+}
+// 树的最大高度
+template <typename T>
+int BTree<T>::height(BTreeNode<T>* node) const
+{
+    int ret = 0;
+
+    // 判断节点是否为空
+    if(node != NULL)
+    {
+        // 不为空时, 树高度加1
+        ret += 1;
+
+        // 左子节点高度
+        int lh = height(node->m_left);
+        // 右子节点高度
+        int rh = height(node->m_right);
+
+        // 自节点高度 + 最大子节点高度
+        ret += ((lh > rh) ? lh : rh);
+    }
+
+    return ret;
+}
+template <typename T>
+int BTree<T>::height() const
+{
+    return height(root());
 }
 
 // 递归清除节点函数

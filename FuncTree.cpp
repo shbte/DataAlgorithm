@@ -201,6 +201,9 @@ void funcTree002()
         }
         cout << endl;
     }
+    cout << "bti.degree = " << bti.degree() << endl;    // bti.degree = 2
+    cout << "bti.count = " << bti.count() << endl;      // bti.count = 11
+    cout << "bti.heigth = " << bti.height() << endl;    // bti.heigth = 4
 
     BTreeNode<int>* rmnode = bti.find(3);
     SharedPointer<Tree<int>> spti = bti.remove(rmnode);
@@ -224,6 +227,9 @@ void funcTree002()
         }
         cout << endl;
     }
+    cout << "bti.degree = " << bti.degree() << endl;    // bti.degree = 2
+    cout << "bti.count = " << bti.count() << endl;      // bti.count = 7
+    cout << "bti.heigth = " << bti.height() << endl;    // bti.heigth = 4
 
     // 输出二叉树(按叶子节点到根节点的顺序输出)
     for(int i = 0; i < 5; i++)
@@ -243,6 +249,9 @@ void funcTree002()
         }
         cout << endl;
     }
+    cout << "bti.degree = " << spti->degree() << endl;  // bti.degree = 2
+    cout << "bti.count = " << spti->count() << endl;    // bti.count = 4
+    cout << "bti.heigth = " << spti->height() << endl;  // bti.heigth = 3
 
     bti.clear();
     // 输出二叉树(按叶子节点到根节点的顺序输出)
@@ -259,4 +268,7 @@ void funcTree002()
         }
         cout << endl;
     }
+    cout << "bti.degree = " << bti.degree() << endl;    // bti.degree = 0
+    cout << "bti.count = " << bti.count() << endl;      // bti.count = 0
+    cout << "bti.heigth = " << bti.height() << endl;    // bti.heigth = 0
 }
