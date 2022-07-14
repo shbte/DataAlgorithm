@@ -3,6 +3,7 @@
 
 #include "Tree.h"
 #include "BTreeNode.h"
+#include "LinkQueue.h"
 
 namespace DemoData
 {
@@ -11,6 +12,10 @@ template <typename T>
 class BTree : public Tree<T>
 {
 protected:
+
+    // 按层次入队存储的树节点队列
+    LinkQueue<BTreeNode<T>*> m_queue;
+
     /* 禁止树之间的相互赋值 */
     BTree<T>(const BTree<T>&);
     BTree<T>& operator =(const BTree&);
@@ -59,30 +64,10 @@ public:
     int height() const;
 
     /* 遍历功能函数 */
-    bool begin()
-    {
-        bool ret = false;
-
-        return ret;
-    }
-    bool next()
-    {
-        bool ret = !end();
-
-        return ret;
-    }
-    TreeNode<T>* current()
-    {
-        BTreeNode<T>* ret = NULL;
-
-        return ret;
-    }
-    bool end()
-    {
-        bool ret = false;
-
-        return ret;
-    }
+    bool begin();
+    bool next();
+    BTreeNode<T>* current();    // 返回值类型可用子类类型代替
+    bool end();
 
     void clear();
 
@@ -313,6 +298,9 @@ SharedPointer<Tree<T>> BTree<T>::remove(const T& value)
     {
         // 删除以该节点为根的子树
         remove(node, ret);
+
+        // 树节点被删除时, 清空队列
+        m_queue.clear();
     }
     else
     {
@@ -334,6 +322,9 @@ SharedPointer<Tree<T>> BTree<T>::remove(TreeNode<T>* node)
     {
         // 删除以该节点为根的子树
         remove(n, ret);
+
+        // 树节点被删除时, 清空队列
+        m_queue.clear();
     }
     else
     {
@@ -496,6 +487,76 @@ int BTree<T>::height() const
     return height(root());
 }
 
+/* 遍历功能函数 */
+template <typename T>
+bool BTree<T>::begin()
+{
+    bool ret = false;
+
+    // 判断树是否为空
+    if(root() != NULL)
+    {
+        // 清空队列
+        m_queue.clear();
+        // 将根节点加入队列
+        m_queue.add(root());
+
+        // 表明将根节点加入队列成功
+        ret = true;
+    }
+
+    return ret;
+}
+template <typename T>
+bool BTree<T>::next()
+{
+    bool ret = end();
+
+    // 判断队列是否为空
+    if(!ret)
+    {
+        // 获取队头元素
+        BTreeNode<T>* node = m_queue.front();
+
+        // 将队头元素的左子节点加入队列
+        if(node->m_left != NULL)
+        {
+            m_queue.add(node->m_left);
+        }
+
+        // 将队头元素的右子节点加入队列
+        if(node->m_right != NULL)
+        {
+            m_queue.add(node->m_right);
+        }
+
+        // 将队头元素弹出队列
+        m_queue.remove();
+    }
+
+    return ret;
+}
+template <typename T>
+BTreeNode<T>* BTree<T>::current()
+{
+    BTreeNode<T>* ret = NULL;
+
+    // 判断队列是否为空
+    if(!end())
+    {
+        // 获取队头元素
+        ret = m_queue.front();
+    }
+
+    return ret;
+}
+template <typename T>
+bool BTree<T>::end()
+{
+    // 返回队列为否为空的判断
+    return (m_queue.size() == 0);
+}
+
 // 递归清除节点函数
 template <typename T>
 void BTree<T>::free(BTreeNode<T>* node)
@@ -546,6 +607,9 @@ void BTree<T>::clear()
 
     // 树根节点赋空, 防止由于其为栈空间而没释放问题
     this->m_root = NULL;
+
+    // 清空队列
+    m_queue.clear();
 }
 
 template <typename T>
