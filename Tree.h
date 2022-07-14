@@ -8,7 +8,7 @@ namespace DemoData
 {
 
 template <typename T>
-class Tree : public TreeNode<T>
+class Tree : public Object
 {
 protected:
     TreeNode<T>* m_root;

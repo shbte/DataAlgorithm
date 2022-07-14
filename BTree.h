@@ -19,6 +19,9 @@ protected:
     BTreeNode<T>* find(BTreeNode<T>* node, const T& value) const;
     BTreeNode<T>* find(BTreeNode<T>* node, BTreeNode<T>* obj) const;
 
+    // 删除函数 => 清理节点关联信息
+    void remove(BTreeNode<T>* node, BTree<T>*& ret);
+
 public:
     BTree<T>() {}
 
@@ -31,18 +34,8 @@ public:
     bool insert(const T& value, TreeNode<T>* parent);
 
     // 删除函数
-    SharedPointer<Tree<T>> remove(const T& value)
-    {
-        BTree<T>* ret = NULL;
-
-        return ret;
-    }
-    SharedPointer<Tree<T>> remove(TreeNode<T>* node)
-    {
-        BTree<T>* ret = NULL;
-
-        return ret;
-    }
+    SharedPointer<Tree<T>> remove(const T& value);
+    SharedPointer<Tree<T>> remove(TreeNode<T>* node);
 
     // 查找函数
     BTreeNode<T>* find(const T& value) const;
@@ -260,6 +253,91 @@ bool BTree<T>::insert(const T& value, TreeNode<T>* obj)
     else
     {
         THROW_EXCEPTION(NoEnoughMemoryException, "No enough memory to create new BTreeNode...");
+    }
+
+    return ret;
+}
+
+// 删除函数 => 清理节点关联信息
+template <typename T>
+void BTree<T>::remove(BTreeNode<T>* node, BTree<T>*& ret)
+{
+    // 获取删除节点的父节点
+    BTreeNode<T>* parent = dynamic_cast<BTreeNode<T>*>(node->parent);
+
+    // 创建树对象堆空间
+    ret = new BTree<T>();
+
+    // 判读父节点是否为空(父节点为空时, 删除节点为根节点)
+    if(parent != NULL)
+    {
+        // 删除节点为父节点的左节点时, 左节点信息赋空
+        if(parent->m_left == node)
+        {
+            parent->m_left = NULL;
+        }
+        // 删除节点为父节点的右节点时, 右节点信息赋空
+        else if(parent->m_right == node)
+        {
+            parent->m_right = NULL;
+        }
+        // 正常情况不会出现父节点没有子节点信息, 应报异常
+        else
+        {
+            THROW_EXCEPTION(InvalidParameterException, "Paramter node is invalid...");
+        }
+
+        // 删除节点的父节点信息更新(赋空)
+        node->parent = NULL;
+    }
+    else
+    {
+        // 删除节点为根节点时, 树清空
+        this->m_root = NULL;
+        //clear();
+    }
+
+    ret->m_root = node;
+}
+// 删除函数
+template <typename T>
+SharedPointer<Tree<T>> BTree<T>::remove(const T& value)
+{
+    BTree<T>* ret = NULL;
+
+    // 在树中查找节点
+    BTreeNode<T>* node = find(value);
+
+    // 判断该节点是否是树节点
+    if(node != NULL)
+    {
+        // 删除以该节点为根的子树
+        remove(node, ret);
+    }
+    else
+    {
+        THROW_EXCEPTION(InvalidParameterException, "Parmeter value is invalid...");
+    }
+
+    return ret;
+}
+template <typename T>
+SharedPointer<Tree<T>> BTree<T>::remove(TreeNode<T>* node)
+{
+    BTree<T>* ret = NULL;
+
+    // 在树中查找节点
+    BTreeNode<T>* n = find(node);
+
+    // 判断该节点是否是树节点
+    if(n != NULL)
+    {
+        // 删除以该节点为根的子树
+        remove(n, ret);
+    }
+    else
+    {
+        THROW_EXCEPTION(InvalidParameterException, "Parmeter node is invalid...");
     }
 
     return ret;

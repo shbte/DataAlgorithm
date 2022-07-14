@@ -187,6 +187,55 @@ void funcTree002()
 
         while(node)
         {
+            /*
+                8 4 2 1
+                9 4 2 1
+                10 5 2 1
+                11 6 3 1
+                7 3 1
+             */
+            cout << node->value << " ";
+
+            // 输出完毕后, 移动节点
+            node = node->parent;
+        }
+        cout << endl;
+    }
+
+    BTreeNode<int>* rmnode = bti.find(3);
+    SharedPointer<Tree<int>> spti = bti.remove(rmnode);
+
+    // 输出二叉树(按叶子节点到根节点的顺序输出)
+    for(int i = 0; i < 5; i++)
+    {
+        TreeNode<int>* node = bti.find(a[i]);
+
+        while(node)
+        {
+            /*
+                8 4 2 1
+                9 4 2 1
+                10 5 2 1
+             */
+            cout << node->value << " ";
+
+            // 输出完毕后, 移动节点
+            node = node->parent;
+        }
+        cout << endl;
+    }
+
+    // 输出二叉树(按叶子节点到根节点的顺序输出)
+    for(int i = 0; i < 5; i++)
+    {
+        TreeNode<int>* node = spti->find(a[i]);
+
+        while(node)
+        {
+            /*
+                11 6 3
+                7 3
+             */
             cout << node->value << " ";
 
             // 输出完毕后, 移动节点
