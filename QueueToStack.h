@@ -100,6 +100,8 @@ T QueueToStack<T>::top() const
 
         return m_pIn->front();
     }
+
+    return NULL;
 }
 template <typename T>
 void QueueToStack<T>::clear()

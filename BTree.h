@@ -197,7 +197,7 @@ bool BTree<T>::insert(const T& value, TreeNode<T>* parent, BTNodePos pos)
     bool ret = false;
 
     // 创建树节点对象
-    BTreeNode<T>* node = BTreeNode<T>::newNode();
+    BTreeNode<T>* node = BTreeNode<T>::NewNode();
 
     // 判断节点对象创建是否成功
     if(node != NULL)
@@ -230,7 +230,7 @@ bool BTree<T>::insert(const T& value, TreeNode<T>* obj)
     bool ret = false;
 
     // 创建树节点对象
-    BTreeNode<T>* node = BTreeNode<T>::newNode();
+    BTreeNode<T>* node = BTreeNode<T>::NewNode();
 
     // 判断节点对象创建是否成功
     if(node != NULL)

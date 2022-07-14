@@ -8,7 +8,7 @@
  * NullPointerException         空指针异常
  * IndexOutOfBoundsException    越界异常
  * NoEnoughMemoryException      内存不足异常
- * InvalidParameterException     参数错误异常
+ * InvalidParameterException    参数错误异常
  */
 namespace DemoData
 {

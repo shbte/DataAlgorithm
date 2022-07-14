@@ -132,6 +132,10 @@ int LinkQueue<T>::size() const
     {
         return this->m_length;
     }
+    else
+    {
+        THROW_EXCEPTION(IndexOutOfBoundsException, "m_length != m_rear + 1");
+    }
 }
 
 template <typename T>

@@ -20,7 +20,7 @@ public:
         // new函数被重载且被父类定义为保护类型, 所以外部不能使用new在堆上创建该节点对象
         GTreeNode<T>* ret = new GTreeNode<T>();
 
-        if(ret != NULL)
+        if(ret)
         {
             // 将该节点标记为true, 表明节点空间在堆上(new在堆上开辟内存空间)
             ret->m_flag = true;

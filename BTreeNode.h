@@ -30,7 +30,7 @@ public:
     }
 
     // 提供静态构造函数(工厂模式)
-    static BTreeNode<T>* newNode()
+    static BTreeNode<T>* NewNode()
     {
         // new函数被重载且被父类定义为保护类型, 所以外部不能使用new在堆上创建该节点对象
         BTreeNode<T>* ret = new BTreeNode<T>();
