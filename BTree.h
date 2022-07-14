@@ -4,9 +4,17 @@
 #include "Tree.h"
 #include "BTreeNode.h"
 #include "LinkQueue.h"
+#include "DynamicArray.h"
 
 namespace DemoData
 {
+
+enum BTTraversal
+{
+    PreOrder,   // 先序
+    InOrder,    // 中序
+    PostOrder   // 后续
+};
 
 template <typename T>
 class BTree : public Tree<T>
@@ -34,6 +42,13 @@ protected:
     int degree(BTreeNode<T>* node) const;
     int count(BTreeNode<T>* node) const;
     int height(BTreeNode<T>* node) const;
+
+    // 先序遍历, 使用引用参数, 防止新建队列对象
+    void preOrderTraversal(BTreeNode<T>* node, LinkQueue<T>& queue);
+    // 中序遍历, 使用引用参数, 防止新建队列对象
+    void inOrderTraversal(BTreeNode<T>* node, LinkQueue<T>& queue);
+    // 后序遍历, 使用引用参数, 防止新建队列对象
+    void postOrderTraversal(BTreeNode<T>* node, LinkQueue<T>& queue);
 
 public:
     BTree<T>() {}
@@ -68,6 +83,9 @@ public:
     bool next();
     BTreeNode<T>* current();    // 返回值类型可用子类类型代替
     bool end();
+
+    // 顺序遍历函数
+    SharedPointer<Array<T>> traversal(BTTraversal order);
 
     void clear();
 
@@ -555,6 +573,88 @@ bool BTree<T>::end()
 {
     // 返回队列为否为空的判断
     return (m_queue.size() == 0);
+}
+
+// 先序遍历
+template <typename T>
+void BTree<T>::preOrderTraversal(BTreeNode<T>* node, LinkQueue<T>& queue)
+{
+    if(node != NULL)
+    {
+        queue.add(node->value);
+        preOrderTraversal(node->m_left, queue);
+        preOrderTraversal(node->m_right, queue);
+    }
+}
+// 中序遍历
+template <typename T>
+void BTree<T>::inOrderTraversal(BTreeNode<T>* node, LinkQueue<T>& queue)
+{
+    if(node != NULL)
+    {
+        inOrderTraversal(node->m_left, queue);
+        queue.add(node->value);
+        inOrderTraversal(node->m_right, queue);
+    }
+}
+// 后序遍历
+template <typename T>
+void BTree<T>::postOrderTraversal(BTreeNode<T>* node, LinkQueue<T>& queue)
+{
+    if(node != NULL)
+    {
+        postOrderTraversal(node->m_left, queue);
+        postOrderTraversal(node->m_right, queue);
+        queue.add(node->value);
+    }
+}
+// 顺序遍历函数
+template <typename T>
+SharedPointer<Array<T>> BTree<T>::traversal(BTTraversal order)
+{
+    // 存放树节点值数组
+    DynamicArray<T>* ret = NULL;
+    // 存放树节点值队列, 起过度作用
+    LinkQueue<T> queue;
+
+    // 判断排序方式, 并将树节点值存储进队列
+    switch(order)
+    {
+        case PreOrder:
+            preOrderTraversal(root(), queue);
+            break;
+        case InOrder:
+            inOrderTraversal(root(), queue);
+            break;
+        case PostOrder:
+            postOrderTraversal(root(), queue);
+            break;
+        default:
+            THROW_EXCEPTION(InvalidParameterException, "parameter order is invalid...");
+            break;
+    }
+
+    // 创建堆空间动态数组对象
+    ret = new DynamicArray<T>(queue.size());
+
+    // 判断数组对象是否创建成功
+    if(ret != NULL)
+    {
+        // 循环将队列元素存储进数组
+        for(int i = 0; i < ret->length(); i++)
+        {
+            // 将队头元素存储进数组
+            ret->set(i, queue.front());
+            // 移除队头元素
+            queue.remove();
+        }
+    }
+    else
+    {
+        THROW_EXCEPTION(NoEnoughMemoryException, "No enough memory to create new DynamicArray...");
+    }
+
+    return ret;
 }
 
 // 递归清除节点函数

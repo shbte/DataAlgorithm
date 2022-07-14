@@ -205,6 +205,29 @@ void funcTree002()
     cout << "bti.count = " << bti.count() << endl;      // bti.count = 11
     cout << "bti.heigth = " << bti.height() << endl;    // bti.heigth = 4
 
+    // 先序遍历
+    SharedPointer<Array<int>> pre = bti.traversal(PreOrder);
+    for(int i = 0; i < pre->length(); i++)
+    {
+        cout << pre->array()[i] << " ";     // 1 2 4 8 9 5 10 3 6 11 7
+    }
+    cout << endl;
+    // 中序遍历
+    SharedPointer<Array<int>> in = bti.traversal(InOrder);
+    for(int i = 0; i < in->length(); i++)
+    {
+        cout << in->array()[i] << " ";      // 8 4 9 2 10 5 1 11 6 3 7
+    }
+    cout << endl;
+    // 后续遍历
+    SharedPointer<Array<int>> post = bti.traversal(PostOrder);
+    for(int i = 0; i < post->length(); i++)
+    {
+        cout << post->array()[i] << " ";    // 8 9 4 10 5 2 11 6 7 3 1
+    }
+    cout << endl;
+
+    // 层次遍历
     for(bti.begin(); !bti.end(); bti.next())
     {
         cout << bti.current()->value << " ";    // 1 2 3 4 5 6 7 8 9 10 11
@@ -237,6 +260,29 @@ void funcTree002()
     cout << "bti.count = " << bti.count() << endl;      // bti.count = 7
     cout << "bti.heigth = " << bti.height() << endl;    // bti.heigth = 4
 
+    // 先序遍历
+    pre = bti.traversal(PreOrder);
+    for(int i = 0; i < pre->length(); i++)
+    {
+        cout << pre->array()[i] << " ";     // 1 2 4 8 9 5 10
+    }
+    cout << endl;
+    // 中序遍历
+    in = bti.traversal(InOrder);
+    for(int i = 0; i < in->length(); i++)
+    {
+        cout << in->array()[i] << " ";      // 8 4 9 2 10 5 1
+    }
+    cout << endl;
+    // 后续遍历
+    post = bti.traversal(PostOrder);
+    for(int i = 0; i < post->length(); i++)
+    {
+        cout << post->array()[i] << " ";    // 8 9 4 10 5 2 1
+    }
+    cout << endl;
+
+    // 层次遍历
     for(bti.begin(); !bti.end(); bti.next())
     {
         cout << bti.current()->value << " ";    // 1 2 4 5 8 9 10
@@ -261,9 +307,9 @@ void funcTree002()
         }
         cout << endl;
     }
-    cout << "spti->degree = " << spti->degree() << endl;  // bti.degree = 2
-    cout << "spti->count = " << spti->count() << endl;    // bti.count = 4
-    cout << "spti->heigth = " << spti->height() << endl;  // bti.heigth = 3
+    cout << "spti->degree = " << spti->degree() << endl;  // spti->degree = 2
+    cout << "spti->count = " << spti->count() << endl;    // spti->count = 4
+    cout << "spti->heigth = " << spti->height() << endl;  // spti->heigth = 3
 
     for(spti->begin(); !spti->end(); spti->next())
     {
@@ -289,6 +335,28 @@ void funcTree002()
     cout << "bti.degree = " << bti.degree() << endl;    // bti.degree = 0
     cout << "bti.count = " << bti.count() << endl;      // bti.count = 0
     cout << "bti.heigth = " << bti.height() << endl;    // bti.heigth = 0
+
+    // 先序遍历
+    pre = bti.traversal(PreOrder);
+    for(int i = 0; i < pre->length(); i++)
+    {
+        cout << pre->array()[i] << " ";     //
+    }
+    cout << endl;
+    // 中序遍历
+    in = bti.traversal(InOrder);
+    for(int i = 0; i < in->length(); i++)
+    {
+        cout << in->array()[i] << " ";      //
+    }
+    cout << endl;
+    // 后续遍历
+    post = bti.traversal(PostOrder);
+    for(int i = 0; i < post->length(); i++)
+    {
+        cout << post->array()[i] << " ";    //
+    }
+    cout << endl;
 
     for(bti.begin(); !bti.end(); bti.next())
     {
