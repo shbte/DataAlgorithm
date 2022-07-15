@@ -96,6 +96,9 @@ void func0004()
 
     cout << endl;
     funcTree002();
+
+    cout << endl;
+    funcTree003();
 }
 
 int main()

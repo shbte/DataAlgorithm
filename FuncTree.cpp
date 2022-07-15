@@ -520,3 +520,174 @@ void funcTree002()
     }
     cout << endl;
 }
+
+template <typename T>
+BTreeNode<T>* createTree()
+{
+    BTreeNode<T>* ret;
+
+    static BTreeNode<T> btn[9];
+
+    for(int i = 0; i < 9; i++)
+    {
+        btn[i].parent = NULL;
+        btn[i].value = i;
+        btn[i].m_left = NULL;
+        btn[i].m_right = NULL;
+    }
+
+    btn[0].m_left = &btn[1];
+    btn[0].m_right = &btn[2];
+
+    btn[1].parent = &btn[0];
+    btn[1].m_left = &btn[3];
+
+    btn[2].parent = &btn[0];
+    btn[2].m_left = &btn[4];
+    btn[2].m_right = &btn[5];
+
+    btn[3].parent = &btn[1];
+    btn[3].m_right = &btn[6];
+
+    btn[4].parent = &btn[2];
+    btn[4].m_left = &btn[7];
+
+    btn[5].parent = &btn[2];
+    btn[5].m_left = &btn[8];
+
+    btn[6].parent = &btn[3];
+    btn[7].parent = &btn[4];
+    btn[8].parent = &btn[5];
+
+    ret = btn;
+
+    return ret;
+}
+template <typename T>
+void printTree(BTreeNode<T>* node)
+{
+    if(node != NULL)
+    {
+        printTree(node->m_left);
+        cout << node->value << " ";
+        printTree(node->m_right);
+    }
+}
+template <typename T>
+BTreeNode<T>* delOdd1(BTreeNode<T>* node)
+{
+    BTreeNode<T>* ret = NULL;
+
+    // 判断节点是否为空
+    if(node != NULL)
+    {
+        // 获取该节点的度数
+        int degree = (!!node->m_left) + (!!node->m_right);
+
+        // 节点度数为0时, 直接返回自节点
+        if(degree == 0)
+        {
+            // 度数为0时, 返回自节点
+            ret = node;
+        }
+        // 节点度数为1时, 删除节点
+        else if(degree == 1)
+        {
+            // 获取父节点
+            BTreeNode<T>* parent = dynamic_cast<BTreeNode<T>*>(node->parent);
+            // 获取子节点
+            BTreeNode<T>* child = (!!node->m_left) ? node->m_left : node->m_right;
+
+            // 父节点的子节点更新
+            if(parent != NULL)
+            {
+                ((parent->m_left == node) ? parent->m_left : parent->m_right) = child;
+            }
+
+            // 子节点的父节点更新
+            child->parent = parent;
+
+            // 删除度数为1的节点
+            if(node->flag())
+            {
+                delete node;
+            }
+
+            // 返回度数为0/2的节点
+            ret = delOdd1(child);
+        }
+        // 节点度数为2时, 递归删除子节点中度数为1的节点
+        else if(degree == 2)
+        {
+            // 删除左子节点中度数为1的节点
+            delOdd1(node->m_left);
+            // 删除右子节点中度数为1的节点
+            delOdd1(node->m_right);
+
+            // 度数为2时, 返回自节点
+            ret = node;
+        }
+        else
+        {
+            THROW_EXCEPTION(InvalidParameterException, "Parameter node is invalid...");
+        }
+    }
+
+    return ret;
+}
+template <typename T>
+void delOdd2(BTreeNode<T>*& node)
+{
+    // 判断节点是否为空
+    if(node != NULL)
+    {
+        // 节点度数为1时, 删除节点
+        if((!!node->m_left + !!node->m_right) == 1)
+        {
+            // 获取子节点
+            BTreeNode<T>* child = ((node->m_left != NULL) ? node->m_left : node->m_right);
+
+            // 删除子节点
+            if(node->flag())
+            {
+                delete node;
+            }
+
+            // 节点赋值
+            node = child;
+
+            delOdd2(node);
+        }
+        // 节点度数为0/2时, 递归删除子节点中度数为1的节点
+        else
+        {
+            delOdd2(node->m_left);
+            delOdd2(node->m_right);
+        }
+    }
+}
+void funcTree003()
+{
+    cout << "funcTree003::" << endl;
+
+    // 创建树
+    BTreeNode<int>* root = createTree<int>();
+
+    // 输出树节点值
+    printTree(root);    // 3 6 1 0 7 4 2 8 5
+    cout << endl;
+
+    // 将度数为1的树节点删除
+    BTreeNode<int>* root1 = delOdd1(root);
+
+    // 输出树节点值
+    printTree(root1);    // 6 0 7 2 8
+    cout << endl;
+
+    // 将度数为1的树节点删除
+    delOdd2(root);
+
+    // 输出树节点值
+    printTree(root);    // 6 0 7 2 8
+    cout << endl;
+}
