@@ -363,4 +363,119 @@ void funcTree002()
         cout << bti.current()->value << " ";    //
     }
     cout << endl;
+
+
+    cout << "BTree:: clone" << endl;
+
+    BTree<int> oldBti;
+    BTreeNode<int> oldRoot;
+    BTreeNode<int>* oldParent;
+
+    oldRoot.value = 1;
+    oldBti.insert(&oldRoot);
+
+    oldParent = oldBti.find(1);
+    oldBti.insert(3, oldParent, RIGHT);
+    oldBti.insert(2, oldParent, LEFT);
+
+    oldParent = oldBti.find(2);
+    oldBti.insert(5, oldParent, RIGHT);
+    oldBti.insert(4, oldParent);
+
+    oldParent = oldBti.find(3);
+    oldBti.insert(6, oldParent);
+    oldBti.insert(7, oldParent, RIGHT);
+
+    oldParent = oldBti.find(4);
+    oldBti.insert(8, oldParent, LEFT);
+    oldBti.insert(9, oldParent, RIGHT);
+
+    oldParent = oldBti.find(5);
+    oldBti.insert(10, oldParent);
+
+    // 先序输出原树
+    cout << "oldBTree::";
+    pre = oldBti.traversal(PreOrder);
+    for(int i = 0; i < pre->length(); i++)
+    {
+        cout << pre->array()[i] << " "; // oldBTree::1 2 4 8 9 5 10 3 6 7
+    }
+    cout << endl;
+
+    // 克隆树
+    SharedPointer<BTree<int>> cloneBti = oldBti.clone();
+
+    // 先序输出克隆树
+    cout << "cloneBti::";
+    pre = cloneBti->traversal(PreOrder);
+    for(int i = 0; i < pre->length(); i++)
+    {
+        cout << pre->array()[i] << " "; // cloneBti::1 2 4 8 9 5 10 3 6 7
+    }
+    cout << endl;
+
+    // 原树和克隆树的比较
+    cout << (oldBti == *cloneBti) << endl;  // 1
+    cout << (oldBti != *cloneBti) << endl;  // 0
+
+    BTree<int> tempBti;
+    BTreeNode<int> tempRoot;
+    BTreeNode<int>* tempParent;
+
+    tempRoot.value = 0;
+
+    tempBti.insert(&tempRoot);
+
+    tempParent = tempBti.find(0);
+    tempBti.insert(6, tempParent);
+    tempBti.insert(2, tempParent);
+
+    tempParent = tempBti.find(2);
+    tempBti.insert(7, tempParent);
+    tempBti.insert(8, tempParent);
+
+    // 先序输出过度树
+    cout << "tempBti::";
+    pre = tempBti.traversal(PreOrder);
+    for(int i = 0; i < pre->length(); i++)
+    {
+        cout << pre->array()[i] << " "; // tempBti::0 6 2 7 8
+    }
+    cout << endl;
+
+    SharedPointer<BTree<int>> addBti = oldBti.add(tempBti);
+
+    // 先序输出过度树
+    cout << "addBti::";
+    pre = addBti->traversal(PreOrder);
+    for(int i = 0; i < pre->length(); i++)
+    {
+        cout << pre->array()[i] << " "; // addBti::1 8 4 8 9 5 10 5 13 15
+    }
+    cout << endl;
+
+    // 移除原树中值为3的子树
+    oldBti.remove(3);
+    cout << "oldBti.remove(3)" << endl; // oldBti.remove(3)
+
+    // 先序输出原树
+    cout << "oldBTree::";
+    pre = oldBti.traversal(PreOrder);
+    for(int i = 0; i < pre->length(); i++)
+    {
+        cout << pre->array()[i] << " "; // oldBTree::1 2 4 8 9 5 10
+    }
+    cout << endl;
+    // 先序输出克隆树
+    cout << "cloneBti::";
+    pre = cloneBti->traversal(PreOrder);
+    for(int i = 0; i < pre->length(); i++)
+    {
+        cout << pre->array()[i] << " "; // cloneBti::1 2 4 8 9 5 10 3 6 7
+    }
+    cout << endl;
+
+    // 原树和克隆树的比较
+    cout << (oldBti == *cloneBti) << endl;  // 0
+    cout << (oldBti != *cloneBti) << endl;  // 1
 }

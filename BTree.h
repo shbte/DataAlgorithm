@@ -50,6 +50,13 @@ protected:
     // 后序遍历, 使用引用参数, 防止新建队列对象
     void postOrderTraversal(BTreeNode<T>* node, LinkQueue<T>& queue);
 
+    // 递归克隆函数
+    BTreeNode<T>* clone(BTreeNode<T>* node) const;
+    // 递归比较函数
+    bool equal(BTreeNode<T>* ln, BTreeNode<T>* rn) const;
+    // 递归相加函数
+    BTreeNode<T>* add(BTreeNode<T>* ln, BTreeNode<T>* rn) const;
+
 public:
     BTree<T>() {}
 
@@ -86,6 +93,14 @@ public:
 
     // 顺序遍历函数
     SharedPointer<Array<T>> traversal(BTTraversal order);
+    // 克隆函数(值相等)
+    SharedPointer<BTree<T>> clone() const;
+    // 相加函数(值相加)
+    SharedPointer<BTree<T>> add(const BTree<T>& btree) const;
+
+    // 比较操作符重载(值比较)
+    bool operator ==(const BTree<T>& btree) const;
+    bool operator !=(const BTree<T>& btree) const;
 
     void clear();
 
@@ -359,7 +374,7 @@ BTreeNode<T>* BTree<T>::find(BTreeNode<T>* node, const T& value) const
     BTreeNode<T>* ret = NULL;
 
     // 判断参数是否合法
-    if((node != NULL) && (value))
+    if(node != NULL)
     {
         // 先判断是否是查找节点值
         if(node->value == value)
@@ -652,6 +667,187 @@ SharedPointer<Array<T>> BTree<T>::traversal(BTTraversal order)
     else
     {
         THROW_EXCEPTION(NoEnoughMemoryException, "No enough memory to create new DynamicArray...");
+    }
+
+    return ret;
+}
+// 递归克隆函数
+template <typename T>
+BTreeNode<T>* BTree<T>::clone(BTreeNode<T>* node) const
+{
+    BTreeNode<T>* ret = NULL;
+
+    // 判断当前节点是否为空
+    if(node != NULL)
+    {
+        // 创建内存堆空间节点对象
+        ret = BTreeNode<T>::NewNode();
+
+        // 节点创建成功时, 节点元素赋值
+        if(ret != NULL)
+        {
+            // 节点自身信息赋值
+            ret->parent = node->parent;
+            ret->value = node->value;
+
+            // 子节点信息赋值
+            ret->m_left = clone(node->m_left);
+            ret->m_right = clone(node->m_right);
+        }
+        else
+        {
+            THROW_EXCEPTION(NoEnoughMemoryException, "No Enough memory to create new BtreeNode...");
+        }
+    }
+
+    return ret;
+}
+// 克隆函数(节点值相等)
+template <typename T>
+SharedPointer<BTree<T>> BTree<T>::clone() const
+{
+    // 创建内存堆空间树对象
+    BTree<T>* ret = new BTree<T>();
+
+    // 树对象创建成功时, 赋值树根节点
+    if(ret != NULL)
+    {
+        // 递归克隆树节点, 并返回根节点
+        ret->m_root = clone(root());
+    }
+    else
+    {
+        THROW_EXCEPTION(NoEnoughMemoryException, "No enough memory to create new BTree...");
+    }
+
+    return ret;
+}
+
+// 递归比较函数
+template <typename T>
+bool BTree<T>::equal(BTreeNode<T>* ln, BTreeNode<T>* rn) const
+{
+    bool ret = false;
+
+    // 两个树节点都不为空时, 进一步比较节点值
+    if(!!ln && !!rn)
+    {
+        // 节点地址值相等时, 值一定相等(value, left, right, parent), 可直接返回true
+        if(ln == rn)
+        {
+            ret = true;
+        }
+        // 节点地址值不相等时, 比较节点值
+        else
+        {
+            // 比较节点值 + 递归比较左节点 + 递归比较右节点
+            ret = ((ln->value == rn->value) && equal(ln->m_left, rn->m_left) && equal(ln->m_right, rn->m_right));
+        }
+    }
+    // 两个树节点都为空时, 返回true
+    else if(!ln && !rn)
+    {
+        ret = true;
+    }
+    else
+    {
+        ret = false;
+    }
+
+    return ret;
+}
+// 比较操作符重载(值比较)
+template <typename T>
+bool BTree<T>::operator ==(const BTree<T>& btree) const
+{
+    bool ret = false;
+
+    // 从根节点开始递归比较树的各个节点
+    ret = equal(root(), btree.root());
+
+    return ret;
+}
+template <typename T>
+bool BTree<T>::operator !=(const BTree<T>& btree) const
+{
+    return !(*this == btree);
+}
+
+// 递归相加函数
+template <typename T>
+BTreeNode<T>* BTree<T>::add(BTreeNode<T>* ln, BTreeNode<T>* rn) const
+{
+    BTreeNode<T>* ret = NULL;
+
+    // 左右节点都不为空, 左右节点值相加
+    if(!!ln && !!rn)
+    {
+        // 创建内存堆空间节点对象
+        ret = BTreeNode<T>::NewNode();
+
+        // 判断节点是否为空, 不为空时, 新节点正常赋值
+        if(ret != NULL)
+        {
+            // 新节点赋值(父节点尚不存在)
+            ret->parent = NULL;
+            ret->value = ln->value + rn->value;
+
+            // 子节点信息赋值
+            ret->m_left = add(ln->m_left, rn->m_left);
+            ret->m_right = add(ln->m_right, rn->m_right);
+
+            // 指定左节点的父节点
+            if(ret->m_left != NULL)
+            {
+                ret->m_left->parent = ret;
+            }
+            // 指定右节点的父节点
+            if(ret->m_right != NULL)
+            {
+                ret->m_right->parent = ret;
+            }
+        }
+        else
+        {
+            THROW_EXCEPTION(NoEnoughMemoryException, "No enough memory to create new BTreeNode...");
+        }
+    }
+    // 左节点不为空, 右节点为空时, 克隆以左节点为根的子树
+    else if(!!ln && !rn)
+    {
+        ret = clone(ln);
+    }
+    // 左节点为空, 右节点不为空, 克隆以右节点为根的子树
+    else if(!ln && !!rn)
+    {
+        ret = clone(rn);
+    }
+    // 左右节点都为空, 返回空
+    else if(!ln && !rn)
+    {
+        ret = NULL;
+    }
+    else
+    {
+        THROW_EXCEPTION(InvalidParameterException, "Parameter BTreeNode is invalid...");
+    }
+
+    return ret;
+}
+// 相加函数(值相加)
+template <typename T>
+SharedPointer<BTree<T>> BTree<T>::add(const BTree<T>& btree) const
+{
+    BTree<T>* ret = new BTree<T>();
+
+    if(ret != NULL)
+    {
+        // 从根节点开始递归相加树的各个节点
+        ret->m_root = add(root(), btree.root());
+    }
+    else
+    {
+        THROW_EXCEPTION(NoEnoughMemoryException, "No enough memory to create new BTree...");
     }
 
     return ret;
