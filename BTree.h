@@ -13,7 +13,8 @@ enum BTTraversal
 {
     PreOrder,   // 先序
     InOrder,    // 中序
-    PostOrder   // 后续
+    PostOrder,  // 后续
+    LevelOrder  // 层次
 };
 
 template <typename T>
@@ -44,11 +45,17 @@ protected:
     int height(BTreeNode<T>* node) const;
 
     // 先序遍历, 使用引用参数, 防止新建队列对象
-    void preOrderTraversal(BTreeNode<T>* node, LinkQueue<T>& queue);
+    void preOrderTraversal(BTreeNode<T>* node, LinkQueue<BTreeNode<T>*>& queue);
     // 中序遍历, 使用引用参数, 防止新建队列对象
-    void inOrderTraversal(BTreeNode<T>* node, LinkQueue<T>& queue);
+    void inOrderTraversal(BTreeNode<T>* node, LinkQueue<BTreeNode<T>*>& queue);
     // 后序遍历, 使用引用参数, 防止新建队列对象
-    void postOrderTraversal(BTreeNode<T>* node, LinkQueue<T>& queue);
+    void postOrderTraversal(BTreeNode<T>* node, LinkQueue<BTreeNode<T>*>& queue);
+    // 层次遍历, 使用引用参数, 防止新建队列对象
+    void levelOrderTraversal(BTreeNode<T>* node, LinkQueue<BTreeNode<T>*>& queue);
+    // 排序函数, 将树节点存储进队列
+    void traversal(BTTraversal order, LinkQueue<BTreeNode<T>*>& queue);
+    // 连接节点函数, 将队列中的元素节点连接为线性结构(双向链表)
+    BTreeNode<T>* connect(LinkQueue<BTreeNode<T>*>& queue);
 
     // 递归克隆函数
     BTreeNode<T>* clone(BTreeNode<T>* node) const;
@@ -97,6 +104,9 @@ public:
     SharedPointer<BTree<T>> clone() const;
     // 相加函数(值相加)
     SharedPointer<BTree<T>> add(const BTree<T>& btree) const;
+
+    // 将二叉树转化为线性结构返回(双向链表)
+    BTreeNode<T>* thread(BTTraversal order);
 
     // 比较操作符重载(值比较)
     bool operator ==(const BTree<T>& btree) const;
@@ -592,46 +602,78 @@ bool BTree<T>::end()
 
 // 先序遍历
 template <typename T>
-void BTree<T>::preOrderTraversal(BTreeNode<T>* node, LinkQueue<T>& queue)
+void BTree<T>::preOrderTraversal(BTreeNode<T>* node, LinkQueue<BTreeNode<T>*>& queue)
 {
     if(node != NULL)
     {
-        queue.add(node->value);
+        queue.add(node);
         preOrderTraversal(node->m_left, queue);
         preOrderTraversal(node->m_right, queue);
     }
 }
 // 中序遍历
 template <typename T>
-void BTree<T>::inOrderTraversal(BTreeNode<T>* node, LinkQueue<T>& queue)
+void BTree<T>::inOrderTraversal(BTreeNode<T>* node, LinkQueue<BTreeNode<T>*>& queue)
 {
     if(node != NULL)
     {
         inOrderTraversal(node->m_left, queue);
-        queue.add(node->value);
+        queue.add(node);
         inOrderTraversal(node->m_right, queue);
     }
 }
 // 后序遍历
 template <typename T>
-void BTree<T>::postOrderTraversal(BTreeNode<T>* node, LinkQueue<T>& queue)
+void BTree<T>::postOrderTraversal(BTreeNode<T>* node, LinkQueue<BTreeNode<T>*>& queue)
 {
     if(node != NULL)
     {
         postOrderTraversal(node->m_left, queue);
         postOrderTraversal(node->m_right, queue);
-        queue.add(node->value);
+        queue.add(node);
     }
 }
-// 顺序遍历函数
+// 层次遍历, 使用引用参数, 防止新建队列对象
 template <typename T>
-SharedPointer<Array<T>> BTree<T>::traversal(BTTraversal order)
+void BTree<T>::levelOrderTraversal(BTreeNode<T>* node, LinkQueue<BTreeNode<T>*>& queue)
 {
-    // 存放树节点值数组
-    DynamicArray<T>* ret = NULL;
-    // 存放树节点值队列, 起过度作用
-    LinkQueue<T> queue;
+    if(node != NULL)
+    {
+        //过渡队列
+        LinkQueue<BTreeNode<T>*> tmp;
 
+        // 将节点加入过渡队列
+        tmp.add(node);
+
+        // 判断过渡队列是否为空
+        while(tmp.size() > 0)
+        {
+            // 获取队头节点
+            BTreeNode<T>* node = tmp.front();
+
+            // 将队头节点的左节点加入过渡队列
+            if(node->m_left != NULL)
+            {
+                tmp.add(node->m_left);
+            }
+            // 将队头节点的右节点加入过渡队列
+            if(node->m_right != NULL)
+            {
+                tmp.add(node->m_right);
+            }
+
+            // 将队头节点从过渡队列中删除
+            tmp.remove();
+
+            // 将队头节点加入队列
+            queue.add(node);
+        }
+    }
+}
+// 排序函数, 将树节点存储进队列
+template <typename T>
+void BTree<T>::traversal(BTTraversal order, LinkQueue<BTreeNode<T>*>& queue)
+{
     // 判断排序方式, 并将树节点值存储进队列
     switch(order)
     {
@@ -644,10 +686,67 @@ SharedPointer<Array<T>> BTree<T>::traversal(BTTraversal order)
         case PostOrder:
             postOrderTraversal(root(), queue);
             break;
+        case LevelOrder:
+            levelOrderTraversal(root(), queue);
+            break;
         default:
             THROW_EXCEPTION(InvalidParameterException, "parameter order is invalid...");
             break;
     }
+}
+// 连接节点函数, 将队列中的元素节点连接为线性结构(双向链表)
+template <typename T>
+BTreeNode<T>* BTree<T>::connect(LinkQueue<BTreeNode<T>*>& queue)
+{
+    BTreeNode<T>* ret = NULL;
+
+    // 判断队列中节点数是否为空
+    if(queue.size() > 0)
+    {
+        // 记录队头元素
+        BTreeNode<T>* head = queue.front();
+        // 指定队头元素的游标
+        BTreeNode<T>* slider = queue.front();
+
+        // 线性结构的首元素的先驱节点为空
+        slider->m_left = NULL;
+        // 将队头元素出队列
+        queue.remove();
+
+        // 判断队列中节点数是否为空, 不为空则循环连接节点
+        while(queue.size() > 0)
+        {
+            // 设置游标元素的后继节点为队头元素
+            slider->m_right = queue.front();
+            // 设置将队头元素的前驱节点为游标元素
+            queue.front()->m_left = slider;
+
+            // 游标指向队头元素
+            slider = queue.front();
+            // 将队头元素出队列
+            queue.remove();
+        }
+
+        // 线性结构的尾元素的后继节点为空
+        slider->m_right = NULL;
+
+        // 将线性结构的头节点返回
+        ret = head;
+    }
+
+    return ret;
+}
+// 顺序遍历函数
+template <typename T>
+SharedPointer<Array<T>> BTree<T>::traversal(BTTraversal order)
+{
+    // 存放树节点值数组
+    DynamicArray<T>* ret = NULL;
+    // 存放树节点值队列, 起过度作用
+    LinkQueue<BTreeNode<T>*> queue;
+
+    // 将树节点按照指定排列存储进队列中
+    traversal(order, queue);
 
     // 创建堆空间动态数组对象
     ret = new DynamicArray<T>(queue.size());
@@ -659,7 +758,7 @@ SharedPointer<Array<T>> BTree<T>::traversal(BTTraversal order)
         for(int i = 0; i < ret->length(); i++)
         {
             // 将队头元素存储进数组
-            ret->set(i, queue.front());
+            ret->set(i, queue.front()->value);
             // 移除队头元素
             queue.remove();
         }
@@ -719,6 +818,27 @@ SharedPointer<BTree<T>> BTree<T>::clone() const
     {
         THROW_EXCEPTION(NoEnoughMemoryException, "No enough memory to create new BTree...");
     }
+
+    return ret;
+}
+
+// 将二叉树转化为线性结构返回(双向链表)
+template <typename T>
+BTreeNode<T>* BTree<T>::thread(BTTraversal order)
+{
+    BTreeNode<T>* ret = NULL;
+    LinkQueue<BTreeNode<T>*> queue;
+
+    // 将树节点按照指定排列存储进队列中
+    traversal(order, queue);
+
+    // 将队列中的元素节点连接成线性结构(双向链表)
+    ret = connect(queue);
+
+    // 树转换为线性结构时, 树节点间关系已经被破坏, 所以最后将树赋空
+    this->m_root = NULL;
+    // 树赋空同时清空树节点队列
+    m_queue.clear();
 
     return ret;
 }

@@ -478,4 +478,45 @@ void funcTree002()
     // 原树和克隆树的比较
     cout << (oldBti == *cloneBti) << endl;  // 0
     cout << (oldBti != *cloneBti) << endl;  // 1
+
+    // 层次遍历
+    cout << "LevelOrderTravelsal::";
+    pre = cloneBti->traversal(LevelOrder);
+    for(int i = 0; i < pre->length(); i++)
+    {
+        cout << pre->array()[i] << " "; // LevelOrderTravelsal::1 2 3 4 5 6 7 8 9 10
+    }
+    cout << endl;
+
+    // 将树转换为线性结构
+    BTreeNode<int>* head = cloneBti->thread(LevelOrder);
+    BTreeNode<int>* tail = head;
+
+    // 从头输出链表
+    cout << "Thread::head = ";
+    while(head)
+    {
+        tail = head;
+        cout << head->value << " "; // Thread::head = 1 2 3 4 5 6 7 8 9 10
+        head = head->m_right;
+    }
+    cout << endl;
+
+    // 从尾输出链表
+    cout << "Thread::tail = ";
+    while(tail)
+    {
+        cout << tail->value << " "; // Thread::tail = 10 9 8 7 6 5 4 3 2 1
+        tail = tail->m_left;
+    }
+    cout << endl;
+
+    // 将树转换为线性结构后, 树已被清空, 此时输出空树
+    cout << "LevelOrderTravelsal::";
+    pre = cloneBti->traversal(LevelOrder);
+    for(int i = 0; i < pre->length(); i++)
+    {
+        cout << pre->array()[i] << " "; // LevelOrderTravelsal::
+    }
+    cout << endl;
 }
