@@ -521,6 +521,7 @@ void funcTree002()
     cout << endl;
 }
 
+// 创建树函数
 template <typename T>
 BTreeNode<T>* createTree()
 {
@@ -563,6 +564,7 @@ BTreeNode<T>* createTree()
 
     return ret;
 }
+// 中序遍历输出树节点函数
 template <typename T>
 void printTree(BTreeNode<T>* node)
 {
@@ -573,6 +575,7 @@ void printTree(BTreeNode<T>* node)
         printTree(node->m_right);
     }
 }
+// 删除度数为1的节点, 树节点存在父节点指针
 template <typename T>
 BTreeNode<T>* delOdd1(BTreeNode<T>* node)
 {
@@ -635,6 +638,7 @@ BTreeNode<T>* delOdd1(BTreeNode<T>* node)
 
     return ret;
 }
+// 删除度数为1的节点, 树节点不存在父指针
 template <typename T>
 void delOdd2(BTreeNode<T>*& node)
 {
@@ -666,6 +670,49 @@ void delOdd2(BTreeNode<T>*& node)
         }
     }
 }
+// 递归线索化树节点 => 中序遍历时线索化
+template <typename T>
+void inOrderThread1(BTreeNode<T>* node, BTreeNode<T>*& pre)
+{
+    if(node != NULL)
+    {
+        //
+        inOrderThread1(node->m_left, pre);
+
+        node->m_left = pre;
+        if(pre != NULL)
+        {
+            pre->m_right = node;
+        }
+
+        pre = node;
+
+        inOrderThread1(node->m_right, pre);
+    }
+}
+template <typename T>
+BTreeNode<T>* inOrderThread(BTreeNode<T>* node)
+{
+    BTreeNode<T>* ret = NULL;
+    BTreeNode<T>* pre = NULL;
+
+    if(node != NULL)
+    {
+        inOrderThread1(node, pre);
+
+        while(node != NULL)
+        {
+            ret = node;
+            node = node->m_left;
+        }
+
+        return ret;
+    }
+    else
+    {
+        THROW_EXCEPTION(InvalidParameterException, "Parameter node is invalid...");
+    }
+}
 void funcTree003()
 {
     cout << "funcTree003::" << endl;
@@ -689,5 +736,25 @@ void funcTree003()
 
     // 输出树节点值
     printTree(root);    // 6 0 7 2 8
+    cout << endl;
+
+    // 线索化树节点
+    BTreeNode<int>* link = inOrderThread(root);
+    BTreeNode<int>* tail;
+
+    // 输出线性结构节点值
+    while(link != NULL)
+    {
+        tail = link;
+        cout << link->value << " "; // 6 0 7 2 8
+        link = link->m_right;
+    }
+    cout << endl;
+    // 输出线性结构节点值
+    while(tail != NULL)
+    {
+        cout << tail->value << " "; // 8 2 7 0 6
+        tail = tail->m_left;
+    }
     cout << endl;
 }
