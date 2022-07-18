@@ -710,10 +710,10 @@ void inOrderThread2(BTreeNode<T>* node, BTreeNode<T>*& head, BTreeNode<T>*& tail
             t->m_right = node;
         }
 
-        // 记录头节点地址, 因参数h为引用类型, 所以只触发一次异赋值, 其它情况为自赋值
+        // 记录头节点地址, 子树线性化后的头节点地址
         head = (h != NULL) ? h : node;
 
-        // 右子树的头尾节点重赋空
+        // 左子树线性化完毕, 右子树线性化开始, 头尾节点重赋空
         h = NULL;
         t = NULL;
 
@@ -725,7 +725,7 @@ void inOrderThread2(BTreeNode<T>* node, BTreeNode<T>*& head, BTreeNode<T>*& tail
             h->m_left = node;
         }
 
-        // 记录尾节点地址, 因参数t为引用类型, 所以只触发一次异赋值, 其它情况为自赋值
+        // 记录尾节点地址, 子树线性化后的尾节点地址
         tail = (t != NULL) ? t : node;
     }
 }
