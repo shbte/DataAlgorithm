@@ -670,48 +670,92 @@ void delOdd2(BTreeNode<T>*& node)
         }
     }
 }
-// 递归线索化树节点 => 中序遍历时线索化
+// 递归线性化树节点 => 中序遍历时线索化, pre本意是前驱节点, 但是一开始却是最前驱节点(左节点: NULL)
 template <typename T>
 void inOrderThread1(BTreeNode<T>* node, BTreeNode<T>*& pre)
 {
+    // 判断节点是否为空
     if(node != NULL)
     {
-        //
+        // 左子树节点线性化
         inOrderThread1(node->m_left, pre);
 
+        // 将左节点和父节点线性化
         node->m_left = pre;
         if(pre != NULL)
         {
             pre->m_right = node;
         }
 
+        // 前节点后移
         pre = node;
 
+        // 将右节点和父节点线性化
         inOrderThread1(node->m_right, pre);
+    }
+}
+template <typename T>
+void inOrderThread2(BTreeNode<T>* node, BTreeNode<T>*& head, BTreeNode<T>*& tail)
+{
+    if(node != NULL)
+    {
+        BTreeNode<T>* h = NULL;
+        BTreeNode<T>* t = NULL;
+
+        inOrderThread2(node->m_left, h, t);
+
+        node->m_left = t;
+        if(t != NULL)
+        {
+            t->m_right = node;
+        }
+
+        // 记录头节点地址, 因参数h为引用类型, 所以只触发一次异赋值, 其它情况为自赋值
+        head = (h != NULL) ? h : node;
+
+        // 右子树的头尾节点重赋空
+        h = NULL;
+        t = NULL;
+
+        inOrderThread2(node->m_right, h, t);
+
+        node->m_right = h;
+        if(h != NULL)
+        {
+            h->m_left = node;
+        }
+
+        // 记录尾节点地址, 因参数t为引用类型, 所以只触发一次异赋值, 其它情况为自赋值
+        tail = (t != NULL) ? t : node;
     }
 }
 template <typename T>
 BTreeNode<T>* inOrderThread(BTreeNode<T>* node)
 {
+    /*
     BTreeNode<T>* ret = NULL;
     BTreeNode<T>* pre = NULL;
 
-    if(node != NULL)
-    {
-        inOrderThread1(node, pre);
+    // 线索化树节点
+    inOrderThread1(node, pre);
 
-        while(node != NULL)
-        {
-            ret = node;
-            node = node->m_left;
-        }
-
-        return ret;
-    }
-    else
+    // 获取头节点
+    while(node != NULL)
     {
-        THROW_EXCEPTION(InvalidParameterException, "Parameter node is invalid...");
+        ret = node;
+        node = node->m_left;
     }
+
+    return ret;
+    */
+
+    BTreeNode<T>* head = NULL;
+    BTreeNode<T>* tail = NULL;
+
+    // 线性化树节点
+    inOrderThread2(node, head, tail);
+
+    return head;
 }
 void funcTree003()
 {
