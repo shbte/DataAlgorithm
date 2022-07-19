@@ -20,6 +20,7 @@ HEADERS += \
     FuncTree.h \
     GTree.h \
     GTreeNode.h \
+    Graph.h \
     LinkList.h \
     LinkListSharedPointer.h \
     LinkQueue.h \
