@@ -4,6 +4,7 @@
 #include "FuncDDString.h"
 #include "FuncSort.h"
 #include "FuncTree.h"
+#include "FuncGraph.h"
 
 using namespace std;
 
@@ -101,6 +102,13 @@ void func0004()
     funcTree003();
 }
 
+// Graph
+void func0005()
+{
+    cout << endl;
+    funcGraph001();
+}
+
 int main()
 {
     cout << "Hello World!" << endl;
@@ -114,6 +122,8 @@ int main()
     func0003();
 
     func0004();
+
+    func0005();
 
     return 0;
 }

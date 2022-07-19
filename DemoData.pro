@@ -15,6 +15,7 @@ HEADERS += \
     DynamicList.h \
     Exception.h \
     FuncDDString.h \
+    FuncGraph.h \
     FuncMy.h \
     FuncSort.h \
     FuncTree.h \
@@ -27,6 +28,7 @@ HEADERS += \
     LinkStack.h \
     LinuxList.h \
     List.h \
+    MatrixGraph.h \
     Object.h \
     Pointer.h \
     Queue.h \
@@ -51,6 +53,7 @@ SOURCES += \
         DDString.cpp \
         Exception.cpp \
         FuncDDString.cpp \
+        FuncGraph.cpp \
         FuncMy.cpp \
         FuncSort.cpp \
         FuncTree.cpp \
