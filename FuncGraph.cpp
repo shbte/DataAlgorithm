@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "MatrixGraph.h"
+#include "ListGraph.h"
 
 using namespace std;
 using namespace DemoData;
@@ -44,4 +45,39 @@ void funcGraph001()
     cout << "V(0): " << mgi.getVertex(0) << endl;   // V(0): 100
 
     //cout << "W(0, 1): " << mgi.getEdge(0, 1) << endl;   // DemoData::InvalidParameterException
+}
+
+void funcGraph002()
+{
+    cout << "funcGraph002:: ListGrap" << endl;
+
+    ListGraph<char, int> g;
+
+    g.addVertex('A');
+    g.addVertex('B');
+    g.addVertex('C');
+    g.addVertex('D');
+    g.setEdge(0, 1, 5);
+    g.setEdge(0, 3, 5);
+    g.setEdge(1, 2, 8);
+    g.setEdge(2, 3, 2);
+    g.setEdge(3, 1, 9);
+
+    for(int i = 0; i < g.vCount(); i++)
+    {
+        cout << i << " : " << g.getVertex(i) << " ";
+    }
+    cout << endl;
+
+    cout << "W(0, 1) : " << g.getEdge(0, 1) << endl;
+    cout << "W(0, 3) : " << g.getEdge(0, 3) << endl;
+    cout << "W(1, 2) : " << g.getEdge(1, 2) << endl;
+    cout << "W(2, 3) : " << g.getEdge(2, 3) << endl;
+    cout << "W(3, 1) : " << g.getEdge(3, 1) << endl;
+
+    cout << "vCount: " << g.vCount() << endl;
+    cout << "eCount: " << g.eCount() << endl;
+    cout << "ID(1): " << g.ID(1) << endl;
+    cout << "OD(1): " << g.OD(1) << endl;
+    cout << "TD(1): " << g.TD(1) << endl;
 }

@@ -28,6 +28,7 @@ HEADERS += \
     LinkStack.h \
     LinuxList.h \
     List.h \
+    ListGraph.h \
     MatrixGraph.h \
     Object.h \
     Pointer.h \
