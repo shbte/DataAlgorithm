@@ -74,21 +74,21 @@ SharedPointer<Array<int>> Graph<V, E>::BFS(int i)
                 // 移除重复队列头元素
                 tmpQueue.remove();
 
-                // 获取头元素的邻接顶点
-                SharedPointer<Array<int>> aj = getAdjacent(front);
-
-                if(aj->length() > 0)
-                {
-                    for(int j = 0; j < aj->length(); j++)
-                    {
-                        // 将邻接顶点加入重复队列中
-                        tmpQueue.add((*aj)[j]);
-                    }
-                }
-
-                // 判断头元素是否已经加入了非重复队列
+                // 判断头元素是否已经加入了队列
                 if(!visited[front])
                 {
+                    // 获取头元素的邻接顶点
+                    SharedPointer<Array<int>> aj = getAdjacent(front);
+
+                    if(aj->length() > 0)
+                    {
+                        for(int j = 0; j < aj->length(); j++)
+                        {
+                            // 将邻接顶点加入重复队列中
+                            tmpQueue.add((*aj)[j]);
+                        }
+                    }
+
                     // 将头元素加入非重复队列
                     queue.add(front);
                     // 表明顶点下标已获取, 标记值设为true
