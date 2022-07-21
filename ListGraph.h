@@ -3,7 +3,6 @@
 
 #include "Graph.h"
 #include "LinkList.h"
-#include "DynamicArray.h"
 
 namespace DemoData
 {

@@ -2,13 +2,12 @@
 #define MATRIXGRAPH_H
 
 #include "Graph.h"
-#include "DynamicArray.h"
 
 namespace DemoData
 {
 
 template <typename V, typename E, int N>
-class MatrixGraph : Graph<V, E>
+class MatrixGraph : public Graph<V, E>
 {
 protected:
     V* m_vertexes[N];   // 图的顶点集, 保存该顶点的值 => 指针数组, 数组内容为V类型的指针 => 防止数据类型过于多的无效构造, 因此使用的是指针数组, 而不直接使用数组

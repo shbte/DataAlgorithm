@@ -45,6 +45,47 @@ void funcGraph001()
     cout << "V(0): " << mgi.getVertex(0) << endl;   // V(0): 100
 
     //cout << "W(0, 1): " << mgi.getEdge(0, 1) << endl;   // DemoData::InvalidParameterException
+
+    MatrixGraph<char, int, 9> mg;
+    mg.setVertex(0, 'A');
+    mg.setVertex(1, 'B');
+    mg.setVertex(4, 'C');
+    mg.setVertex(3, 'D');
+    mg.setVertex(2, 'E');
+    mg.setVertex(6, 'F');
+    mg.setVertex(5, 'G');
+    mg.setVertex(7, 'H');
+    mg.setVertex(8, 'I');
+    mg.setEdge(0, 1, 1);
+    mg.setEdge(0, 3, 1);
+    mg.setEdge(0, 4, 1);
+    mg.setEdge(1, 0, 1);
+    mg.setEdge(1, 2, 1);
+    mg.setEdge(1, 4, 1);
+    mg.setEdge(2, 1, 1);
+    mg.setEdge(2, 5, 1);
+    mg.setEdge(3, 0, 1);
+    mg.setEdge(3, 6, 1);
+    mg.setEdge(4, 0, 1);
+    mg.setEdge(4, 1, 1);
+    mg.setEdge(4, 6, 1);
+    mg.setEdge(5, 2, 1);
+    mg.setEdge(6, 3, 1);
+    mg.setEdge(6, 4, 1);
+    mg.setEdge(6, 7, 1);
+    mg.setEdge(7, 6, 1);
+    mg.setEdge(7, 8, 1);
+    mg.setEdge(8, 7, 1);
+
+    cout << "vCount: " << mg.vCount() << endl;  // vCount: 9
+    cout << "eCount: " << mg.eCount() << endl;  //eCount: 20
+
+    SharedPointer<Array<int>> array = mg.BFS(0);
+    for(int i = 0; i < array->length(); i++)
+    {
+        cout << (*array)[i] << " "; // 0 1 3 4 2 6 5 7 8
+    }
+    cout << endl;
 }
 
 void funcGraph002()
@@ -81,4 +122,45 @@ void funcGraph002()
     cout << "ID(1): " << g.ID(1) << endl;       // ID(1): 2
     cout << "OD(1): " << g.OD(1) << endl;       // OD(1): 1
     cout << "TD(1): " << g.TD(1) << endl;       // TD(1): 3
+
+    ListGraph<char, int> mg;
+    mg.addVertex('A');
+    mg.addVertex('B');
+    mg.addVertex('E');
+    mg.addVertex('D');
+    mg.addVertex('C');
+    mg.addVertex('G');
+    mg.addVertex('F');
+    mg.addVertex('H');
+    mg.addVertex('I');
+    mg.setEdge(0, 1, 1);
+    mg.setEdge(0, 3, 1);
+    mg.setEdge(0, 4, 1);
+    mg.setEdge(1, 0, 1);
+    mg.setEdge(1, 2, 1);
+    mg.setEdge(1, 4, 1);
+    mg.setEdge(2, 1, 1);
+    mg.setEdge(2, 5, 1);
+    mg.setEdge(3, 0, 1);
+    mg.setEdge(3, 6, 1);
+    mg.setEdge(4, 0, 1);
+    mg.setEdge(4, 1, 1);
+    mg.setEdge(4, 6, 1);
+    mg.setEdge(5, 2, 1);
+    mg.setEdge(6, 3, 1);
+    mg.setEdge(6, 4, 1);
+    mg.setEdge(6, 7, 1);
+    mg.setEdge(7, 6, 1);
+    mg.setEdge(7, 8, 1);
+    mg.setEdge(8, 7, 1);
+
+    cout << "vCount: " << mg.vCount() << endl;  // vCount: 9
+    cout << "eCount: " << mg.eCount() << endl;  // eCount: 20
+
+    SharedPointer<Array<int>> array = mg.BFS(1);
+    for(int i = 0; i < array->length(); i++)
+    {
+        cout << (*array)[i] << " "; // 1 0 2 4 3 5 6 7 8
+    }
+    cout << endl;
 }
