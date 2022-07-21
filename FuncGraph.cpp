@@ -81,9 +81,26 @@ void funcGraph001()
     cout << "eCount: " << mg.eCount() << endl;  //eCount: 20
 
     SharedPointer<Array<int>> array = mg.BFS(0);
+    cout << "Breadth First Search: ";
     for(int i = 0; i < array->length(); i++)
     {
-        cout << (*array)[i] << " "; // 0 1 3 4 2 6 5 7 8
+        cout << (*array)[i] << " "; // Breadth First Search: 0 1 3 4 2 6 5 7 8
+    }
+    cout << endl;
+
+    array = mg.DFS(0);
+    cout << "Depth First Search: ";
+    for(int i = 0; i < array->length(); i++)
+    {
+        cout << (*array)[i] << " "; // Depth First Search: 0 1 2 5 4 6 3 7 8
+    }
+    cout << endl;
+
+    array = mg.DFS1(0);
+    cout << "Depth First Search Recursion: ";
+    for(int i = 0; i < array->length(); i++)
+    {
+        cout << (*array)[i] << " "; // Depth First Search Recursion: 0 1 2 5 4 6 3 7 8
     }
     cout << endl;
 }
@@ -157,10 +174,27 @@ void funcGraph002()
     cout << "vCount: " << mg.vCount() << endl;  // vCount: 9
     cout << "eCount: " << mg.eCount() << endl;  // eCount: 20
 
+    cout << "Breadth First Search: ";
     SharedPointer<Array<int>> array = mg.BFS(1);
     for(int i = 0; i < array->length(); i++)
     {
-        cout << (*array)[i] << " "; // 1 0 2 4 3 5 6 7 8
+        cout << (*array)[i] << " "; // Breadth First Search: 1 0 2 4 3 5 6 7 8
+    }
+    cout << endl;
+
+    array = mg.DFS(1);
+    cout << "Depth First Search: ";
+    for(int i = 0; i < array->length(); i++)
+    {
+        cout << (*array)[i] << " "; // epth First Search: 1 0 3 6 4 7 8 2 5
+    }
+    cout << endl;
+
+    array = mg.DFS1(1);
+    cout << "Depth First Search Recursion: ";
+    for(int i = 0; i < array->length(); i++)
+    {
+        cout << (*array)[i] << " "; // Depth First Search Recursion: 1 0 3 6 4 7 8 2 5
     }
     cout << endl;
 }
