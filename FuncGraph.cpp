@@ -61,23 +61,24 @@ void funcGraph002()
     g.setEdge(0, 3, 5);
     g.setEdge(1, 2, 8);
     g.setEdge(2, 3, 2);
+    g.setEdge(3, 1, 8);
     g.setEdge(3, 1, 9);
 
     for(int i = 0; i < g.vCount(); i++)
     {
-        cout << i << " : " << g.getVertex(i) << " ";
+        cout << i << " : " << g.getVertex(i) << " ";    // 0 : A 1 : B 2 : C 3 : D
     }
     cout << endl;
 
-    cout << "W(0, 1) : " << g.getEdge(0, 1) << endl;
-    cout << "W(0, 3) : " << g.getEdge(0, 3) << endl;
-    cout << "W(1, 2) : " << g.getEdge(1, 2) << endl;
-    cout << "W(2, 3) : " << g.getEdge(2, 3) << endl;
-    cout << "W(3, 1) : " << g.getEdge(3, 1) << endl;
+    cout << "W(0, 1) : " << g.getEdge(0, 1) << endl;    // W(0, 1) : 5
+    cout << "W(0, 3) : " << g.getEdge(0, 3) << endl;    // W(0, 3) : 5
+    cout << "W(1, 2) : " << g.getEdge(1, 2) << endl;    // W(1, 2) : 8
+    cout << "W(2, 3) : " << g.getEdge(2, 3) << endl;    // W(2, 3) : 2
+    cout << "W(3, 1) : " << g.getEdge(3, 1) << endl;    // W(3, 1) : 9
 
-    cout << "vCount: " << g.vCount() << endl;
-    cout << "eCount: " << g.eCount() << endl;
-    cout << "ID(1): " << g.ID(1) << endl;
-    cout << "OD(1): " << g.OD(1) << endl;
-    cout << "TD(1): " << g.TD(1) << endl;
+    cout << "vCount: " << g.vCount() << endl;   // vCount: 4
+    cout << "eCount: " << g.eCount() << endl;   // eCount: 5
+    cout << "ID(1): " << g.ID(1) << endl;       // ID(1): 2
+    cout << "OD(1): " << g.OD(1) << endl;       // OD(1): 1
+    cout << "TD(1): " << g.TD(1) << endl;       // TD(1): 3
 }
