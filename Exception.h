@@ -9,6 +9,7 @@
  * IndexOutOfBoundsException    越界异常
  * NoEnoughMemoryException      内存不足异常
  * InvalidParameterException    参数错误异常
+ * InvalidOperatorException     非法操作异常
  */
 namespace DemoData
 {
@@ -132,6 +133,25 @@ public:
     }
 
     virtual ~InvalidParameterException() {};
+};
+
+// 非法操作异常
+class InvalidOperatorException : public Exception
+{
+public:
+    InvalidOperatorException() : Exception(0) {};
+    InvalidOperatorException(const char* message) : Exception(message) {};
+    InvalidOperatorException(const char* file, int line) : Exception(file, line) {};
+    InvalidOperatorException(const char* message, const char* file, int line) : Exception(message, file, line) {};
+
+    InvalidOperatorException(const InvalidOperatorException& e) : Exception(e) {};
+    InvalidOperatorException& operator =(const InvalidOperatorException& e)
+    {
+        Exception::operator=(e);
+        return *this;
+    }
+
+    virtual ~InvalidOperatorException() {};
 };
 
 };
