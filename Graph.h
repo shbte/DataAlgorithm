@@ -12,7 +12,7 @@ namespace DemoData
 {
 
 /* 图(抽象类) */
-template <typename V, typename E>
+template <typename V, typename W>
 class Graph : public Object
 {
 public:
@@ -20,10 +20,10 @@ public:
     virtual bool getVertex(int i, V& value) = 0;
     virtual bool setVertex(int i, const V& value) = 0;
     virtual SharedPointer<Array<int>> getAdjacent(int i) = 0;
-    virtual E getEdge(int i, int j) = 0;
-    virtual bool getEdge(int i, int j, E& value) = 0;
-    virtual bool setEdge(int i, int j, const E& value) = 0;
-    virtual bool removeEdge(int i, int j) = 0;
+    virtual W getEdgeWeight(int i, int j) = 0;
+    virtual bool getEdgeWeight(int i, int j, W& weight) = 0;
+    virtual bool setEdgeWeight(int i, int j, const W& weight) = 0;
+    virtual bool removeEdgeWeight(int i, int j) = 0;
     virtual int vCount() = 0;
     virtual int eCount() = 0;
     virtual int OD(int i) = 0;
@@ -41,8 +41,8 @@ public:
 };
 
 // 广度优先算法(Breadth First Search)
-template <typename V, typename E>
-SharedPointer<Array<int>> Graph<V, E>::BFS(int i)
+template <typename V, typename W>
+SharedPointer<Array<int>> Graph<V, W>::BFS(int i)
 {
     // 判断顶点下标是否合法
     if((0 <= i) && (i < vCount()))
@@ -121,8 +121,8 @@ SharedPointer<Array<int>> Graph<V, E>::BFS(int i)
     }
 }
 // 深度优先算法(Depth First Search) => 栈实现, 先序遍历
-template <typename V, typename E>
-SharedPointer<Array<int>> Graph<V, E>::DFS(int i)
+template <typename V, typename W>
+SharedPointer<Array<int>> Graph<V, W>::DFS(int i)
 {
     if((0 <= i) && (i < vCount()))
     {
@@ -202,8 +202,8 @@ SharedPointer<Array<int>> Graph<V, E>::DFS(int i)
     }
 }
 // 深度优先算法(Depth First Search) => 栈实现, 先序遍历, 递归
-template <typename V, typename E>
-SharedPointer<Array<int>> Graph<V, E>::DFS1(int i)
+template <typename V, typename W>
+SharedPointer<Array<int>> Graph<V, W>::DFS1(int i)
 {
     // 判断顶点下标是否合法
     if((0 <= i) && (i < vCount()))
@@ -243,8 +243,8 @@ SharedPointer<Array<int>> Graph<V, E>::DFS1(int i)
     }
 }
 // 先序遍历图顶点核心函数 => 递归实现
-template <typename V, typename E>
-void Graph<V, E>::DFS1(int i, Array<int>* ret, int& retIndex, Array<bool>& visited)
+template <typename V, typename W>
+void Graph<V, W>::DFS1(int i, Array<int>* ret, int& retIndex, Array<bool>& visited)
 {
     // 判读顶点下标是否合法
     if((0 <= i) && (i < vCount()))

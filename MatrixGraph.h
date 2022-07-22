@@ -6,16 +6,16 @@
 namespace DemoData
 {
 
-template <typename V, typename E, int N>
-class MatrixGraph : public Graph<V, E>
+template <typename V, typename W, int N>
+class MatrixGraph : public Graph<V, W>
 {
 protected:
     V* m_vertexes[N];   // 图的顶点集, 保存该顶点的值 => 指针数组, 数组内容为V类型的指针 => 防止数据类型过于多的无效构造, 因此使用的是指针数组, 而不直接使用数组
-    E* m_edges[N][N];   // 图的边集, 保存点与点之间的权重 => 指针数组, 数组内容为E类型的指针
+    W* m_edges[N][N];   // 图的边集, 保存点与点之间的权重 => 指针数组, 数组内容为E类型的指针
     int m_eCount;       // 图的边数
 
 public:
-    MatrixGraph<V, E, N>();
+    MatrixGraph<V, W, N>();
 
     /* 顶点函数 */
     V getVertex(int i);
@@ -24,10 +24,10 @@ public:
     SharedPointer<Array<int>> getAdjacent(int i);
 
     /* 边函数 */
-    E getEdge(int i, int j);
-    bool getEdge(int i, int j, E& value);
-    bool setEdge(int i, int j, const E& value);
-    bool removeEdge(int i, int j);
+    W getEdgeWeight(int i, int j);
+    bool getEdgeWeight(int i, int j, W& weight);
+    bool setEdgeWeight(int i, int j, const W& weight);
+    bool removeEdgeWeight(int i, int j);
 
     /* 属性函数 */
     int vCount();
@@ -36,12 +36,12 @@ public:
     int ID(int i);
     int TD(int i);
 
-    ~MatrixGraph<V, E, N>();
+    ~MatrixGraph<V, W, N>();
 };
 
 // 构造函数 =>
-template <typename V, typename E, int N>
-MatrixGraph<V, E, N>::MatrixGraph()
+template <typename V, typename W, int N>
+MatrixGraph<V, W, N>::MatrixGraph()
 {
     // 边数赋值0
     m_eCount = 0;
@@ -61,8 +61,8 @@ MatrixGraph<V, E, N>::MatrixGraph()
 
 /* 顶点函数 */
 // 获取i位置顶点值
-template <typename V, typename E, int N>
-V MatrixGraph<V, E, N>::getVertex(int i)
+template <typename V, typename W, int N>
+V MatrixGraph<V, W, N>::getVertex(int i)
 {
     V ret;
 
@@ -75,8 +75,8 @@ V MatrixGraph<V, E, N>::getVertex(int i)
     return ret;
 }
 // 获取i位置顶点值, 并使用引用参数传出
-template <typename V, typename E, int N>
-bool MatrixGraph<V, E, N>::getVertex(int i, V& value)
+template <typename V, typename W, int N>
+bool MatrixGraph<V, W, N>::getVertex(int i, V& value)
 {
     // 判断顶点位置是否合法
     bool ret = ((0 <= i) && (i < vCount()));
@@ -98,8 +98,8 @@ bool MatrixGraph<V, E, N>::getVertex(int i, V& value)
     return ret;
 }
 // 设置i位置顶点值
-template <typename V, typename E, int N>
-bool MatrixGraph<V, E, N>::setVertex(int i, const V& value)
+template <typename V, typename W, int N>
+bool MatrixGraph<V, W, N>::setVertex(int i, const V& value)
 {
     // 判断顶点位置是否合法
     bool ret = ((0 <= i) && (i < vCount()));
@@ -134,8 +134,8 @@ bool MatrixGraph<V, E, N>::setVertex(int i, const V& value)
     return ret;
 }
 // 获取i位置顶点的相邻顶点 => 能到达的顶点
-template <typename V, typename E, int N>
-SharedPointer<Array<int>> MatrixGraph<V, E, N>::getAdjacent(int i)
+template <typename V, typename W, int N>
+SharedPointer<Array<int>> MatrixGraph<V, W, N>::getAdjacent(int i)
 {
     DynamicArray<int>* ret = NULL;
 
@@ -188,22 +188,22 @@ SharedPointer<Array<int>> MatrixGraph<V, E, N>::getAdjacent(int i)
 
 /* 边函数 */
 // 获取边集的权重值(顶点i和顶点j是否有边)
-template <typename V, typename E, int N>
-E MatrixGraph<V, E, N>::getEdge(int i, int j)
+template <typename V, typename W, int N>
+W MatrixGraph<V, W, N>::getEdgeWeight(int i, int j)
 {
-    E ret;
+    W ret;
 
     // 判断边值是否获取成功
-    if(!getEdge(i, j, ret))
+    if(!getEdgeWeight(i, j, ret))
     {
-        THROW_EXCEPTION(InvalidParameterException, "Index i/j is invalid...");
+        THROW_EXCEPTION(InvalidParameterException, "Edge<i, j> is invalid...");
     }
 
     return ret;
 }
 // 获取边集值的权重值, 并使用引用参数传出
-template <typename V, typename E, int N>
-bool MatrixGraph<V, E, N>::getEdge(int i, int j, E& value)
+template <typename V, typename W, int N>
+bool MatrixGraph<V, W, N>::getEdgeWeight(int i, int j, W& weight)
 {
     // 判断顶点位置是否合法
     bool ret = (((0 <= i) && (i < vCount())) && ((0 <= j) && (j < vCount())));
@@ -214,7 +214,7 @@ bool MatrixGraph<V, E, N>::getEdge(int i, int j, E& value)
         if(m_edges[i][j] != NULL)
         {
             // 获取边集的权重值
-            value = *(m_edges[i][j]);
+            weight = *(m_edges[i][j]);
         }
         else
         {
@@ -225,34 +225,34 @@ bool MatrixGraph<V, E, N>::getEdge(int i, int j, E& value)
     return ret;
 }
 // 设置边集的权重值
-template <typename V, typename E, int N>
-bool MatrixGraph<V, E, N>::setEdge(int i, int j, const E& value)
+template <typename V, typename W, int N>
+bool MatrixGraph<V, W, N>::setEdgeWeight(int i, int j, const W& weight)
 {
     // 判断顶点位置是否合法
     bool ret = (((0 <= i) && (i < vCount())) && ((0 <= j) && (j < vCount())));
 
     if(ret)
     {
-        E* tmpE = m_edges[i][j];
+        W* tmpW = m_edges[i][j];
 
         // 判断顶点是否为空
-        if(tmpE == NULL)
+        if(tmpW == NULL)
         {
             // 创建内存堆空间对象
-            tmpE = new E();
+            tmpW = new W();
 
             // 边数+1
             m_eCount++;
         }
 
         // 判断边集对象创建是否成功
-        if(tmpE != NULL)
+        if(tmpW != NULL)
         {
             // 边集对象赋值
-            *tmpE = value;
+            *tmpW = weight;
 
             // 将边集对象赋值给图
-            m_edges[i][j] = tmpE;
+            m_edges[i][j] = tmpW;
         }
         else
         {
@@ -263,15 +263,15 @@ bool MatrixGraph<V, E, N>::setEdge(int i, int j, const E& value)
     return ret;
 }
 // 删除边集
-template <typename V, typename E, int N>
-bool MatrixGraph<V, E, N>::removeEdge(int i, int j)
+template <typename V, typename W, int N>
+bool MatrixGraph<V, W, N>::removeEdgeWeight(int i, int j)
 {
     // 判断顶点位置是否合法
     bool ret = (((0 <= i) && (i < vCount())) && ((0 <= j) && (j < vCount())));
 
     if(ret)
     {
-        E* toDel = m_edges[i][j];
+        W* toDel = m_edges[i][j];
 
         // 边集赋空
         m_edges[i][j] = NULL;
@@ -292,20 +292,20 @@ bool MatrixGraph<V, E, N>::removeEdge(int i, int j)
 
 /* 属性函数 */
 // 获取图的顶点数
-template <typename V, typename E, int N>
-int MatrixGraph<V, E, N>::vCount()
+template <typename V, typename W, int N>
+int MatrixGraph<V, W, N>::vCount()
 {
     return N;
 }
 // 获取图的边数
-template <typename V, typename E, int N>
-int MatrixGraph<V, E, N>::eCount()
+template <typename V, typename W, int N>
+int MatrixGraph<V, W, N>::eCount()
 {
     return m_eCount;
 }
 // 获取顶点的出度数
-template <typename V, typename E, int N>
-int MatrixGraph<V, E, N>::OD(int i)
+template <typename V, typename W, int N>
+int MatrixGraph<V, W, N>::OD(int i)
 {
     // 判断顶点位置是否合法
     if((0 <= i) && (i < vCount()))
@@ -330,8 +330,8 @@ int MatrixGraph<V, E, N>::OD(int i)
     }
 }
 // 获取顶点的入度数
-template <typename V, typename E, int N>
-int MatrixGraph<V, E, N>::ID(int i)
+template <typename V, typename W, int N>
+int MatrixGraph<V, W, N>::ID(int i)
 {
     // 判断顶点位置是否合法
     if((0 <= i) && (i < vCount()))
@@ -356,15 +356,15 @@ int MatrixGraph<V, E, N>::ID(int i)
     }
 }
 // 获取顶点的度数
-template <typename V, typename E, int N>
-int MatrixGraph<V, E, N>::TD(int i)
+template <typename V, typename W, int N>
+int MatrixGraph<V, W, N>::TD(int i)
 {
     return (ID(i) + OD(i));
 }
 
 // 析构函数
-template <typename V, typename E, int N>
-MatrixGraph<V, E, N>::~MatrixGraph<V, E, N>()
+template <typename V, typename W, int N>
+MatrixGraph<V, W, N>::~MatrixGraph<V, W, N>()
 {
     for(int i = 0; i < N; i++)
     {
