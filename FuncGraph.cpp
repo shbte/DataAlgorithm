@@ -28,6 +28,8 @@ void funcGraph001()
     cout << "W(1, 0): " << mgi.getEdgeWeight(1, 0) << endl;   // W(1, 0): 2
     cout << "W(1, 2): " << mgi.getEdgeWeight(1, 2) << endl;   // W(1, 2): 3
 
+    cout << "isUndirected: " << mgi.isUndirected() << endl; // isUndirected: 0
+
     SharedPointer<Array<int>> aj = mgi.getAdjacent(1);
 
     for(int i = 0; i < aj->length(); i++)
@@ -79,6 +81,8 @@ void funcGraph001()
 
     cout << "vCount: " << mg.vCount() << endl;  // vCount: 9
     cout << "eCount: " << mg.eCount() << endl;  //eCount: 20
+
+    cout << "isUndirected: " << mg.isUndirected() << endl;  // isUndirected: 1
 
     SharedPointer<Array<int>> array = mg.BFS(0);
     cout << "Breadth First Search: ";
@@ -140,6 +144,8 @@ void funcGraph002()
     cout << "OD(1): " << g.OD(1) << endl;       // OD(1): 1
     cout << "TD(1): " << g.TD(1) << endl;       // TD(1): 3
 
+    cout << "isUndirected: " << g.isUndirected() << endl;   // isUndirected: 0
+
     ListGraph<char, int> mg;
     mg.addVertex('A');
     mg.addVertex('B');
@@ -173,6 +179,8 @@ void funcGraph002()
 
     cout << "vCount: " << mg.vCount() << endl;  // vCount: 9
     cout << "eCount: " << mg.eCount() << endl;  // eCount: 20
+
+    cout << "isUndirected: " << mg.isUndirected() << endl;  // isUndirected: 1
 
     cout << "Breadth First Search: ";
     SharedPointer<Array<int>> array = mg.BFS(1);

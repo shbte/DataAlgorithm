@@ -38,6 +38,11 @@ public:
     SharedPointer<Array<int>> DFS1(int i);
     // 先序遍历图顶点核心函数 => 递归实现
     void DFS1(int i, Array<int>* ret, int& size, Array<bool>& visited);
+
+    // 顶点间邻接判断函数
+    bool isAdjacent(int i, int j);
+    // 无向图判断函数 => 有向图: false、无向图: true
+    bool isUndirected();
 };
 
 // 广度优先算法(Breadth First Search)
@@ -271,6 +276,56 @@ void Graph<V, W>::DFS1(int i, Array<int>* ret, int& retIndex, Array<bool>& visit
     {
         THROW_EXCEPTION(InvalidParameterException, "Parameter index is invalid...");
     }
+}
+
+// 顶点间邻接判断函数
+template <typename V, typename W>
+bool Graph<V, W>::isAdjacent(int i, int j)
+{
+    bool ret = false;
+
+    // 判断顶点位置是否合法
+    if((0 <= i) && (i < vCount()) && (0 <= j) && (j < vCount()))
+    {
+        // 获取顶点的邻接顶点
+        SharedPointer<Array<int>> aj = getAdjacent(i);
+
+        // !ret: 邻接存在则循环结束
+        for(int k = 0; (k < aj->length()) && (!ret); k++)
+        {
+            // 判断邻接顶点中是否存在指定顶点, 存在则说明指定顶尖间邻接, 赋值true
+            if((*aj)[k] == j)
+            {
+                ret = true;
+            }
+        }
+    }
+
+    return ret;
+}
+// 无向图判断函数
+template <typename V, typename W>
+bool Graph<V, W>::isUndirected()
+{
+    bool ret = true;
+
+    // ret为false时, 为无向图, 循环结束
+    for(int i = 0; (i < vCount()) && (ret); i++)
+    {
+        SharedPointer<Array<int>> aj = getAdjacent(i);
+
+        // ret为false时, 为无向图, 循环结束
+        for(int j = 0; (j < aj->length()) && (ret); j++)
+        {
+            // 以邻接顶点为起始, 判断顶点间是否反邻接
+            if(!isAdjacent((*aj)[j], i))
+            {
+                ret = false;
+            }
+        }
+    }
+
+    return ret;
 }
 
 }
