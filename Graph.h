@@ -11,6 +11,34 @@
 namespace DemoData
 {
 
+// 边结构体
+template <typename W>
+struct Edge : public Object
+{
+    int b;  // 起始顶点
+    int e;  // 邻接顶点
+    W w;    // 权重
+
+    Edge<W>(int i = -1, int j = -1)
+    {
+        b = i;
+        e = j;
+    }
+
+    Edge<W>(int i, int j, const W& weight)
+    {
+        b = i;
+        e = j;
+        w = weight;
+    }
+
+    // 重载比较操作符
+    bool operator ==(const Edge<W>& obj)
+    {
+        return ((b == obj.b) && (e == obj.e));
+    }
+};
+
 /* 图(抽象类) */
 template <typename V, typename W>
 class Graph : public Object
@@ -43,6 +71,8 @@ public:
     bool isAdjacent(int i, int j);
     // 无向图判断函数 => 有向图: false、无向图: true
     bool isUndirected();
+    // 最小/最大生成树 => 连接顶点间的最小/最大权值
+    SharedPointer<Array<Edge<W>>> Prim(bool min = true);
 };
 
 // 广度优先算法(Breadth First Search)
@@ -326,6 +356,113 @@ bool Graph<V, W>::isUndirected()
     }
 
     return ret;
+}
+
+// 最小/最大生成树 => 连接顶点间的最小/最大权值
+template <typename V, typename W>
+SharedPointer<Array<Edge<W>>> Graph<V, W>::Prim(bool min)
+{
+    if(isUndirected())
+    {
+        DynamicArray<Edge<W>>* ret = new DynamicArray<Edge<W>>(vCount() - 1);
+        int retIndex = 0;
+
+        if(ret != NULL)
+        {
+            // 标记顶点是否已连接 => 数组下标为顶点, 数组值为连接状态(已连接为true, 未连接未false)
+            DynamicArray<bool> vexArray(vCount());
+            // 已连接和未连接顶点 => 数组下标为未连接顶点, 数组值为已连接顶点
+            DynamicArray<int> adjVexArray(vCount());
+            // 已连接和未连接顶点间的最小权值 => 数组下标为未连接顶点, 数组值为最小权值(以为连接顶点为起始)
+            DynamicArray<W> adjVexMWeiArray(vCount());
+
+            // 最小权值集合中的最小值
+            W mAdjVexWei;
+            // 最小权值的连接顶点下标
+            int mVexIndex;
+            // 最小权值的未连接顶点下标
+            int mAdjVexIndex;
+
+            // 以0顶点为起始(赋值true), 其余顶点为未连接顶点
+            vexArray[0] = true;
+            for(int i = 1; i < vCount(); i++)
+            {
+                vexArray[i] = false;
+            }
+
+            // 判断已获取的连接边 => 边数 = 顶点个数 - 1
+            while(retIndex < (vCount() - 1))
+            {
+                // 初始化
+                for(int i = 0; i < vCount(); i++)
+                {
+                    if(!vexArray[i])
+                    {
+                        adjVexArray[i] = -1;
+                        adjVexMWeiArray[i] = min ? 999999999 : -1;
+                        mAdjVexWei = adjVexMWeiArray[i];
+                    }
+                }
+                mVexIndex = 0;
+                mAdjVexIndex = -1;
+
+                for(int i = 0; i < vCount(); i++)
+                {
+                    // 判断该顶点是否已连接, 未连接则结束(获取已连接顶点)
+                    if(vexArray[i])
+                    {
+                        SharedPointer<Array<int>> aj = getAdjacent(i);
+
+                        for(int j = 0; j < aj->length(); j++)
+                        {
+                            // 获取已连接顶点的邻接顶点
+                            int adjVexIndex = (*aj)[j];
+
+                            // 判断邻接顶点是否已连接, 连接则结束(获取未连接顶点)
+                            if(!vexArray[adjVexIndex])
+                            {
+                                // 获取已连接顶点与未连接顶点的边的权值
+                                W adjVexWei = getEdgeWeight(i, adjVexIndex);
+
+                                // 判断权值
+                                if(min ? (adjVexMWeiArray[adjVexIndex] > adjVexWei) : (adjVexMWeiArray[adjVexIndex] < adjVexWei))
+                                {
+                                    // i: 起始顶点(已连接)  adjVexIndex: 结束顶点(未连接)
+                                    adjVexArray[adjVexIndex] = i;
+                                    // 保存已连接顶点与未连接顶点的边的权值
+                                    adjVexMWeiArray[adjVexIndex] = adjVexWei;
+
+                                    // 判断是否为最小/最大
+                                    if(min ? (mAdjVexWei > adjVexWei) : (mAdjVexWei < adjVexWei))
+                                    {
+                                        // 已连接顶点与未连接顶点的起始顶点下标、结束顶点下标、权值
+                                        mVexIndex = i;
+                                        mAdjVexIndex = adjVexIndex;
+                                        mAdjVexWei = adjVexWei;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // 保存 已连接顶点与未连接顶点间的最小权值边
+                ret->set(retIndex++, Edge<W>(mVexIndex, mAdjVexIndex, mAdjVexWei));
+                // 将未连接顶点设置为已连接
+                vexArray[mAdjVexIndex] = true;
+            }
+        }
+        else
+        {
+            THROW_EXCEPTION(NoEnoughMemoryException, "No enough memory to create ret object(DynamicArray)");
+        }
+
+        return ret;
+    }
+    else
+    {
+        THROW_EXCEPTION(InvalidOperatorException, "Prim operation is for undirected argph only...");
+    }
 }
 
 }

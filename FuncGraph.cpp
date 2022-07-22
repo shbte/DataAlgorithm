@@ -107,6 +107,88 @@ void funcGraph001()
         cout << (*array)[i] << " "; // Depth First Search Recursion: 0 1 2 5 4 6 3 7 8
     }
     cout << endl;
+
+    cout << "Prim:" << endl;    // Prim:
+    MatrixGraph<int, int, 4> mgp1;
+    mgp1.setVertex(0, 0);
+    mgp1.setVertex(1, 1);
+    mgp1.setVertex(2, 2);
+    mgp1.setVertex(3, 3);
+    mgp1.setEdgeWeight(0, 1, 1);
+    mgp1.setEdgeWeight(1, 0, 1);
+    mgp1.setEdgeWeight(0, 2, 3);
+    mgp1.setEdgeWeight(2, 0, 3);
+    mgp1.setEdgeWeight(1, 2, 1);
+    mgp1.setEdgeWeight(2, 1, 1);
+    mgp1.setEdgeWeight(1, 3, 4);
+    mgp1.setEdgeWeight(3, 1, 4);
+    mgp1.setEdgeWeight(2, 3, 1);
+    mgp1.setEdgeWeight(3, 2, 1);
+
+    cout << "mgp1.isUndirected: " << mgp1.isUndirected() << endl;   // mgp1.isUndirected: 1
+
+    SharedPointer<Array<Edge<int>>> edges = mgp1.Prim();
+    int weight = 0;
+    for(int i = 0; i < edges->length(); i++)
+    {
+        cout << "(" << (*edges)[i].b << ", " << (*edges)[i].e << ", " << (*edges)[i].w << ")" << " ";   // (0, 1, 1) (1, 2, 1) (2, 3, 1)
+        weight += (*edges)[i].w;
+    }
+    cout << endl;
+    cout << "AllWeight: " << weight << endl;    // AllWeight: 3
+
+    MatrixGraph<const char*, int, 9> mgp2;
+    mgp2.setVertex(0, "V0");
+    mgp2.setVertex(1, "V1");
+    mgp2.setVertex(2, "V2");
+    mgp2.setVertex(3, "V3");
+    mgp2.setVertex(4, "V4");
+    mgp2.setVertex(5, "V5");
+    mgp2.setVertex(6, "V6");
+    mgp2.setVertex(7, "V7");
+    mgp2.setVertex(8, "V8");
+    mgp2.setEdgeWeight(0, 1, 10);
+    mgp2.setEdgeWeight(1, 0, 10);
+    mgp2.setEdgeWeight(0, 5, 11);
+    mgp2.setEdgeWeight(5, 0, 11);
+    mgp2.setEdgeWeight(1, 2, 18);
+    mgp2.setEdgeWeight(2, 1, 18);
+    mgp2.setEdgeWeight(1, 6, 16);
+    mgp2.setEdgeWeight(6, 1, 16);
+    mgp2.setEdgeWeight(1, 8, 12);
+    mgp2.setEdgeWeight(8, 1, 12);
+    mgp2.setEdgeWeight(2, 3, 22);
+    mgp2.setEdgeWeight(3, 2, 22);
+    mgp2.setEdgeWeight(2, 8, 8);
+    mgp2.setEdgeWeight(8, 2, 8);
+    mgp2.setEdgeWeight(3, 4, 20);
+    mgp2.setEdgeWeight(4, 3, 20);
+    mgp2.setEdgeWeight(3, 6, 24);
+    mgp2.setEdgeWeight(6, 3, 24);
+    mgp2.setEdgeWeight(3, 7, 16);
+    mgp2.setEdgeWeight(7, 3, 16);
+    mgp2.setEdgeWeight(3, 8, 21);
+    mgp2.setEdgeWeight(8, 3, 21);
+    mgp2.setEdgeWeight(4, 5, 26);
+    mgp2.setEdgeWeight(5, 4, 26);
+    mgp2.setEdgeWeight(4, 7, 7);
+    mgp2.setEdgeWeight(7, 4, 7);
+    mgp2.setEdgeWeight(5, 6, 17);
+    mgp2.setEdgeWeight(6, 5, 17);
+    mgp2.setEdgeWeight(6, 7, 19);
+    mgp2.setEdgeWeight(7, 6, 19);
+
+    cout << "mgp2.isUndirected: " << mgp2.isUndirected() << endl;   // mgp2.isUndirected: 1
+
+    edges = mgp2.Prim(true);
+    weight = 0;
+    for(int i = 0; i < edges->length(); i++)
+    {
+        cout << "(" << (*edges)[i].b << ", " << (*edges)[i].e << ", " << (*edges)[i].w << ")" << " ";   // (0, 1, 10) (0, 5, 11) (1, 8, 12) (8, 2, 8) (1, 6, 16) (6, 7, 19) (7, 4, 7) (7, 3, 16)
+        weight += (*edges)[i].w;
+    }
+    cout << endl;
+    cout << "AllWeight: " << weight << endl;    // AllWeight: 99
 }
 
 void funcGraph002()
@@ -205,4 +287,86 @@ void funcGraph002()
         cout << (*array)[i] << " "; // Depth First Search Recursion: 1 0 3 6 4 7 8 2 5
     }
     cout << endl;
+
+    cout << "Prim:" << endl;    // mgp1.isUndirected: 1
+    ListGraph<int, int> mgp1;
+    mgp1.addVertex(0);
+    mgp1.addVertex(1);
+    mgp1.addVertex(2);
+    mgp1.addVertex(3);
+    mgp1.setEdgeWeight(0, 1, 1);
+    mgp1.setEdgeWeight(1, 0, 1);
+    mgp1.setEdgeWeight(0, 2, 3);
+    mgp1.setEdgeWeight(2, 0, 3);
+    mgp1.setEdgeWeight(1, 2, 1);
+    mgp1.setEdgeWeight(2, 1, 1);
+    mgp1.setEdgeWeight(1, 3, 4);
+    mgp1.setEdgeWeight(3, 1, 4);
+    mgp1.setEdgeWeight(2, 3, 1);
+    mgp1.setEdgeWeight(3, 2, 1);
+
+    cout << "mgp1.isUndirected: " << mgp1.isUndirected() << endl;   // mgp1.isUndirected: 1
+
+    SharedPointer<Array<Edge<int>>> edges = mgp1.Prim();
+    int weight = 0;
+    for(int i = 0; i < edges->length(); i++)
+    {
+        cout << "(" << (*edges)[i].b << ", " << (*edges)[i].e << ", " << (*edges)[i].w << ")" << " ";   // (0, 1, 1) (1, 2, 1) (2, 3, 1)
+        weight += (*edges)[i].w;
+    }
+    cout << endl;
+    cout << "AllWeight: " << weight << endl;    // AllWeight: 3
+
+    ListGraph<const char*, int> mgp2;
+    mgp2.addVertex("V0");
+    mgp2.addVertex("V1");
+    mgp2.addVertex("V2");
+    mgp2.addVertex("V3");
+    mgp2.addVertex("V4");
+    mgp2.addVertex("V5");
+    mgp2.addVertex("V6");
+    mgp2.addVertex("V7");
+    mgp2.addVertex("V8");
+    mgp2.setEdgeWeight(0, 1, 10);
+    mgp2.setEdgeWeight(1, 0, 10);
+    mgp2.setEdgeWeight(0, 5, 11);
+    mgp2.setEdgeWeight(5, 0, 11);
+    mgp2.setEdgeWeight(1, 2, 18);
+    mgp2.setEdgeWeight(2, 1, 18);
+    mgp2.setEdgeWeight(1, 6, 16);
+    mgp2.setEdgeWeight(6, 1, 16);
+    mgp2.setEdgeWeight(1, 8, 12);
+    mgp2.setEdgeWeight(8, 1, 12);
+    mgp2.setEdgeWeight(2, 3, 22);
+    mgp2.setEdgeWeight(3, 2, 22);
+    mgp2.setEdgeWeight(2, 8, 8);
+    mgp2.setEdgeWeight(8, 2, 8);
+    mgp2.setEdgeWeight(3, 4, 20);
+    mgp2.setEdgeWeight(4, 3, 20);
+    mgp2.setEdgeWeight(3, 6, 24);
+    mgp2.setEdgeWeight(6, 3, 24);
+    mgp2.setEdgeWeight(3, 7, 16);
+    mgp2.setEdgeWeight(7, 3, 16);
+    mgp2.setEdgeWeight(3, 8, 21);
+    mgp2.setEdgeWeight(8, 3, 21);
+    mgp2.setEdgeWeight(4, 5, 26);
+    mgp2.setEdgeWeight(5, 4, 26);
+    mgp2.setEdgeWeight(4, 7, 7);
+    mgp2.setEdgeWeight(7, 4, 7);
+    mgp2.setEdgeWeight(5, 6, 17);
+    mgp2.setEdgeWeight(6, 5, 17);
+    mgp2.setEdgeWeight(6, 7, 19);
+    mgp2.setEdgeWeight(7, 6, 19);
+
+    cout << "mgp2.isUndirected: " << mgp2.isUndirected() << endl;   // mgp2.isUndirected: 1
+
+    edges = mgp2.Prim(false);
+    weight = 0;
+    for(int i = 0; i < edges->length(); i++)
+    {
+        cout << "(" << (*edges)[i].b << ", " << (*edges)[i].e << ", " << (*edges)[i].w << ")" << " ";   // (0, 5, 11) (5, 4, 26) (4, 3, 20) (3, 6, 24) (3, 2, 22) (3, 8, 21) (6, 7, 19) (2, 1, 18)
+        weight += (*edges)[i].w;
+    }
+    cout << endl;
+    cout << "AllWeight: " << weight << endl;    // AllWeight: 161
 }

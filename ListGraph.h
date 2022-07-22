@@ -7,33 +7,6 @@
 namespace DemoData
 {
 
-// 边结构体
-template <typename W>
-struct Edge : public Object
-{
-    int b;      // 起始顶点
-    int e;      // 邻接顶点
-    W weight;   // 权重
-
-    Edge<W>(int i = -1, int j = -1)
-    {
-        b = i;
-        e = j;
-    }
-
-    Edge<W>(int i, int j, const W& value)
-    {
-        b = i;
-        e = j;
-        weight = value;
-    }
-
-    // 重载比较操作符
-    bool operator ==(const Edge<W>& obj)
-    {
-        return ((b == obj.b) && (e == obj.e));
-    }
-};
 // 顶点结构体
 template <typename V, typename W>
 struct Vertex : public Object
@@ -351,7 +324,7 @@ bool ListGraph<V, W>::getEdgeWeight(int i, int j, W& weight)
         if(pos >= 0)
         {
             // 获取指定顶点间的权重
-            weight = edge_list.get(pos).weight;
+            weight = edge_list.get(pos).w;
 
             // 表明获取指定顶点间的权重成功, 赋值true
             ret = true;
