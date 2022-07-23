@@ -137,6 +137,16 @@ void funcGraph001()
     cout << endl;
     cout << "AllWeight: " << weight << endl;    // AllWeight: 3
 
+    edges = mgp1.Kruskal();
+    weight = 0;
+    for(int i = 0; i < edges->length(); i++)
+    {
+        cout << "(" << (*edges)[i].b << ", " << (*edges)[i].e << ", " << (*edges)[i].w << ")" << " ";   // (0, 1, 1) (1, 2, 1) (2, 3, 1)
+        weight += (*edges)[i].w;
+    }
+    cout << endl;
+    cout << "AllWeight: " << weight << endl;    // AllWeight: 3
+
     MatrixGraph<const char*, int, 9> mgp2;
     mgp2.setVertex(0, "V0");
     mgp2.setVertex(1, "V1");
@@ -185,6 +195,16 @@ void funcGraph001()
     for(int i = 0; i < edges->length(); i++)
     {
         cout << "(" << (*edges)[i].b << ", " << (*edges)[i].e << ", " << (*edges)[i].w << ")" << " ";   // (0, 1, 10) (0, 5, 11) (1, 8, 12) (8, 2, 8) (1, 6, 16) (6, 7, 19) (7, 4, 7) (7, 3, 16)
+        weight += (*edges)[i].w;
+    }
+    cout << endl;
+    cout << "AllWeight: " << weight << endl;    // AllWeight: 99
+
+    edges = mgp2.Kruskal(true);
+    weight = 0;
+    for(int i = 0; i < edges->length(); i++)
+    {
+        cout << "(" << (*edges)[i].b << ", " << (*edges)[i].e << ", " << (*edges)[i].w << ")" << " ";   // (4, 7, 7) (2, 8, 8) (0, 1, 10) (0, 5, 11) (1, 8, 12) (1, 6, 16) (3, 7, 16) (6, 7, 19)
         weight += (*edges)[i].w;
     }
     cout << endl;
@@ -317,6 +337,16 @@ void funcGraph002()
     cout << endl;
     cout << "AllWeight: " << weight << endl;    // AllWeight: 3
 
+    edges = mgp1.Kruskal();
+    weight = 0;
+    for(int i = 0; i < edges->length(); i++)
+    {
+        cout << "(" << (*edges)[i].b << ", " << (*edges)[i].e << ", " << (*edges)[i].w << ")" << " ";   // (0, 1, 1) (1, 2, 1) (2, 3, 1)
+        weight += (*edges)[i].w;
+    }
+    cout << endl;
+    cout << "AllWeight: " << weight << endl;    // AllWeight: 3
+
     ListGraph<const char*, int> mgp2;
     mgp2.addVertex("V0");
     mgp2.addVertex("V1");
@@ -365,6 +395,16 @@ void funcGraph002()
     for(int i = 0; i < edges->length(); i++)
     {
         cout << "(" << (*edges)[i].b << ", " << (*edges)[i].e << ", " << (*edges)[i].w << ")" << " ";   // (0, 5, 11) (5, 4, 26) (4, 3, 20) (3, 6, 24) (3, 2, 22) (3, 8, 21) (6, 7, 19) (2, 1, 18)
+        weight += (*edges)[i].w;
+    }
+    cout << endl;
+    cout << "AllWeight: " << weight << endl;    // AllWeight: 161
+
+    edges = mgp2.Kruskal(false);
+    weight = 0;
+    for(int i = 0; i < edges->length(); i++)
+    {
+        cout << "(" << (*edges)[i].b << ", " << (*edges)[i].e << ", " << (*edges)[i].w << ")" << " ";   // (4, 5, 26) (3, 6, 24) (2, 3, 22) (3, 8, 21) (3, 4, 20) (6, 7, 19) (1, 2, 18) (0, 5, 11)
         weight += (*edges)[i].w;
     }
     cout << endl;

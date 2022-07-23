@@ -7,6 +7,7 @@
 #include "LinkQueue.h"
 #include "DynamicArray.h"
 #include "LinkStack.h"
+#include "Sort.h"
 
 namespace DemoData
 {
@@ -36,6 +37,15 @@ struct Edge : public Object
     bool operator ==(const Edge<W>& obj)
     {
         return ((b == obj.b) && (e == obj.e));
+    }
+
+    bool operator > (const Edge<W>& obj)
+    {
+        return (w > obj.w);
+    }
+    bool operator < (const Edge<W>& obj)
+    {
+        return (w < obj.w);
     }
 };
 
@@ -71,8 +81,15 @@ public:
     bool isAdjacent(int i, int j);
     // 无向图判断函数 => 有向图: false、无向图: true
     bool isUndirected();
-    // 最小/最大生成树 => 连接顶点间的最小/最大权值
+    // 最小/最大生成树 => 连接顶点间的最小/最大权值 => 以顶点为核心
     SharedPointer<Array<Edge<W>>> Prim(bool min = true);
+
+    // 获取无向图的所有非重复边
+    SharedPointer<Array<Edge<W>>> getUndirectedEdges();
+    // 获取顶点的最前驱顶点下标
+    int find(Array<int>& p, int i);
+    // 最小/最大生成树 => 连接顶点间的最小/最大权值 => 以边为核心
+    SharedPointer<Array<Edge<W>>> Kruskal(bool min = true);
 };
 
 // 广度优先算法(Breadth First Search)
@@ -451,13 +468,140 @@ SharedPointer<Array<Edge<W>>> Graph<V, W>::Prim(bool min)
                 // 将未连接顶点设置为已连接
                 vexArray[mAdjVexIndex] = true;
             }
+
+            return ret;
         }
         else
         {
             THROW_EXCEPTION(NoEnoughMemoryException, "No enough memory to create ret object(DynamicArray)");
         }
+    }
+    else
+    {
+        THROW_EXCEPTION(InvalidOperatorException, "Prim operation is for undirected argph only...");
+    }
+}
 
-        return ret;
+// 获取无向图的所有非重复边
+template <typename V, typename W>
+SharedPointer<Array<Edge<W>>>  Graph<V, W>::getUndirectedEdges()
+{
+    if(isUndirected())
+    {
+        DynamicArray<Edge<W>>* ret = NULL;
+        LinkQueue<Edge<W>> queue;
+
+        // 循环遍历顶点, 获取顶点间的边
+        for(int i = 0; i < vCount(); i++)
+        {
+            // 为了获取的边不前后重复, 因此邻接顶点要大于起始顶点
+            for(int j = (i + 1) ; j < vCount(); j++)
+            {
+                if(isAdjacent(i, j))
+                {
+                    // 顶点间相邻时, 加入边队列
+                    queue.add(Edge<W>(i, j, getEdgeWeight(i, j)));
+                }
+            }
+        }
+
+        // 以边队列大小创建返回堆空间数组对象
+        ret = new DynamicArray<Edge<W>>(queue.size());
+
+        if(ret != NULL)
+        {
+            for(int i = 0; i < ret->length(); i++)
+            {
+                // 将队列头元素放入返回数组
+                ret->set(i, queue.front());
+                // 移除队列头元素
+                queue.remove();
+            }
+
+            return ret;
+        }
+        else
+        {
+            THROW_EXCEPTION(NoEnoughMemoryException, "No enough memory to create ret object(DynamicArray)...");
+        }
+    }
+    else
+    {
+        THROW_EXCEPTION(InvalidParameterException, "GetUndirectedEdges operation is for undirected argph only...");
+    }
+}
+// 获取顶点的最前驱顶点下标 => p[n]为顶点n的前驱顶点
+template <typename V, typename W>
+int Graph<V, W>::find(Array<int>& p, int i)
+{
+    int ret = -1;
+
+    // p[i]不为-1时, 说明i有p[i]为前驱节点, 需要再往前寻找前驱顶点, 直至最前驱顶点
+    while(p[i] != -1)
+    {
+        i = p[i];
+    }
+    ret = i;
+
+    return ret;
+}
+// 最小/最大生成树 => 连接顶点间的最小/最大权值 => 以边为核心
+template <typename V, typename W>
+SharedPointer<Array<Edge<W>>> Graph<V, W>::Kruskal(bool min)
+{
+    if(isUndirected())
+    {
+        DynamicArray<Edge<W>>* ret = NULL;
+        // 因为不能确定边的数量, 所以使用中间队列来接收选择好的边
+        LinkQueue<Edge<W>> queue;
+
+        // pre[i]为i的前驱节点
+        DynamicArray<int> pre(vCount());
+        // 获取当前图的所有非重复边
+        SharedPointer<Array<Edge<W>>> gEdges = getUndirectedEdges();
+
+        for(int i = 0; i < pre.length(); i++)
+        {
+            // 初始化, 所有顶点的前驱顶点为空(-1)
+            pre.set(i, -1);
+        }
+
+        // 将所有边按照权值排序 => 核心1 => 注意: Shell第一个参数是数组类指针(*gEdges不是数组类指针, 而是自定义数组类)
+        Sort::Shell(gEdges.get()->array(), (*gEdges).length(), min);
+
+        // 按顺序获取边, 并判断已选择边是否构造回路 => 核心2
+        for(int i = 0; i < (*gEdges).length(); i++)
+        {
+            int b = find(pre, (*gEdges)[i].b);
+            int e = find(pre, (*gEdges)[i].e);
+
+            if(b != e)
+            {
+                // 该边与已选择的边不构成回路, 可加入选择边
+                queue.add(Edge<W>((*gEdges)[i].b, (*gEdges)[i].e, getEdgeWeight((*gEdges)[i].b, (*gEdges)[i].e)));
+
+                // 设置顶点e的前置顶点为b
+                pre[e] = b;
+            }
+        }
+
+        ret = new DynamicArray<Edge<W>>(queue.size());
+
+        if(ret != NULL)
+        {
+            // 将选择好的边放入返回值对象中
+            for(int i = 0; i < ret->length(); i++)
+            {
+                ret->set(i, queue.front());
+                queue.remove();
+            }
+
+            return ret;
+        }
+        else
+        {
+            THROW_EXCEPTION(NoEnoughMemoryException, "No enough memory to create ret object<DynamicArray)...");
+        }
     }
     else
     {
