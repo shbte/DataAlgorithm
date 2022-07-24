@@ -416,7 +416,7 @@ SharedPointer<Array<Edge<W>>> Graph<V, W>::Prim(bool min)
                     if(!vexArray[i])
                     {
                         adjVexArray[i] = -1;
-                        adjVexMWeiArray[i] = min ? 999999999 : -1;
+                        adjVexMWeiArray[i] = min ? 999999999 : -999999999;
                         mAdjVexWei = adjVexMWeiArray[i];
                     }
                 }
