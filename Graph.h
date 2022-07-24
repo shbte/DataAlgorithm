@@ -747,9 +747,7 @@ SharedPointer<Array<int>> Graph<V, W>::Floyd(int i, int j)
         DynamicArray<DynamicArray<int>> path(vCount());
 
         /* 遍历出任意两顶点间的最短路径 */
-        cout << "=Vex<i, j>=" << endl;
         Floyd(dist, path);
-        cout << "=Vex<i, j>=" << endl;
 
         /* 获取特定顶点i和顶点j的最短路径 */
 
@@ -825,6 +823,9 @@ void Graph<V, W>::Floyd(DynamicArray<DynamicArray<W>>& dist, DynamicArray<Dynami
         }
     }
 
+    /*
+    cout << "=Vex<i, j>=" << endl;
+
     cout << "minWeight:" << endl;
     for(int m = 0; m < dist.length(); m++)
     {
@@ -843,6 +844,9 @@ void Graph<V, W>::Floyd(DynamicArray<DynamicArray<W>>& dist, DynamicArray<Dynami
         }
         cout << endl;
     }
+
+    cout << "=Vex<i, j>=" << endl;
+    */
 }
 
 }
