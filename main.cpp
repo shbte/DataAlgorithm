@@ -110,6 +110,9 @@ void func0005()
 
     cout << endl;
     funcGraph002();
+
+    cout << endl;
+    funcGraph003();
 }
 
 int main()

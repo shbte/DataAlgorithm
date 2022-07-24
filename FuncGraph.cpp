@@ -410,3 +410,104 @@ void funcGraph002()
     cout << endl;
     cout << "AllWeight: " << weight << endl;    // AllWeight: 161
 }
+
+void funcGraph003()
+{
+    cout << "funcGraph003: MatrixGraph => Dijkstra" << endl;    // funcGraph003: MatrixGraph => Dijkstra
+
+    MatrixGraph<int, int, 4> mg1;
+    mg1.setVertex(0, 0);
+    mg1.setVertex(1, 1);
+    mg1.setVertex(2, 2);
+    mg1.setVertex(3, 3);
+    mg1.setEdgeWeight(0, 1, 1);
+    mg1.setEdgeWeight(0, 2, 3);
+    mg1.setEdgeWeight(1, 2, 1);
+    mg1.setEdgeWeight(2, 3, 1);
+    mg1.setEdgeWeight(1, 3, 4);
+
+    cout << "mg1.vCount: " << mg1.vCount() << endl; // mg1.vCount: 4
+    cout << "mg1.eCount: " << mg1.eCount() << endl; // mg1.eCount: 5
+
+    SharedPointer<Array<int>> path = mg1.Dijkstra(0, 3);
+
+    for(int i = 0; i < path->length(); i++)
+    {
+        cout << (*path)[i] << " ";  // 0 1 2 3
+    }
+    cout << endl;
+
+    MatrixGraph<int, int, 5> mg2;
+    mg2.setVertex(0, 0);
+    mg2.setVertex(1, 1);
+    mg2.setVertex(2, 2);
+    mg2.setVertex(3, 3);
+    mg2.setVertex(4, 4);
+    mg2.setEdgeWeight(0, 1, 10);
+    mg2.setEdgeWeight(0, 3, 30);
+    mg2.setEdgeWeight(0, 4, 100);
+    mg2.setEdgeWeight(1, 2, 50);
+    mg2.setEdgeWeight(2, 4, 10);
+    mg2.setEdgeWeight(3, 2, 20);
+    mg2.setEdgeWeight(3, 4, 60);
+
+    cout << "mg2.vCount: " << mg2.vCount() << endl; // mg2.vCount: 5
+    cout << "mg2.eCount: " << mg2.eCount() << endl; // mg2.eCount: 7
+
+    path = mg2.Dijkstra(0, 4);
+
+    for(int i = 0; i < path->length(); i++)
+    {
+        cout << (*path)[i] << " ";  // 0 3 2 4
+    }
+    cout << endl;
+
+    cout << "funcGraph003: ListGraph => Dijkstra" << endl;  // funcGraph003: ListGraph => Dijkstra
+
+    ListGraph<int, int> lg1;
+    lg1.addVertex(0);
+    lg1.addVertex(1);
+    lg1.addVertex(2);
+    lg1.addVertex(3);
+    lg1.setEdgeWeight(0, 1, 1);
+    lg1.setEdgeWeight(0, 2, 3);
+    lg1.setEdgeWeight(1, 2, 1);
+    lg1.setEdgeWeight(2, 3, 1);
+    lg1.setEdgeWeight(1, 3, 4);
+
+    cout << "lg1.vCount: " << lg1.vCount() << endl; // lg1.vCount: 4
+    cout << "lg1.eCount: " << lg1.eCount() << endl; // lg1.eCount: 5
+
+    path = lg1.Dijkstra(0, 3);
+
+    for(int i = 0; i < path->length(); i++)
+    {
+        cout << (*path)[i] << " ";  // 0 1 2 3
+    }
+    cout << endl;
+
+    ListGraph<int, int> lg2;
+    lg2.addVertex(0);
+    lg2.addVertex(1);
+    lg2.addVertex(2);
+    lg2.addVertex(3);
+    lg2.addVertex(4);
+    lg2.setEdgeWeight(0, 1, 10);
+    lg2.setEdgeWeight(0, 3, 30);
+    lg2.setEdgeWeight(0, 4, 100);
+    lg2.setEdgeWeight(1, 2, 50);
+    lg2.setEdgeWeight(2, 4, 10);
+    lg2.setEdgeWeight(3, 2, 20);
+    lg2.setEdgeWeight(3, 4, 60);
+
+    cout << "lg2.vCount: " << lg2.vCount() << endl; // lg2.vCount: 5
+    cout << "lg2.eCount: " << lg2.eCount() << endl; // lg2.eCount: 7
+
+    path = lg2.Dijkstra(0, 4);
+
+    for(int i = 0; i < path->length(); i++)
+    {
+        cout << (*path)[i] << " ";  // 0 3 2 4
+    }
+    cout << endl;
+}

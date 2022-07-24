@@ -90,6 +90,9 @@ public:
     int find(Array<int>& p, int i);
     // 最小/最大生成树 => 连接顶点间的最小/最大权值 => 以边为核心
     SharedPointer<Array<Edge<W>>> Kruskal(bool min = true);
+
+    // 两点间的最短路径 => 用已知最短路径求未知最短路径(不断更新到达各顶点最短路径值<权重>)
+    SharedPointer<Array<int>> Dijkstra(int i, int j);
 };
 
 // 广度优先算法(Breadth First Search)
@@ -606,6 +609,122 @@ SharedPointer<Array<Edge<W>>> Graph<V, W>::Kruskal(bool min)
     else
     {
         THROW_EXCEPTION(InvalidOperatorException, "Prim operation is for undirected argph only...");
+    }
+}
+
+// 两点间的最短路径 => 用已知最短路径求未知最短路径(不断更新到达各顶点最短路径值<权重>)
+template <typename V, typename W>
+SharedPointer<Array<int>> Graph<V, W>::Dijkstra(int i, int j)
+{
+    // 判断顶点位置是否合法
+    if((0 <= i) && (i < vCount()) && (0 <= j) && (j < vCount()))
+    {
+        // 记录两点间最短路径的顶点下标
+        DynamicArray<int>* ret = NULL;
+        // 最短路径经过的顶点数不确定, 因此先使用中间队列记录最短路径的顶点下标
+        LinkQueue<int> queue;
+
+        // disit[k]: 到达顶点k的最短权值为disit[k]
+        DynamicArray<W> disit(vCount());
+        // pre[k]: 在最短路径中, 顶点k的前驱顶点为pre[k]
+        DynamicArray<int> pre(vCount());
+        // mark[k]: false表示顶点k的最短路径没有被寻找到, true表示顶点k的最短路径已经被找到 => 避免顶点被重复经过, 可防回路情况的发生
+        DynamicArray<bool> mark(vCount());
+
+        W Limit = 999999999;
+
+        // 初始化
+        for(int k = 0; k < vCount(); k++)
+        {
+            // 这里直接赋值i到k的权重是因为要以当前最短路径不断前进
+            disit[k] = isAdjacent(i, k) ? getEdgeWeight(i, k) : Limit;
+            pre[k] = isAdjacent(i, k) ? i : -1;
+            mark[k] = (i == k) ? true : false;
+        }
+
+        // 必须求出指定的顶点i到各顶点的最短路径, 因为每个顶点都有可能是最短路径中的点
+        for(int k = 0; k < (vCount() - 1); k++)
+        {
+            int w = Limit;
+            int eIndex = -1;
+
+            // 获取当前未计算出最短路径顶点的下标
+            for(int m = 0; m < disit.length(); m++)
+            {
+                if(!mark[m] && disit[m] < w)
+                {
+                    eIndex = m;
+                    w = disit[m];
+                }
+            }
+
+            // 说明不存在未计算最短路径顶点, 循环结束
+            if(eIndex == -1)
+            {
+                break;
+            }
+
+            // 将未计算最短路径加入最短路径中(以最短路径求未知最短路径) => 当前情况下最短时, 已不可能出现其它非最短中转后而达到最短, 既当前顶点的最短路径已确定
+            mark[eIndex] = true;
+
+            // 开始寻找顶点eIndex的邻接顶点的最短路径(权重)
+            SharedPointer<Array<int>> aj = getAdjacent(eIndex);
+
+            for(int m = 0; m < aj->length(); m++)
+            {
+                int ajIndex = (*aj)[m];
+
+                if(!mark[ajIndex])
+                {
+                    W ajWeight = getEdgeWeight(eIndex, ajIndex);
+
+                    // 更新邻接顶点的最短路径(权值)
+                    if((disit[eIndex] + ajWeight) < disit[ajIndex])
+                    {
+                        pre[ajIndex] = eIndex;
+                        disit[ajIndex] = disit[eIndex] + ajWeight;
+                    }
+                }
+            }
+        }
+
+        // 判断是否已获取i到j的最短路径
+        if(mark[j])
+        {
+            // 将最短路径的顶点下标加入队列(以确定顶点数量), 别忘了起始顶点i
+            while(pre[j] != -1)
+            {
+                queue.add(j);
+                j = pre[j];
+            }
+            queue.add(i);
+
+            ret = new DynamicArray<int>(queue.size());
+
+            if(ret != NULL)
+            {
+                // 将队列中的顶点下标放入返回值对象中
+                for(int n = (ret->length() - 1); n >= 0; n--)
+                {
+                    ret->set(n, queue.front());
+                    queue.remove();
+                }
+
+                return ret;
+            }
+            else
+            {
+                THROW_EXCEPTION(NoEnoughMemoryException, "No enough memory to create ret object(DynamicArray)...");
+            }
+        }
+        else
+        {
+            THROW_EXCEPTION(ArithmeticException, "There is no path form i to j...");
+        }
+    }
+    else
+    {
+        THROW_EXCEPTION(InvalidParameterException, "Index <i, y> is invalid...");
     }
 }
 

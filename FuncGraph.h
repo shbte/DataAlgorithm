@@ -3,5 +3,6 @@
 
 void funcGraph001();
 void funcGraph002();
+void funcGraph003();
 
 #endif // FUNCGRAPH_H
