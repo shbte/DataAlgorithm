@@ -510,4 +510,30 @@ void funcGraph003()
         cout << (*path)[i] << " ";  // 0 3 2 4
     }
     cout << endl;
+
+    cout << "funcGraph003: MatrixGraph => Floyd" << endl;
+
+    MatrixGraph<int, int, 3> mg3;
+    mg3.setVertex(0, 0);
+    mg3.setVertex(1, 1);
+    mg3.setVertex(2, 2);
+    mg3.setEdgeWeight(0, 1, 4);
+    mg3.setEdgeWeight(0, 2, 11);
+    mg3.setEdgeWeight(1, 0, 6);
+    mg3.setEdgeWeight(1, 2, 2);
+    mg3.setEdgeWeight(2, 0, 3);
+
+    cout << "mg3.vCount: " << mg3.vCount() << endl;
+    cout << "mg3.eCount: " << mg3.eCount() << endl;
+
+    int i = 1;
+    int j = 1;
+    path = mg3.Floyd(i, j);
+    cout << "Vex<" << i << ", " << j << "> = ";
+    for(int k = 0; k < path->length(); k++)
+    {
+        cout << (*path)[k] << " ";
+    }
+    cout << endl;
+
 }

@@ -93,6 +93,10 @@ public:
 
     // 两点间的最短路径 => 用已知最短路径求未知最短路径(不断更新到达各顶点最短路径值<权重>)
     SharedPointer<Array<int>> Dijkstra(int i, int j);
+    // 两点间的最短路径 => 通过不断中转遍历, 递推出所有的路径, 从中选出最短路径
+    SharedPointer<Array<int>> Floyd(int i, int j);
+    // 遍历出任意两顶点间的最短路径
+    void Floyd(DynamicArray<DynamicArray<W>>& dist, DynamicArray<DynamicArray<int>>& path);
 };
 
 // 广度优先算法(Breadth First Search)
@@ -724,7 +728,120 @@ SharedPointer<Array<int>> Graph<V, W>::Dijkstra(int i, int j)
     }
     else
     {
-        THROW_EXCEPTION(InvalidParameterException, "Index <i, y> is invalid...");
+        THROW_EXCEPTION(InvalidParameterException, "Index <i, j> is invalid...");
+    }
+}
+// 两点间的最短路径 => 通过不断中转遍历, 递推出所有的路径, 从中选出最短路径
+template <typename V, typename W>
+SharedPointer<Array<int>> Graph<V, W>::Floyd(int i, int j)
+{
+    // 判断顶点位置是否合法
+    if((0 <= i) && (i < vCount()) && (0 <= j) && (j < vCount()))
+    {
+        DynamicArray<int>* ret = NULL;
+        LinkQueue<int> queue;
+
+        // dist[i][j]为顶点i和顶点j之间最小路径(权值)
+        DynamicArray<DynamicArray<W>> dist(vCount());
+        // path[i][j]为顶点i和顶点j间最短路径上的顶点j的前驱节点 => 尾顶点的前驱节点
+        DynamicArray<DynamicArray<int>> path(vCount());
+
+        /* 遍历出任意两顶点间的最短路径 */
+        cout << "=Vex<i, j>=" << endl;
+        Floyd(dist, path);
+        cout << "=Vex<i, j>=" << endl;
+
+        /* 获取特定顶点i和顶点j的最短路径 */
+
+        // 先将最短路径的尾顶点加入临时队列
+        queue.add(j);
+        // 再将最短路径的中转顶点加入临时队列 => -1表示顶点i和顶点j之间没有路径(邻接)
+        while((path[i][j] != i))
+        {
+            queue.add(path[i][j]);
+            // 不断递推最短路径的前驱中转顶点
+            j = path[i][j];
+        }
+        // 最后将起始顶点加入临时队列
+        queue.add(i);
+
+        ret = new DynamicArray<int>(queue.size());
+
+        if(ret != NULL)
+        {
+            for(int k = (ret->length() - 1); k >= 0; k--)
+            {
+                ret->set(k, queue.front());
+                queue.remove();
+            }
+
+            return ret;
+        }
+        else
+        {
+            THROW_EXCEPTION(NoEnoughMemoryException, "No enough memory to create ret object(DynamicArray)...");
+        }
+    }
+    else
+    {
+        THROW_EXCEPTION(InvalidParameterException, "Index <i, j> is invalid...");
+    }
+}
+// 遍历出任意两顶点间的最短路径
+template <typename V, typename W>
+void Graph<V, W>::Floyd(DynamicArray<DynamicArray<W>>& dist, DynamicArray<DynamicArray<int>>& path)
+{
+    for(int k = 0; k < vCount(); k++)
+    {
+        dist[k].resize(vCount());
+        path[k].resize(vCount());
+    }
+    for(int m = 0; m < vCount(); m++)
+    {
+        for(int n = 0; n < vCount(); n++)
+        {
+            //dist[m][n] = isAdjacent(m, n) ?  getEdgeWeight(m, n) : 99999999;
+            //path[m][n] = isAdjacent(m, n) ? n : -1;
+            path[m][n] = -1;
+            // 如果顶点m和顶点n间邻接, 则更新顶点m为起始中转顶点
+            dist[m][n] = isAdjacent(m, n) ? (path[m][n] = m, getEdgeWeight(m, n)) : 999999999;
+        }
+    }
+
+    // 顶点k为结束顶点的前一中转顶点, 因为不确定直接路径是否最短, 所以需要不断中转遍历, 递推出所有路径中的最短路径
+    for(int k = 0; k < vCount(); k++)
+    {
+        for(int m = 0; m < vCount(); m++)
+        {
+            for(int n = 0; n < vCount(); n++)
+            {
+                if((isAdjacent(k, n)) && ((dist[m][k] + dist[k][n]) < dist[m][n]))
+                {
+                    // 如果经过顶点k中转的路径比现在短, 则更新最短路径值, 并保存中转顶点下标
+                    dist[m][n] = dist[m][k] + dist[k][n];
+                    path[m][n] = k;
+                }
+            }
+        }
+    }
+
+    cout << "minWeight:" << endl;
+    for(int m = 0; m < dist.length(); m++)
+    {
+        for(int n = 0; n < dist.length(); n++)
+        {
+            cout << dist[m][n] << " ";
+        }
+        cout << endl;
+    }
+    cout << "pathIndex: " << endl;
+    for(int m = 0; m < dist.length(); m++)
+    {
+        for(int n = 0; n < dist.length(); n++)
+        {
+            cout << path[m][n] << " ";
+        }
+        cout << endl;
     }
 }
 
