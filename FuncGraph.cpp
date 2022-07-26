@@ -535,5 +535,201 @@ void funcGraph003()
         cout << (*path)[k] << " ";
     }
     cout << endl;
+}
 
+// 创建图函数
+Graph<int, int>* create_graph(int* a, int len)
+{
+    ListGraph<int, int>* ret = new ListGraph<int, int>();
+
+    if(ret != NULL)
+    {
+        // 生成顶点
+        for(int i = 0; i < len; i++)
+        {
+            ret->addVertex(a[i]);
+        }
+        // 生成边
+        for(int i = 0; i < len; i++)
+        {
+            for(int j = (i + 1); j < len; j++)
+            {
+                // 最长不下降序列, 数值不下降
+                if(a[i] <= a[j])
+                {
+                    ret->setEdgeWeight(i, j, 1);
+                }
+            }
+        }
+
+        cout << "Graph: ";
+        for(int i = 0; i < ret->vCount(); i++)
+        {
+            cout << ret->getVertex(i) << " ";
+        }
+        cout << endl;
+        cout << "vCount: " << ret->vCount() << endl;
+        cout << "eCount: " << ret->eCount() << endl;
+
+        return ret;
+    }
+    else
+    {
+        THROW_EXCEPTION(NoEnoughMemoryException, "No enough memoty to create ret object(ListGraph<int, int>)...");
+    }
+}
+// 初始化数组函数
+void init_array(Array<int>& count, Array<LinkList<int>*>& path, Array<bool>& mark)
+{
+    for(int i = 0; i < count.length(); i++)
+    {
+        count[i] = 0;
+        path[i] = NULL;
+        mark[i] = false;
+    }
+}
+// 最长不下降序列递归函数 => 以顶点index为起始的图g的最长不下降序列, 返回值为最长序列的顶点个数
+int search_max_path(Graph<int, int>& g, int index, Array<int>& count, Array<LinkList<int>*>& path, Array<bool>& mark)
+{
+    int ret = 0;
+
+    int maxCount = 0;
+    LinkList<int>* maxIndex = new LinkList<int>();
+
+    SharedPointer<Array<int>> aj = g.getAdjacent(index);
+
+    // 循环遍历顶点index的邻接顶点
+    for(int i = 0; i < aj->length(); i++)
+    {
+        int num = 0;
+        int ajIndex = (*aj)[i];
+
+        if(!mark[ajIndex])
+        {
+            num = search_max_path(g, ajIndex, count, path, mark);
+        }
+        else
+        {
+            // 获取以顶点ajIndex为起始的序列的顶点数
+            num = count[ajIndex];
+        }
+
+        // 获取最长序列所在的邻接顶点下标(maxIndex)和顶点数(maxCount)
+        if(maxCount == num)
+        {
+            maxIndex->insert(ajIndex);
+        }
+
+        if(maxCount < num)
+        {
+            maxIndex->clear();
+
+            maxIndex->insert(ajIndex);
+            maxCount = num;
+        }
+    }
+
+    // 邻接顶点的最长序列数 + 加上自顶点
+    maxCount++;
+
+    // 更新相关数组
+    count[index] = maxCount;
+    path[index] = maxIndex;
+    mark[index] = true;
+
+    ret = maxCount;
+
+    return ret;
+}
+void search_max_path(Graph<int, int>& g, Array<int>& count, Array<LinkList<int>*>& path, Array<bool>& mark)
+{
+    // 遍历图, 分别以顶点i为起始顶点
+    for(int i = 0; i < count.length(); i++)
+    {
+        if(!mark[i])
+        {
+            search_max_path(g, i, count, path, mark);
+        }
+    }
+}
+// 递归输出函数
+void print_max_path(Graph<int, int>& g, int index, Array<LinkList<int>*>& path, LinkList<int>& cp)
+{
+    // 加入顶点下标
+    cp.insert(index);
+
+    // 判断是否到达尾元素 => 尾元素的path[index]为空
+    if(path[index]->length() > 0)
+    {
+        for(path[index]->moveInit(0); !path[index]->end(); path[index]->next())
+        {
+            print_max_path(g, path[index]->currentValue(), path, cp);
+        }
+    }
+    else
+    {
+        cout << "Element: ";
+        for(int i = 0; i < cp.length(); i++)
+        {
+            cout << g.getVertex(cp.get(i)) << " ";
+        }
+        cout << endl;
+    }
+
+    // 向上移除链表尾元素
+    cp.remove(cp.length() - 1);
+}
+// 输出函数 => 打印图的指定顶点值
+void print_max_path(Graph<int, int>& g, Array<int>& count, Array<LinkList<int>*>& path)
+{
+    int maxCount = -1;
+
+    LinkList<int> cp;
+
+    // 获取最长不下降序列的顶点数、起始顶点下标
+    for(int i = 0; i < count.length(); i++)
+    {
+        if(maxCount < count[i])
+        {
+            maxCount = count[i];
+        }
+    }
+
+    cout << "maxCount: " << maxCount << endl;
+
+    for(int i = 0; i < count.length(); i++)
+    {
+        if(count[i] == maxCount)
+        {
+            print_max_path(g, i, path, cp);
+        }
+    }
+}
+void solutin(int* a, int len)
+{
+    // 最长序列最长顶点数数组 => 以顶点i为起始顶点的最长序列数为count[i]
+    DynamicArray<int> count(len);
+    // 最长序列下一顶点数组 => 以顶点i为起始顶点的最长序列中, 下一顶点为path[i]
+    DynamicArray<LinkList<int>*> path(len);
+    // 最长序列标记数组 => 顶点i在最长序列中时mark[i]为true, 顶点i不在最长序列中时mark[i]为false
+    DynamicArray<bool> mark(len);
+
+    SharedPointer<Graph<int, int>> g;
+
+    g = create_graph(a, len);
+
+    init_array(count, path, mark);
+
+    search_max_path(*g, count, path, mark);
+
+    print_max_path(*g, count, path);
+}
+void funcGraph004()
+{
+    cout << "funcGraph004:" << endl;
+
+    int a[] = {6, 5, 4, 5, 5};
+    int len = sizeof(a) / sizeof(a[0]);
+
+    solutin(a, len);
 }
