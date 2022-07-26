@@ -705,6 +705,7 @@ void print_max_path(Graph<int, int>& g, Array<int>& count, Array<LinkList<int>*>
         }
     }
 }
+// 求一堆数字的最长不下降序列 => 将数字按顺序建立图, 边按大小建立向后的等值边, 最后求最大高度(深度) => 巧妙的将求最长不下降序列转换为求最长路径
 void solutin(int* a, int len)
 {
     // 最长序列最长顶点数数组 => 以顶点i为起始顶点的最长序列数为count[i]
@@ -728,7 +729,7 @@ void funcGraph004()
 {
     cout << "funcGraph004:" << endl;
 
-    int a[] = {6, 5, 4, 5, 5};
+    int a[] = {6, 5, 4, 5, 4};
     int len = sizeof(a) / sizeof(a[0]);
 
     solutin(a, len);
